@@ -226,14 +226,14 @@ uint256[] memory inputs = new uint256[](customInputs.length + newNullifiers.leng
             inputs[k++] = checkNullifiers[1];
             inputs[k++] = checkNullifiers[2];
             inputs[k++] = checkNullifiers[3];
-inputs[k++] = checkNullifiers[4];
+            inputs[k++] = checkNullifiers[4];
 
 
             inputs[k++] = newNullifiers[0];
             inputs[k++] = newCommitments[0];
             inputs[k++] = newNullifiers[1];
             inputs[k++] = newCommitments[1];
-inputs[k++] = newNullifiers[2];
+            inputs[k++] = newNullifiers[2];
             inputs[k++] = newCommitments[2];
             inputs[k++] = newNullifiers[3];
             inputs[k++] = newCommitments[3];
@@ -251,7 +251,7 @@ inputs[k++] = newNullifiers[2];
             inputs[k++] = newCommitments[8];
 
             inputs[k++] = checkNullifiers[6];
-            inputs[k++] =checkNullifiers[7];
+           inputs[k++] = checkNullifiers[7];
             inputs[k++] = newNullifiers[9];
             inputs[k++] = newCommitments[9];
             inputs[k++] = newNullifiers[10];
@@ -266,9 +266,6 @@ inputs[k++] = newNullifiers[2];
             inputs[k++] = newCommitments[13];
             inputs[k++] = newNullifiers[14];
             inputs[k++] = newCommitments[14];
-
-
-
 
              inputs[k++] = newCommitments[4];
               inputs[k++] = newCommitments[5];
@@ -661,7 +658,7 @@ require(isContractTerminated == false, "The contract is terminated!");
       }
 
 
-      function calculateCfd (uint256[] calldata newNullifiers, uint256 commitmentRoot, uint256[] calldata newCommitments, uint256[] calldata proof) public  {
+      function calculateCfd (uint256[] calldata newNullifiers, uint256 commitmentRoot, uint256[] calldata newCommitments, uint256[] calldata checkNullifiers, uint256[] calldata proof) public  {
 
         
 require(isContractTerminated == false, "The contract is terminated!");
@@ -670,9 +667,21 @@ require(isContractTerminated == false, "The contract is terminated!");
 
           Inputs memory inputs;
 
+          inputs.customInputs = new uint[](7);
+          inputs.customInputs[0] = newCommitments[4];
+            inputs.customInputs[1] = newCommitments[5];
+            inputs.customInputs[2] = newCommitments[6];
+            inputs.customInputs[3] = newCommitments[7];
+            inputs.customInputs[4] = newCommitments[11];
+            inputs.customInputs[5] = newCommitments[14];
+            inputs.customInputs[6] = newCommitments[8];
+      
+              
 
           inputs.newNullifiers = newNullifiers;
            
+
+        inputs.checkNullifiers = checkNullifiers;
 
           inputs.commitmentRoot = commitmentRoot;
 

@@ -2830,8 +2830,8 @@ let tempSurplusIndex = generalise(parseInt(surplusIndex.integer, 10) + 1);
 				expiryDateOfContract_nullifier.integer,
 				sequenceNumberInterval_nullifier.integer,
 				numberOfConsecutivePeriodsForShortfall_nullifier.integer,
-				numberOfConsecutivePeriodsForSurplus_nullifier.integer,
 				shortfallThreshold_nullifier.integer,
+				numberOfConsecutivePeriodsForSurplus_nullifier.integer,
 				surplusThreshold_nullifier.integer,
 			],
 			proof
