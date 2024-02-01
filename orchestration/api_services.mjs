@@ -30,7 +30,8 @@ import setBundlePrice from "./setBundlePrice.mjs";
 
 import setStrikePrice from "./setStrikePrice.mjs";
 
-import { startEventFilter, getSiblingPath } from "./common/timber.mjs";
+import { startEventFilter, getSiblingPath} from "./common/timber.mjs";
+import { getContractInstance } from "./common/contract.mjs";
 import fs from "fs";
 import logger from "./common/logger.mjs";
 import { decrypt } from "./common/number-theory.mjs";
@@ -791,6 +792,18 @@ export async function service_reinstateNullifiers(req, res, next) {
 		await reinstateNullifiers();
 		res.send("Complete");
 		await sleep(10);
+	} catch (err) {
+		logger.error(err);
+		res.send({ errors: [err.message] });
+	}
+}
+
+export async function service_terminateContract(req, res, next) {
+	try {
+			await web3.connect();;
+			const instance = await getContractInstance("SyntheticPpaShield");
+			await instance.methods.terminateContract().send( {from: config.web3.options.defaultAccount} );
+			res.send("Contract Terminated");
 	} catch (err) {
 		logger.error(err);
 		res.send({ errors: [err.message] });

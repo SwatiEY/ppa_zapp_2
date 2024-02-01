@@ -25,6 +25,7 @@ import { service_initSurplusSequenceNumber } from "./api_services.mjs";
 import { service_setInitialContractParams } from "./api_services.mjs";
 
 import { service_calculateCfd } from "./api_services.mjs";
+import { service_terminateContract } from "./api_services.mjs";
 
 import {
 	service_allCommitments,
@@ -77,6 +78,8 @@ router.post("/setInitialContractParams", service_setInitialContractParams);
 
 // eslint-disable-next-line func-names
 router.post("/calculateCfd", service_calculateCfd);
+
+router.post("/terminateContract", service_terminateContract);
 
 // commitment getter routes
 router.get("/getAllCommitments", service_allCommitments);
