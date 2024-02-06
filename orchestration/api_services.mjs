@@ -787,16 +787,7 @@ export async function service_getCommitmentsByState(req, res, next) {
 	}
 }
 
-export async function service_reinstateNullifiers(req, res, next) {
-	try {
-		await reinstateNullifiers();
-		res.send("Complete");
-		await sleep(10);
-	} catch (err) {
-		logger.error(err);
-		res.send({ errors: [err.message] });
-	}
-}
+
 
 export async function service_terminateContract(req, res, next) {
 	try {

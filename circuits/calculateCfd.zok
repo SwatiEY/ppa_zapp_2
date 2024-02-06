@@ -573,12 +573,7 @@ for u32 i in 0..5 do
         )
 
 
-        // prepare secret state 'strikePrice' for commitment
-
-        field strikePrice_newCommitment_value_field = strikePrice
-
-
-
+    
         // bundlePrice_oldCommitment - PoKoSK:
         // The correctness of this secret key will be constrained within the oldCommitment existence check.
 

@@ -2779,6 +2779,7 @@ let tempSurplusIndex = generalise(parseInt(surplusIndex.integer, 10) + 1);
 	].flat(Infinity);
 
 	console.log(allInputs.join(' '));
+	
 	const res = await generateProof("calculateCfd", allInputs);
 	const proof = generalise(Object.values(res.proof).flat(Infinity))
 		.map((coeff) => coeff.integer)
