@@ -30,7 +30,6 @@ import { service_terminateContract } from "./api_services.mjs";
 import {
 	service_allCommitments,
 	service_getCommitmentsByState,
-	service_reinstateNullifiers,
 } from "./api_services.mjs";
 
 import express from "express";
