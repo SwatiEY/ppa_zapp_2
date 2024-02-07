@@ -85,6 +85,6 @@ router.post("/terminateContract", service_terminateContract);
 router.get("/getAllCommitments", service_allCommitments);
 router.get("/getCommitmentsByVariableName", service_getCommitmentsByState);
 // nullifier route
-router.post("/reinstateNullifiers", service_reinstateNullifiers);
+
 
 export default router;

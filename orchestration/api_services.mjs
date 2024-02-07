@@ -38,7 +38,6 @@ import { decrypt } from "./common/number-theory.mjs";
 import {
 	getAllCommitments,
 	getCommitmentsByState,
-	reinstateNullifiers,
 } from "./common/commitment-storage.mjs";
 import web3 from "./common/web3.mjs";
 
