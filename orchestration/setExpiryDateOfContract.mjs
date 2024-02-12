@@ -63,7 +63,7 @@ export default async function setExpiryDateOfContract(
 
 	// Initialise commitment preimage of whole state:
 
-	const expiryDateOfContract_stateVarId = generalise(13).hex(32);
+	const expiryDateOfContract_stateVarId = generalise(15).hex(32);
 
 	let expiryDateOfContract_commitmentExists = true;
 	let expiryDateOfContract_witnessRequired = true;
