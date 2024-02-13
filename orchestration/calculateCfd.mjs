@@ -1602,13 +1602,13 @@ let index_1 = generalise(parseInt(surplusIndex.integer, 10) + 1);
 		parseInt(totalGeneratedVolume.integer, 10) *
 			parseInt(volumeShare.integer, 10)
 	);
-console.log("offtakerVolume", offtakerVolume);
+
 	let fixedAmount = generalise(
 		parseInt(offtakerVolume.integer, 10) *
 			parseInt(bundlePrice.integer, 10) *
 			parseInt(marginalLossFactor.integer, 10)
 	);
-console.log("fixedAmount", fixedAmount);
+
 
 	// Added check : if bills are not in correct sequence
 
@@ -1638,10 +1638,7 @@ console.log("fixedAmount", fixedAmount);
 	netPositiveAdjustment = generalise(netPositiveAdjustment);
 	netNegativeAdjustment = generalise(netNegativeAdjustment);
 
-console.log((parseInt(floatingAmount.integer, 10) +
-parseInt(netNegativeAdjustment.integer, 10)) >
-(parseInt(fixedAmount.integer, 10) +
-parseInt(netPositiveAdjustment.integer, 10)));
+
 	
 	if (
 		(parseInt(floatingAmount.integer, 10) +
@@ -1661,8 +1658,7 @@ parseInt(netPositiveAdjustment.integer, 10)));
 			parseInt(positiveAdjustment.integer, 10) -
 			parseInt(negativeAdjustment.integer, 10);
 	}
-console.log("generatorCharges_billNumber", generatorCharges_billNumber);
-console.log("offtakerCharges_billNumber", offtakerCharges_billNumber);
+
 	generatorCharges_billNumber = generalise(generatorCharges_billNumber);
 
 	offtakerCharges_billNumber = generalise(offtakerCharges_billNumber);
@@ -3333,7 +3329,6 @@ console.log("offtakerCharges_billNumber", offtakerCharges_billNumber);
 		isNullified: false,
 	});
 
-	console.log("Negative price occurred: ", negativePriceCharges_billNumber.integer);
 
 	return {
 		tx,
@@ -3350,7 +3345,7 @@ console.log("offtakerCharges_billNumber", offtakerCharges_billNumber);
 			shortfallCharges_billNumber.integer,
 		surplusCharges_billNumber_newCommitmentValue:
 			surplusCharges_billNumber.integer,
-		negativePriceCharges_billNumberValue:
+		negativePriceCharges_billNumber_newCommitmentValue:
 			negativePriceCharges_billNumber.integer,
 	};
 }
