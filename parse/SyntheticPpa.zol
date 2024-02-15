@@ -222,7 +222,7 @@ contract SyntheticPpa {
         if (shortfallSequence && expectedVolume > offtakerVolume && volumeDifference >= shortfallThreshold) {
             shortfalls[index].billNumber = billNumber;
             shortfalls[index].price = averagePrice;
-            shortfalls[index].volume = shortfallThreshold - offtakerVolume; 
+            shortfalls[index].volume = expectedVolume - offtakerVolume;
             shortfallChargeSum += shortfalls[index].volume * priceDifference;
             shortfallIndex += 1;
             latestShortfallSequenceNumber = sequenceNumber;
@@ -246,7 +246,7 @@ contract SyntheticPpa {
         if (surplusSequence && expectedVolume < offtakerVolume && volumeDifference >= surplusThreshold) {
             surpluses[index].billNumber = billNumber;
             surpluses[index].price = averagePrice;
-            surpluses[index].volume = surplusThreshold - offtakerVolume; 
+            surpluses[index].volume = offtakerVolume - expectedVolume;
             surplusChargeSum += surpluses[index].volume * priceDifference;
             surplusIndex += 1;
             latestSurplusSequenceNumber = sequenceNumber;

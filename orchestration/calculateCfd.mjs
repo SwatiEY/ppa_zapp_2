@@ -1725,7 +1725,7 @@ let index_1 = generalise(parseInt(surplusIndex.integer, 10) + 1);
 		shortfalls_index.price = parseInt(averagePrice.integer, 10);
 
 		shortfalls_index.volume =
-			parseInt(shortfallThreshold.integer, 10) -
+			parseInt(expectedVolume.integer, 10) -
 			parseInt(offtakerVolume.integer, 10);
 
 		shortfallChargeSum =
@@ -1807,7 +1807,7 @@ let index_1 = generalise(parseInt(surplusIndex.integer, 10) + 1);
 		surpluses_index_1.price = parseInt(averagePrice.integer, 10);
 
 		surpluses_index_1.volume =
-			parseInt(surplusThreshold.integer, 10) -
+			parseInt(expectedVolume.integer, 10) -
 			parseInt(offtakerVolume.integer, 10);
 
 		surplusChargeSum =
