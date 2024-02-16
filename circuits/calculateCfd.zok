@@ -517,7 +517,7 @@ bool surplusSequence = false
         field surplusThreshold_temp = surplusThreshold
         surpluses_index_1.billNumber = if surplusSequence_temp && expectedVolume_temp < offtakerVolume && volumeDifference_temp >= surplusThreshold_temp then billNumber else surpluses_index_1.billNumber fi
         surpluses_index_1.price = if surplusSequence_temp && expectedVolume_temp < offtakerVolume && volumeDifference_temp >= surplusThreshold_temp then averagePrice else surpluses_index_1.price fi
-        surpluses_index_1.volume = if surplusSequence_temp && expectedVolume_temp < offtakerVolume && volumeDifference_temp >= surplusThreshold_temp then expectedVolume - offtakerVolume else surpluses_index_1.volume fi
+        surpluses_index_1.volume = if surplusSequence_temp && expectedVolume_temp < offtakerVolume && volumeDifference_temp >= surplusThreshold_temp then offtakerVolume - expectedVolume else surpluses_index_1.volume fi
         surplusChargeSum = if surplusSequence_temp && expectedVolume_temp < offtakerVolume && volumeDifference_temp >= surplusThreshold_temp then surplusChargeSum + surpluses_index_1.volume * priceDifference else surplusChargeSum fi
         surplusIndex = if surplusSequence_temp && expectedVolume_temp < offtakerVolume && volumeDifference_temp >= surplusThreshold_temp then surplusIndex + 1 else surplusIndex fi
         latestSurplusSequenceNumber = if surplusSequence_temp && expectedVolume_temp < offtakerVolume && volumeDifference_temp >= surplusThreshold_temp then sequenceNumber else latestSurplusSequenceNumber fi

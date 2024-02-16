@@ -1807,8 +1807,8 @@ let index_1 = generalise(parseInt(surplusIndex.integer, 10) + 1);
 		surpluses_index_1.price = parseInt(averagePrice.integer, 10);
 
 		surpluses_index_1.volume =
-			parseInt(expectedVolume.integer, 10) -
-			parseInt(offtakerVolume.integer, 10);
+		parseInt(offtakerVolume.integer, 10) -
+		parseInt(expectedVolume.integer, 10);
 
 		surplusChargeSum =
 			parseInt(surplusChargeSum.integer, 10) +
