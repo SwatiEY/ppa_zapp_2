@@ -45,11 +45,11 @@
                                 "setSurplusThreshold",
                                 "setSurplusPeriods",
                                 "setDailyInterestRate",
+                                "setStartDateOfContract",
                                 "setExpiryDateOfContract",
                                 "setVolumeShare",
                                 "setSequenceNumberInterval",
                                 "initSequenceNumber",
-                                "initSurplusSequenceNumber",
                                 "setInitialContractParams",
                                 "calculateCfd"
                             ],
@@ -129,6 +129,14 @@
                                         "newCommitment"
                                     ]
                                 },
+                                "setStartDateOfContract": {
+                                    "parameters": [
+                                        "nullifierRoot",
+                                        "nullifier",
+                                        "oldCommitmentExistence",
+                                        "newCommitment"
+                                    ]
+                                },
                                 "setExpiryDateOfContract": {
                                     "parameters": [
                                         "nullifierRoot",
@@ -158,14 +166,8 @@
                                         "nullifierRoot",
                                         "nullifier",
                                         "oldCommitmentExistence",
-                                        "newCommitment"
-                                    ]
-                                },
-                                "initSurplusSequenceNumber": {
-                                    "parameters": [
-                                        "nullifierRoot",
+                                        "newCommitment",
                                         "nullifier",
-                                        "oldCommitmentExistence",
                                         "newCommitment"
                                     ]
                                 },
@@ -174,6 +176,8 @@
                                         "nullifierRoot",
                                         "nullifier",
                                         "oldCommitmentExistence",
+                                        "newCommitment",
+                                        "nullifier",
                                         "newCommitment",
                                         "nullifier",
                                         "newCommitment",
@@ -241,13 +245,13 @@
                                         "newCommitment"
                                     ],
                                     "returnParameters": [
-                                        "newCommitments[12]",
                                         "newCommitments[13]",
                                         "newCommitments[14]",
                                         "newCommitments[15]",
-                                        "newCommitments[21]",
-                                        "newCommitments[26]",
-                                        "newCommitments[16]"
+                                        "newCommitments[16]",
+                                        "newCommitments[22]",
+                                        "newCommitments[27]",
+                                        "newCommitments[17]"
                                     ]
                                 }
                             },
@@ -343,6 +347,24 @@
                         },
                         {
                             "nodeType": "VariableDeclaration",
+                            "name": "startDateOfContract",
+                            "visibility": "private",
+                            "storageLocation": "default",
+                            "typeDescriptions": {
+                                "typeString": "uint256"
+                            },
+                            "typeName": {
+                                "nodeType": "ElementaryTypeName",
+                                "typeDescriptions": {
+                                    "typeString": "uint256"
+                                }
+                            },
+                            "isSecret": true,
+                            "interactsWithSecret": true,
+                            "declarationType": "state"
+                        },
+                        {
+                            "nodeType": "VariableDeclaration",
                             "name": "expiryDateOfContract",
                             "visibility": "private",
                             "storageLocation": "default",
@@ -381,7 +403,7 @@
                             "visibility": "private",
                             "storageLocation": "default",
                             "typeDescriptions": {
-                                "typeString": "mapping(uint256 => struct SyntheticPpa.Shortfall)"
+                                "typeString": "mapping(uint256 => struct SyntheticPpa.VolumeGap)"
                             },
                             "typeName": {
                                 "nodeType": "Mapping",
@@ -418,11 +440,11 @@
                         },
                         {
                             "nodeType": "VariableDeclaration",
-                            "name": "surplus",
+                            "name": "surpluses",
                             "visibility": "private",
                             "storageLocation": "default",
                             "typeDescriptions": {
-                                "typeString": "mapping(uint256 => struct SyntheticPpa.Shortfall)"
+                                "typeString": "mapping(uint256 => struct SyntheticPpa.VolumeGap)"
                             },
                             "typeName": {
                                 "nodeType": "Mapping",
@@ -477,7 +499,7 @@
                         },
                         {
                             "nodeType": "StructDefinition",
-                            "name": "Shortfall",
+                            "name": "VolumeGap",
                             "members": [
                                 {
                                     "nodeType": "VariableDeclaration",
@@ -953,11 +975,6 @@
                                                         "nodeType": "Identifier",
                                                         "name": "owner"
                                                     }
-                                                },
-                                                {
-                                                    "nodeType": "Literal",
-                                                    "value": "Caller is unauthorised, it must be the owner",
-                                                    "kind": "string"
                                                 }
                                             ]
                                         }
@@ -1056,11 +1073,6 @@
                                                         "nodeType": "Identifier",
                                                         "name": "owner"
                                                     }
-                                                },
-                                                {
-                                                    "nodeType": "Literal",
-                                                    "value": "Caller is unauthorised, it must be the owner",
-                                                    "kind": "string"
                                                 }
                                             ]
                                         }
@@ -1159,11 +1171,6 @@
                                                         "nodeType": "Identifier",
                                                         "name": "owner"
                                                     }
-                                                },
-                                                {
-                                                    "nodeType": "Literal",
-                                                    "value": "Caller is unauthorised, it must be the owner",
-                                                    "kind": "string"
                                                 }
                                             ]
                                         }
@@ -1262,11 +1269,6 @@
                                                         "nodeType": "Identifier",
                                                         "name": "owner"
                                                     }
-                                                },
-                                                {
-                                                    "nodeType": "Literal",
-                                                    "value": "Caller is unauthorised, it must be the owner",
-                                                    "kind": "string"
                                                 }
                                             ]
                                         }
@@ -1365,11 +1367,6 @@
                                                         "nodeType": "Identifier",
                                                         "name": "owner"
                                                     }
-                                                },
-                                                {
-                                                    "nodeType": "Literal",
-                                                    "value": "Caller is unauthorised, it must be the owner",
-                                                    "kind": "string"
                                                 }
                                             ]
                                         }
@@ -1468,11 +1465,6 @@
                                                         "nodeType": "Identifier",
                                                         "name": "owner"
                                                     }
-                                                },
-                                                {
-                                                    "nodeType": "Literal",
-                                                    "value": "Caller is unauthorised, it must be the owner",
-                                                    "kind": "string"
                                                 }
                                             ]
                                         }
@@ -1571,11 +1563,6 @@
                                                         "nodeType": "Identifier",
                                                         "name": "owner"
                                                     }
-                                                },
-                                                {
-                                                    "nodeType": "Literal",
-                                                    "value": "Caller is unauthorised, it must be the owner",
-                                                    "kind": "string"
                                                 }
                                             ]
                                         }
@@ -1645,6 +1632,104 @@
                         },
                         {
                             "nodeType": "FunctionDefinition",
+                            "name": "setStartDateOfContract",
+                            "visibility": "public",
+                            "isConstructor": false,
+                            "kind": "function",
+                            "stateMutability": "",
+                            "msgSigRequired": false,
+                            "body": {
+                                "nodeType": "Block",
+                                "preStatements": [],
+                                "statements": [
+                                    {
+                                        "nodeType": "ExpressionStatement",
+                                        "expression": {
+                                            "nodeType": "FunctionCall",
+                                            "expression": {
+                                                "nodeType": "Identifier",
+                                                "name": "require"
+                                            },
+                                            "arguments": [
+                                                {
+                                                    "nodeType": "BinaryOperation",
+                                                    "leftExpression": {
+                                                        "nodeType": "MsgSender"
+                                                    },
+                                                    "operator": "==",
+                                                    "rightExpression": {
+                                                        "nodeType": "Identifier",
+                                                        "name": "owner"
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "nodeType": "ExpressionStatement",
+                                        "expression": {}
+                                    }
+                                ],
+                                "postStatements": [
+                                    {
+                                        "nodeType": "FunctionBoilerplate",
+                                        "bpSection": "postStatements",
+                                        "bpCategory": "customFunction",
+                                        "customInputs": [
+                                            {
+                                                "name": 1,
+                                                "type": "uint256",
+                                                "dummy": true,
+                                                "inCircuit": true
+                                            }
+                                        ],
+                                        "functionName": "setStartDateOfContract",
+                                        "nullifiersRequired": true,
+                                        "oldCommitmentAccessRequired": true,
+                                        "newCommitmentsRequired": true,
+                                        "isConstructor": false
+                                    }
+                                ]
+                            },
+                            "parameters": {
+                                "nodeType": "ParameterList",
+                                "parameters": [
+                                    {
+                                        "nodeType": "VariableDeclaration",
+                                        "name": "startDateOfContractParam",
+                                        "visibility": "internal",
+                                        "storageLocation": "default",
+                                        "typeDescriptions": {
+                                            "typeString": "uint256"
+                                        },
+                                        "typeName": {
+                                            "nodeType": "ElementaryTypeName",
+                                            "typeDescriptions": {
+                                                "typeString": "uint256"
+                                            }
+                                        },
+                                        "isSecret": true,
+                                        "interactsWithSecret": true,
+                                        "declarationType": "parameter"
+                                    },
+                                    {
+                                        "nodeType": "FunctionBoilerplate",
+                                        "bpSection": "parameters",
+                                        "bpCategory": "customFunction",
+                                        "nullifiersRequired": true,
+                                        "oldCommitmentAccessRequired": true,
+                                        "newCommitmentsRequired": true,
+                                        "isConstructor": false
+                                    }
+                                ]
+                            },
+                            "returnParameters": {
+                                "nodeType": "ParameterList",
+                                "parameters": []
+                            }
+                        },
+                        {
+                            "nodeType": "FunctionDefinition",
                             "name": "setExpiryDateOfContract",
                             "visibility": "public",
                             "isConstructor": false,
@@ -1674,11 +1759,6 @@
                                                         "nodeType": "Identifier",
                                                         "name": "owner"
                                                     }
-                                                },
-                                                {
-                                                    "nodeType": "Literal",
-                                                    "value": "Caller is unauthorised, it must be the owner",
-                                                    "kind": "string"
                                                 }
                                             ]
                                         }
@@ -1777,11 +1857,6 @@
                                                         "nodeType": "Identifier",
                                                         "name": "owner"
                                                     }
-                                                },
-                                                {
-                                                    "nodeType": "Literal",
-                                                    "value": "Caller is unauthorised, it must be the owner",
-                                                    "kind": "string"
                                                 }
                                             ]
                                         }
@@ -1880,11 +1955,6 @@
                                                         "nodeType": "Identifier",
                                                         "name": "owner"
                                                     }
-                                                },
-                                                {
-                                                    "nodeType": "Literal",
-                                                    "value": "Caller is unauthorised, it must be the owner",
-                                                    "kind": "string"
                                                 }
                                             ]
                                         }
@@ -1983,14 +2053,13 @@
                                                         "nodeType": "Identifier",
                                                         "name": "owner"
                                                     }
-                                                },
-                                                {
-                                                    "nodeType": "Literal",
-                                                    "value": "Caller is unauthorised, it must be the owner",
-                                                    "kind": "string"
                                                 }
                                             ]
                                         }
+                                    },
+                                    {
+                                        "nodeType": "ExpressionStatement",
+                                        "expression": {}
                                     },
                                     {
                                         "nodeType": "ExpressionStatement",
@@ -2039,91 +2108,6 @@
                         },
                         {
                             "nodeType": "FunctionDefinition",
-                            "name": "initSurplusSequenceNumber",
-                            "visibility": "public",
-                            "isConstructor": false,
-                            "kind": "function",
-                            "stateMutability": "",
-                            "msgSigRequired": false,
-                            "body": {
-                                "nodeType": "Block",
-                                "preStatements": [],
-                                "statements": [
-                                    {
-                                        "nodeType": "ExpressionStatement",
-                                        "expression": {
-                                            "nodeType": "FunctionCall",
-                                            "expression": {
-                                                "nodeType": "Identifier",
-                                                "name": "require"
-                                            },
-                                            "arguments": [
-                                                {
-                                                    "nodeType": "BinaryOperation",
-                                                    "leftExpression": {
-                                                        "nodeType": "MsgSender"
-                                                    },
-                                                    "operator": "==",
-                                                    "rightExpression": {
-                                                        "nodeType": "Identifier",
-                                                        "name": "owner"
-                                                    }
-                                                },
-                                                {
-                                                    "nodeType": "Literal",
-                                                    "value": "Caller is unauthorised, it must be the owner",
-                                                    "kind": "string"
-                                                }
-                                            ]
-                                        }
-                                    },
-                                    {
-                                        "nodeType": "ExpressionStatement",
-                                        "expression": {}
-                                    }
-                                ],
-                                "postStatements": [
-                                    {
-                                        "nodeType": "FunctionBoilerplate",
-                                        "bpSection": "postStatements",
-                                        "bpCategory": "customFunction",
-                                        "customInputs": [
-                                            {
-                                                "name": 1,
-                                                "type": "uint256",
-                                                "dummy": true,
-                                                "inCircuit": true
-                                            }
-                                        ],
-                                        "functionName": "initSurplusSequenceNumber",
-                                        "nullifiersRequired": true,
-                                        "oldCommitmentAccessRequired": true,
-                                        "newCommitmentsRequired": true,
-                                        "isConstructor": false
-                                    }
-                                ]
-                            },
-                            "parameters": {
-                                "nodeType": "ParameterList",
-                                "parameters": [
-                                    {
-                                        "nodeType": "FunctionBoilerplate",
-                                        "bpSection": "parameters",
-                                        "bpCategory": "customFunction",
-                                        "nullifiersRequired": true,
-                                        "oldCommitmentAccessRequired": true,
-                                        "newCommitmentsRequired": true,
-                                        "isConstructor": false
-                                    }
-                                ]
-                            },
-                            "returnParameters": {
-                                "nodeType": "ParameterList",
-                                "parameters": []
-                            }
-                        },
-                        {
-                            "nodeType": "FunctionDefinition",
                             "name": "setInitialContractParams",
                             "visibility": "public",
                             "isConstructor": false,
@@ -2134,10 +2118,6 @@
                                 "nodeType": "Block",
                                 "preStatements": [],
                                 "statements": [
-                                    {
-                                        "nodeType": "ExpressionStatement",
-                                        "expression": {}
-                                    },
                                     {
                                         "nodeType": "ExpressionStatement",
                                         "expression": {
@@ -2162,6 +2142,10 @@
                                                 }
                                             ]
                                         }
+                                    },
+                                    {
+                                        "nodeType": "ExpressionStatement",
+                                        "expression": {}
                                     },
                                     {
                                         "nodeType": "ExpressionStatement",
@@ -2382,6 +2366,24 @@
                                     },
                                     {
                                         "nodeType": "VariableDeclaration",
+                                        "name": "startDateOfContractParam",
+                                        "visibility": "internal",
+                                        "storageLocation": "default",
+                                        "typeDescriptions": {
+                                            "typeString": "uint256"
+                                        },
+                                        "typeName": {
+                                            "nodeType": "ElementaryTypeName",
+                                            "typeDescriptions": {
+                                                "typeString": "uint256"
+                                            }
+                                        },
+                                        "isSecret": true,
+                                        "interactsWithSecret": true,
+                                        "declarationType": "parameter"
+                                    },
+                                    {
+                                        "nodeType": "VariableDeclaration",
                                         "name": "expiryDateOfContractParam",
                                         "visibility": "internal",
                                         "storageLocation": "default",
@@ -2401,24 +2403,6 @@
                                     {
                                         "nodeType": "VariableDeclaration",
                                         "name": "sequenceNumberIntervalParam",
-                                        "visibility": "internal",
-                                        "storageLocation": "default",
-                                        "typeDescriptions": {
-                                            "typeString": "uint256"
-                                        },
-                                        "typeName": {
-                                            "nodeType": "ElementaryTypeName",
-                                            "typeDescriptions": {
-                                                "typeString": "uint256"
-                                            }
-                                        },
-                                        "isSecret": true,
-                                        "interactsWithSecret": true,
-                                        "declarationType": "parameter"
-                                    },
-                                    {
-                                        "nodeType": "VariableDeclaration",
-                                        "name": "referenceDate",
                                         "visibility": "internal",
                                         "storageLocation": "default",
                                         "typeDescriptions": {
@@ -2468,6 +2452,10 @@
                                     },
                                     {
                                         "nodeType": "ExpressionStatement",
+                                        "expression": {}
+                                    },
+                                    {
+                                        "nodeType": "ExpressionStatement",
                                         "expression": {
                                             "nodeType": "FunctionCall",
                                             "expression": {
@@ -2476,16 +2464,12 @@
                                             },
                                             "arguments": [
                                                 {
-                                                    "nodeType": "BinaryOperation",
-                                                    "leftExpression": {
+                                                    "nodeType": "UnaryOperation",
+                                                    "operator": "!",
+                                                    "prefix": true,
+                                                    "subExpression": {
                                                         "nodeType": "Identifier",
                                                         "name": "isContractTerminated"
-                                                    },
-                                                    "operator": "==",
-                                                    "rightExpression": {
-                                                        "nodeType": "Literal",
-                                                        "value": "false",
-                                                        "kind": "bool"
                                                     }
                                                 }
                                             ]
@@ -2510,12 +2494,6 @@
                                         "bpCategory": "customFunction",
                                         "customInputs": [
                                             {
-                                                "name": "newCommitments[12]",
-                                                "typeName": {
-                                                    "name": "uint256"
-                                                }
-                                            },
-                                            {
                                                 "name": "newCommitments[13]",
                                                 "typeName": {
                                                     "name": "uint256"
@@ -2534,19 +2512,25 @@
                                                 }
                                             },
                                             {
-                                                "name": "newCommitments[21]",
-                                                "typeName": {
-                                                    "name": "uint256"
-                                                }
-                                            },
-                                            {
-                                                "name": "newCommitments[26]",
-                                                "typeName": {
-                                                    "name": "uint256"
-                                                }
-                                            },
-                                            {
                                                 "name": "newCommitments[16]",
+                                                "typeName": {
+                                                    "name": "uint256"
+                                                }
+                                            },
+                                            {
+                                                "name": "newCommitments[22]",
+                                                "typeName": {
+                                                    "name": "uint256"
+                                                }
+                                            },
+                                            {
+                                                "name": "newCommitments[27]",
+                                                "typeName": {
+                                                    "name": "uint256"
+                                                }
+                                            },
+                                            {
+                                                "name": "newCommitments[17]",
                                                 "typeName": {
                                                     "name": "uint256"
                                                 }
@@ -2816,6 +2800,24 @@
                                     },
                                     {
                                         "nodeType": "VariableDeclaration",
+                                        "name": "negativePriceOccurredParam",
+                                        "visibility": "internal",
+                                        "storageLocation": "default",
+                                        "typeDescriptions": {
+                                            "typeString": "bool"
+                                        },
+                                        "typeName": {
+                                            "nodeType": "ElementaryTypeName",
+                                            "typeDescriptions": {
+                                                "typeString": "bool"
+                                            }
+                                        },
+                                        "isSecret": true,
+                                        "interactsWithSecret": true,
+                                        "declarationType": "parameter"
+                                    },
+                                    {
+                                        "nodeType": "VariableDeclaration",
                                         "name": "referenceDate",
                                         "visibility": "internal",
                                         "storageLocation": "default",
@@ -2993,11 +2995,6 @@
                                                         "nodeType": "Identifier",
                                                         "name": "owner"
                                                     }
-                                                },
-                                                {
-                                                    "nodeType": "Literal",
-                                                    "value": "Caller is unauthorised, it must be the owner",
-                                                    "kind": "string"
                                                 }
                                             ]
                                         }

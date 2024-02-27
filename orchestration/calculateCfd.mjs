@@ -46,11 +46,12 @@ export default async function calculateCfd(
 	_outstandingOfftakerAmount,
 	_generatorDelayDays,
 	_offtakerDelayDays,
+	_negativePriceOccurredParam,
 	_referenceDate,
 	_strikePrice_newOwnerPublicKey = 0,
 	_shortfalls_index_newOwnerPublicKey = 0,
 	_latestShortfallSequenceNumber_newOwnerPublicKey = 0,
-	_surplus_tempSurplusIndex_newOwnerPublicKey = 0,
+	_surpluses_index_1_newOwnerPublicKey = 0,
 	_latestSurplusSequenceNumber_newOwnerPublicKey = 0,
 	_generatorCharges_billNumber_newOwnerPublicKey = 0,
 	_offtakerCharges_billNumber_newOwnerPublicKey = 0,
@@ -86,6 +87,7 @@ export default async function calculateCfd(
 	const outstandingOfftakerAmount = generalise(_outstandingOfftakerAmount);
 	const generatorDelayDays = generalise(_generatorDelayDays);
 	const offtakerDelayDays = generalise(_offtakerDelayDays);
+	const negativePriceOccurredParam = generalise(_negativePriceOccurredParam);
 	const referenceDate = generalise(_referenceDate);
 	
 	let shortfalls_index_newOwnerPublicKey = generalise(
@@ -94,8 +96,8 @@ export default async function calculateCfd(
 	let latestShortfallSequenceNumber_newOwnerPublicKey = generalise(
 		_latestShortfallSequenceNumber_newOwnerPublicKey
 	);
-	let surplus_tempSurplusIndex_newOwnerPublicKey = generalise(
-		_surplus_tempSurplusIndex_newOwnerPublicKey
+	let surpluses_index_1_newOwnerPublicKey = generalise(
+		_surpluses_index_1_newOwnerPublicKey
 	);
 	let latestSurplusSequenceNumber_newOwnerPublicKey = generalise(
 		_latestSurplusSequenceNumber_newOwnerPublicKey
@@ -211,7 +213,21 @@ export default async function calculateCfd(
 
 	// Initialise commitment preimage of whole accessed state:
 
-	const expiryDateOfContract_stateVarId = generalise(13).hex(32);
+	const startDateOfContract_stateVarId = generalise(13).hex(32);
+
+	let startDateOfContract_commitmentExists = true;
+
+	const startDateOfContract_commitment = await getCurrentWholeCommitment(
+		startDateOfContract_stateVarId
+	);
+
+	const startDateOfContract_preimage = startDateOfContract_commitment.preimage;
+
+	const startDateOfContract = generalise(startDateOfContract_preimage.value);
+
+	// Initialise commitment preimage of whole accessed state:
+
+	const expiryDateOfContract_stateVarId = generalise(15).hex(32);
 
 	let expiryDateOfContract_commitmentExists = true;
 
@@ -335,41 +351,40 @@ if (!surplusIndex_commitment) {
 
 let surplusIndex = generalise(surplusIndex_preimage.value);
 
-let tempSurplusIndex = generalise(parseInt(surplusIndex.integer, 10) + 1);
+let index_1 = generalise(parseInt(surplusIndex.integer, 10) + 1);
 	// Initialise commitment preimage of whole state:
 
-	let surplus_tempSurplusIndex_stateVarId = 27;
+	let surpluses_index_1_stateVarId = 27;
 
-	const surplus_tempSurplusIndex_stateVarId_key = tempSurplusIndex;
+	const surpluses_index_1_stateVarId_key = index_1;
 
-	surplus_tempSurplusIndex_stateVarId = generalise(
+	surpluses_index_1_stateVarId = generalise(
 		utils.mimcHash(
 			[
-				generalise(surplus_tempSurplusIndex_stateVarId).bigInt,
-				surplus_tempSurplusIndex_stateVarId_key.bigInt,
+				generalise(surpluses_index_1_stateVarId).bigInt,
+				surpluses_index_1_stateVarId_key.bigInt,
 			],
 			"ALT_BN_254"
 		)
 	).hex(32);
 
-	let surplus_tempSurplusIndex_commitmentExists = true;
-	let surplus_tempSurplusIndex_witnessRequired = true;
+	let surpluses_index_1_commitmentExists = true;
+	let surpluses_index_1_witnessRequired = true;
 
-	const surplus_tempSurplusIndex_commitment = await getCurrentWholeCommitment(
-		surplus_tempSurplusIndex_stateVarId
+	const surpluses_index_1_commitment = await getCurrentWholeCommitment(
+		surpluses_index_1_stateVarId
 	);
 
-	let surplus_tempSurplusIndex_preimage = {
+	let surpluses_index_1_preimage = {
 		value: { billNumber: 0, price: 0, volume: 0 },
 		salt: 0,
 		commitment: 0,
 	};
-	if (!surplus_tempSurplusIndex_commitment) {
-		surplus_tempSurplusIndex_commitmentExists = false;
-		surplus_tempSurplusIndex_witnessRequired = false;
+	if (!surpluses_index_1_commitment) {
+		surpluses_index_1_commitmentExists = false;
+		surpluses_index_1_witnessRequired = false;
 	} else {
-		surplus_tempSurplusIndex_preimage =
-			surplus_tempSurplusIndex_commitment.preimage;
+		surpluses_index_1_preimage = surpluses_index_1_commitment.preimage;
 	}
 
 	// Initialise commitment preimage of whole state:
@@ -807,6 +822,18 @@ let tempSurplusIndex = generalise(parseInt(surplusIndex.integer, 10) + 1);
 
 	// read preimage for accessed state
 
+	const startDateOfContract_currentCommitment = generalise(
+		startDateOfContract_commitment._id
+	);
+	const startDateOfContract_prev = generalise(
+		startDateOfContract_preimage.value
+	);
+	const startDateOfContract_prevSalt = generalise(
+		startDateOfContract_preimage.salt
+	);
+
+	// read preimage for accessed state
+
 	const expiryDateOfContract_currentCommitment = generalise(
 		expiryDateOfContract_commitment._id
 	);
@@ -850,19 +877,17 @@ let tempSurplusIndex = generalise(parseInt(surplusIndex.integer, 10) + 1);
 	);
 
 	// read preimage for whole state
-	surplus_tempSurplusIndex_newOwnerPublicKey =
-		_surplus_tempSurplusIndex_newOwnerPublicKey === 0
+	surpluses_index_1_newOwnerPublicKey =
+		_surpluses_index_1_newOwnerPublicKey === 0
 			? publicKey
-			: surplus_tempSurplusIndex_newOwnerPublicKey;
+			: surpluses_index_1_newOwnerPublicKey;
 
-	const surplus_tempSurplusIndex_currentCommitment = surplus_tempSurplusIndex_commitmentExists
-		? generalise(surplus_tempSurplusIndex_commitment._id)
+	const surpluses_index_1_currentCommitment = surpluses_index_1_commitmentExists
+		? generalise(surpluses_index_1_commitment._id)
 		: generalise(0);
-	const surplus_tempSurplusIndex_prev = generalise(
-		surplus_tempSurplusIndex_preimage.value
-	);
-	const surplus_tempSurplusIndex_prevSalt = generalise(
-		surplus_tempSurplusIndex_preimage.salt
+	const surpluses_index_1_prev = generalise(surpluses_index_1_preimage.value);
+	const surpluses_index_1_prevSalt = generalise(
+		surpluses_index_1_preimage.salt
 	);
 
 	// read preimage for whole state
@@ -1136,6 +1161,18 @@ let tempSurplusIndex = generalise(parseInt(surplusIndex.integer, 10) + 1);
 	const dailyInterestRate_path = generalise(dailyInterestRate_witness.path).all;
 
 	// generate witness for whole accessed state
+	const startDateOfContract_witness = await getMembershipWitness(
+		"SyntheticPpaShield",
+		startDateOfContract_currentCommitment.integer
+	);
+	const startDateOfContract_index = generalise(
+		startDateOfContract_witness.index
+	);
+	const startDateOfContract_root = generalise(startDateOfContract_witness.root);
+	const startDateOfContract_path = generalise(startDateOfContract_witness.path)
+		.all;
+
+	// generate witness for whole accessed state
 	const expiryDateOfContract_witness = await getMembershipWitness(
 		"SyntheticPpaShield",
 		expiryDateOfContract_currentCommitment.integer
@@ -1189,26 +1226,21 @@ let tempSurplusIndex = generalise(parseInt(surplusIndex.integer, 10) + 1);
 	).all;
 
 	// generate witness for whole state
-	const surplus_tempSurplusIndex_emptyPath = new Array(32).fill(0);
-	const surplus_tempSurplusIndex_witness = surplus_tempSurplusIndex_witnessRequired
+	const surpluses_index_1_emptyPath = new Array(32).fill(0);
+	const surpluses_index_1_witness = surpluses_index_1_witnessRequired
 		? await getMembershipWitness(
 				"SyntheticPpaShield",
-				surplus_tempSurplusIndex_currentCommitment.integer
+				surpluses_index_1_currentCommitment.integer
 		  )
 		: {
 				index: 0,
-				path: surplus_tempSurplusIndex_emptyPath,
+				path: surpluses_index_1_emptyPath,
 				root: (await getRoot("SyntheticPpaShield")) || 0,
 		  };
-	const surplus_tempSurplusIndex_index = generalise(
-		surplus_tempSurplusIndex_witness.index
-	);
-	const surplus_tempSurplusIndex_root = generalise(
-		surplus_tempSurplusIndex_witness.root
-	);
-	const surplus_tempSurplusIndex_path = generalise(
-		surplus_tempSurplusIndex_witness.path
-	).all;
+	const surpluses_index_1_index = generalise(surpluses_index_1_witness.index);
+	const surpluses_index_1_root = generalise(surpluses_index_1_witness.root);
+	const surpluses_index_1_path = generalise(surpluses_index_1_witness.path).all;
+
 
 	// generate witness for whole state
 	const latestSurplusSequenceNumber_emptyPath = new Array(32).fill(0);
@@ -1517,6 +1549,10 @@ let tempSurplusIndex = generalise(parseInt(surplusIndex.integer, 10) + 1);
 		surplusCharges_billNumber_witness.path
 	).all;
 
+	let negativePriceCharges_billNumber = generalise(
+		negativePriceCharges_billNumber_preimage.value
+	);
+
 	let offtakerInterest_billNumber = generalise(
 		offtakerInterest_billNumber_preimage.value
 	);
@@ -1537,8 +1573,8 @@ let tempSurplusIndex = generalise(parseInt(surplusIndex.integer, 10) + 1);
 
 	let surplusChargeSum = generalise(surplusChargeSum_preimage.value);
 
-	let surplus_tempSurplusIndex = generalise(
-		surplus_tempSurplusIndex_preimage.value
+	let surpluses_index_1 = generalise(
+		surpluses_index_1_preimage.value
 	);
 
 	let shortfallCharges_billNumber = generalise(
@@ -1573,6 +1609,7 @@ let tempSurplusIndex = generalise(parseInt(surplusIndex.integer, 10) + 1);
 			parseInt(marginalLossFactor.integer, 10)
 	);
 
+
 	// Added check : if bills are not in correct sequence
 
 	if(parseInt(sequenceNumber.integer, 10) != (parseInt(latestShortfallSequenceNumber.integer, 10) + parseInt(sequenceNumberInterval.integer, 10))){
@@ -1581,15 +1618,33 @@ let tempSurplusIndex = generalise(parseInt(surplusIndex.integer, 10) + 1);
 	   );
     }
 
-	let negativePriceCharges_billNumber =
-		parseInt(expectedVolume.integer, 10) * parseInt(strikePrice.integer, 10) -
-		parseInt(totalGeneratedVolume.integer, 10) *
-			parseInt(strikePrice.integer, 10);
+	let netPositiveAdjustment = generalise(0);
 
-	negativePriceCharges_billNumber = generalise(negativePriceCharges_billNumber);
+	let netNegativeAdjustment = generalise(0);
 
 	if (
-		parseInt(floatingAmount.integer, 10) > parseInt(fixedAmount.integer, 10)
+		parseInt(negativeAdjustment.integer, 10) >
+		parseInt(positiveAdjustment.integer, 10)
+	) {
+		netNegativeAdjustment =
+			parseInt(negativeAdjustment.integer, 10) -
+			parseInt(positiveAdjustment.integer, 10);
+	} else {
+		netPositiveAdjustment =
+			parseInt(positiveAdjustment.integer, 10) -
+			parseInt(negativeAdjustment.integer, 10);
+	}
+
+	netPositiveAdjustment = generalise(netPositiveAdjustment);
+	netNegativeAdjustment = generalise(netNegativeAdjustment);
+
+
+	
+	if (
+		(parseInt(floatingAmount.integer, 10) +
+			parseInt(netNegativeAdjustment.integer, 10)) >
+		(parseInt(fixedAmount.integer, 10) +
+			parseInt(netPositiveAdjustment.integer, 10))
 	) {
 		generatorCharges_billNumber =
 			parseInt(floatingAmount.integer, 10) -
@@ -1670,7 +1725,7 @@ let tempSurplusIndex = generalise(parseInt(surplusIndex.integer, 10) + 1);
 		shortfalls_index.price = parseInt(averagePrice.integer, 10);
 
 		shortfalls_index.volume =
-			parseInt(shortfallThreshold.integer, 10) -
+			parseInt(expectedVolume.integer, 10) -
 			parseInt(offtakerVolume.integer, 10);
 
 		shortfallChargeSum =
@@ -1747,13 +1802,13 @@ let tempSurplusIndex = generalise(parseInt(surplusIndex.integer, 10) + 1);
 			  parseInt(volumeDifference.integer, 10) >=
 					parseInt(surplusThreshold.integer, 10)
 	) {
-		surplus_tempSurplusIndex.billNumber = parseInt(billNumber.integer, 10);
+		surpluses_index_1.billNumber = parseInt(billNumber.integer, 10);
 
-		surplus_tempSurplusIndex.price = parseInt(averagePrice.integer, 10);
+		surpluses_index_1.price = parseInt(averagePrice.integer, 10);
 
-		surplus_tempSurplusIndex.volume =
-			parseInt(surplusThreshold.integer, 10) -
-			parseInt(offtakerVolume.integer, 10);
+		surpluses_index_1.volume =
+		parseInt(offtakerVolume.integer, 10) -
+		parseInt(expectedVolume.integer, 10);
 
 		surplusChargeSum =
 			parseInt(surplusChargeSum.integer, 10) +
@@ -1765,11 +1820,7 @@ let tempSurplusIndex = generalise(parseInt(surplusIndex.integer, 10) + 1);
 		latestSurplusSequenceNumber = parseInt(sequenceNumber.integer, 10);
 	}
 
-	surplus_tempSurplusIndex = generalise(surplus_tempSurplusIndex);
-
-	surplus_tempSurplusIndex = generalise(surplus_tempSurplusIndex);
-
-	surplus_tempSurplusIndex = generalise(surplus_tempSurplusIndex);
+	surpluses_index_1 = generalise(surpluses_index_1);
 
 	surplusChargeSum = generalise(surplusChargeSum);
 
@@ -1844,6 +1895,22 @@ let tempSurplusIndex = generalise(parseInt(surplusIndex.integer, 10) + 1);
 
 	offtakerInterest_billNumber = generalise(offtakerInterest_billNumber);
 
+	if (
+		parseInt(negativePriceOccurredParam.integer, 10) === 0
+			? false
+			: true &&
+			  parseInt(expectedVolume.integer, 10) >=
+					parseInt(totalGeneratedVolume.integer, 10)
+	) {
+		negativePriceCharges_billNumber =
+			parseInt(expectedVolume.integer, 10) * parseInt(strikePrice.integer, 10) -
+			parseInt(totalGeneratedVolume.integer, 10) *
+				parseInt(strikePrice.integer, 10);
+	}
+
+	negativePriceCharges_billNumber = generalise(negativePriceCharges_billNumber);
+
+
 	// Calculate nullifier(s):
 
 	let strikePrice_nullifier = strikePrice_commitmentExists
@@ -1904,6 +1971,22 @@ let tempSurplusIndex = generalise(parseInt(surplusIndex.integer, 10) + 1);
 
 	dailyInterestRate_nullifier = generalise(dailyInterestRate_nullifier.hex(32)); // truncate
 
+	let startDateOfContract_nullifier = startDateOfContract_commitmentExists
+		? poseidonHash([
+				BigInt(startDateOfContract_stateVarId),
+				BigInt(secretKey.hex(32)),
+				BigInt(startDateOfContract_prevSalt.hex(32)),
+		  ])
+		: poseidonHash([
+				BigInt(startDateOfContract_stateVarId),
+				BigInt(generalise(0).hex(32)),
+				BigInt(startDateOfContract_prevSalt.hex(32)),
+		  ]);
+
+	startDateOfContract_nullifier = generalise(
+		startDateOfContract_nullifier.hex(32)
+	); // truncate
+
 	let expiryDateOfContract_nullifier = expiryDateOfContract_commitmentExists
 		? poseidonHash([
 				BigInt(expiryDateOfContract_stateVarId),
@@ -1950,21 +2033,20 @@ let tempSurplusIndex = generalise(parseInt(surplusIndex.integer, 10) + 1);
 		latestShortfallSequenceNumber_nullifier.hex(32)
 	); // truncate
 
-	let surplus_tempSurplusIndex_nullifier = surplus_tempSurplusIndex_commitmentExists
+	let surpluses_index_1_nullifier = surpluses_index_1_commitmentExists
 		? poseidonHash([
-				BigInt(surplus_tempSurplusIndex_stateVarId),
+				BigInt(surpluses_index_1_stateVarId),
 				BigInt(secretKey.hex(32)),
-				BigInt(surplus_tempSurplusIndex_prevSalt.hex(32)),
+				BigInt(surpluses_index_1_prevSalt.hex(32)),
 		  ])
 		: poseidonHash([
-				BigInt(surplus_tempSurplusIndex_stateVarId),
+				BigInt(surpluses_index_1_stateVarId),
 				BigInt(generalise(0).hex(32)),
-				BigInt(surplus_tempSurplusIndex_prevSalt.hex(32)),
+				BigInt(surpluses_index_1_prevSalt.hex(32)),
 		  ]);
 
-	surplus_tempSurplusIndex_nullifier = generalise(
-		surplus_tempSurplusIndex_nullifier.hex(32)
-	); // truncate
+	surpluses_index_1_nullifier = generalise(surpluses_index_1_nullifier.hex(32)); // truncate
+
 
 	let latestSurplusSequenceNumber_nullifier = latestSurplusSequenceNumber_commitmentExists
 		? poseidonHash([
@@ -2289,29 +2371,29 @@ let tempSurplusIndex = generalise(parseInt(surplusIndex.integer, 10) + 1);
 		latestShortfallSequenceNumber_newCommitment.hex(32)
 	); // truncate
 
-	surplus_tempSurplusIndex.billNumber = surplus_tempSurplusIndex.billNumber
-		? surplus_tempSurplusIndex.billNumber
-		: surplus_tempSurplusIndex_prev.billNumber;
-	surplus_tempSurplusIndex.volume = surplus_tempSurplusIndex.volume
-		? surplus_tempSurplusIndex.volume
-		: surplus_tempSurplusIndex_prev.volume;
-	surplus_tempSurplusIndex.price = surplus_tempSurplusIndex.price
-		? surplus_tempSurplusIndex.price
-		: surplus_tempSurplusIndex_prev.price;
+	surpluses_index_1.billNumber = surpluses_index_1.billNumber
+		? surpluses_index_1.billNumber
+		: surpluses_index_1_prev.billNumber;
+	surpluses_index_1.volume = surpluses_index_1.volume
+		? surpluses_index_1.volume
+		: surpluses_index_1_prev.volume;
+	surpluses_index_1.price = surpluses_index_1.price
+		? surpluses_index_1.price
+		: surpluses_index_1_prev.price;
 
-	const surplus_tempSurplusIndex_newSalt = generalise(utils.randomHex(31));
+	const surpluses_index_1_newSalt = generalise(utils.randomHex(31));
 
-	let surplus_tempSurplusIndex_newCommitment = poseidonHash([
-		BigInt(surplus_tempSurplusIndex_stateVarId),
-		BigInt(surplus_tempSurplusIndex.billNumber.hex(32)),
-		BigInt(surplus_tempSurplusIndex.volume.hex(32)),
-		BigInt(surplus_tempSurplusIndex.price.hex(32)),
-		BigInt(surplus_tempSurplusIndex_newOwnerPublicKey.hex(32)),
-		BigInt(surplus_tempSurplusIndex_newSalt.hex(32)),
+	let surpluses_index_1_newCommitment = poseidonHash([
+		BigInt(surpluses_index_1_stateVarId),
+		BigInt(surpluses_index_1.billNumber.hex(32)),
+		BigInt(surpluses_index_1.volume.hex(32)),
+		BigInt(surpluses_index_1.price.hex(32)),
+		BigInt(surpluses_index_1_newOwnerPublicKey.hex(32)),
+		BigInt(surpluses_index_1_newSalt.hex(32)),
 	]);
 
-	surplus_tempSurplusIndex_newCommitment = generalise(
-		surplus_tempSurplusIndex_newCommitment.hex(32)
+	surpluses_index_1_newCommitment = generalise(
+		surpluses_index_1_newCommitment.hex(32)
 	); // truncate
 
 	const latestSurplusSequenceNumber_newSalt = generalise(utils.randomHex(31));
@@ -2486,6 +2568,7 @@ let tempSurplusIndex = generalise(parseInt(surplusIndex.integer, 10) + 1);
 		outstandingOfftakerAmount.all.integer,
 		generatorDelayDays.all.integer,
 		offtakerDelayDays.all.integer,
+		negativePriceOccurredParam.integer,
 		referenceDate.integer,
 		secretKey.integer,
 		strikePrice_nullifier.integer,
@@ -2516,6 +2599,15 @@ let tempSurplusIndex = generalise(parseInt(surplusIndex.integer, 10) + 1);
 
 		dailyInterestRate_index.integer,
 		dailyInterestRate_path.integer,
+
+		secretKey.integer,
+
+		startDateOfContract_nullifier.integer,
+		startDateOfContract_prev.integer,
+		startDateOfContract_prevSalt.integer,
+
+		startDateOfContract_index.integer,
+		startDateOfContract_path.integer,
 
 		secretKey.integer,
 		expiryDateOfContract_nullifier.integer,
@@ -2554,22 +2646,22 @@ let tempSurplusIndex = generalise(parseInt(surplusIndex.integer, 10) + 1);
 		latestShortfallSequenceNumber_newOwnerPublicKey.integer,
 		latestShortfallSequenceNumber_newSalt.integer,
 		latestShortfallSequenceNumber_newCommitment.integer,
-		surplus_tempSurplusIndex_commitmentExists
+		surpluses_index_1_commitmentExists
 			? secretKey.integer
 			: generalise(0).integer,
 
-		surplus_tempSurplusIndex_nullifier.integer,
-		surplus_tempSurplusIndex_prev.billNumber.integer,
-		surplus_tempSurplusIndex_prev.volume.integer,
-		surplus_tempSurplusIndex_prev.price.integer,
-		surplus_tempSurplusIndex_prevSalt.integer,
-		surplus_tempSurplusIndex_commitmentExists ? 0 : 1,
+		surpluses_index_1_nullifier.integer,
+		surpluses_index_1_prev.billNumber.integer,
+		surpluses_index_1_prev.volume.integer,
+		surpluses_index_1_prev.price.integer,
+		surpluses_index_1_prevSalt.integer,
+		surpluses_index_1_commitmentExists ? 0 : 1,
 
-		surplus_tempSurplusIndex_index.integer,
-		surplus_tempSurplusIndex_path.integer,
-		surplus_tempSurplusIndex_newOwnerPublicKey.integer,
-		surplus_tempSurplusIndex_newSalt.integer,
-		surplus_tempSurplusIndex_newCommitment.integer,
+		surpluses_index_1_index.integer,
+		surpluses_index_1_path.integer,
+		surpluses_index_1_newOwnerPublicKey.integer,
+		surpluses_index_1_newSalt.integer,
+		surpluses_index_1_newCommitment.integer,
 		latestSurplusSequenceNumber_commitmentExists
 			? secretKey.integer
 			: generalise(0).integer,
@@ -2792,7 +2884,7 @@ let tempSurplusIndex = generalise(parseInt(surplusIndex.integer, 10) + 1);
 			[
 				shortfalls_index_nullifier.integer,
 				latestShortfallSequenceNumber_nullifier.integer,
-				surplus_tempSurplusIndex_nullifier.integer,
+				surpluses_index_1_nullifier.integer,
 				latestSurplusSequenceNumber_nullifier.integer,
 				generatorCharges_billNumber_nullifier.integer,
 				offtakerCharges_billNumber_nullifier.integer,
@@ -2810,7 +2902,7 @@ let tempSurplusIndex = generalise(parseInt(surplusIndex.integer, 10) + 1);
 			[
 				shortfalls_index_newCommitment.integer,
 				latestShortfallSequenceNumber_newCommitment.integer,
-				surplus_tempSurplusIndex_newCommitment.integer,
+				surpluses_index_1_newCommitment.integer,
 				latestSurplusSequenceNumber_newCommitment.integer,
 				generatorCharges_billNumber_newCommitment.integer,
 				offtakerCharges_billNumber_newCommitment.integer,
@@ -2828,6 +2920,7 @@ let tempSurplusIndex = generalise(parseInt(surplusIndex.integer, 10) + 1);
 				bundlePrice_nullifier.integer,
 				volumeShare_nullifier.integer,
 				dailyInterestRate_nullifier.integer,
+				startDateOfContract_nullifier.integer,
 				expiryDateOfContract_nullifier.integer,
 				sequenceNumberInterval_nullifier.integer,
 				numberOfConsecutivePeriodsForShortfall_nullifier.integer,
@@ -2923,29 +3016,29 @@ let tempSurplusIndex = generalise(parseInt(surplusIndex.integer, 10) + 1);
 		isNullified: false,
 	});
 
-	if (surplus_tempSurplusIndex_commitmentExists)
+	if (surpluses_index_1_commitmentExists)
 		await markNullified(
-			surplus_tempSurplusIndex_currentCommitment,
+			surpluses_index_1_currentCommitment,
 			secretKey.hex(32)
 		);
 	
 
 	await storeCommitment({
-		hash: surplus_tempSurplusIndex_newCommitment,
+		hash: surpluses_index_1_newCommitment,
 		name: "surplus",
-		mappingKey: surplus_tempSurplusIndex_stateVarId_key.integer,
+		mappingKey: surpluses_index_1_stateVarId_key.integer,
 		preimage: {
-			stateVarId: generalise(surplus_tempSurplusIndex_stateVarId),
+			stateVarId: generalise(surpluses_index_1_stateVarId),
 			value: {
-				billNumber: surplus_tempSurplusIndex.billNumber,
-				volume: surplus_tempSurplusIndex.volume,
-				price: surplus_tempSurplusIndex.price,
+				billNumber: surpluses_index_1.billNumber,
+				volume: surpluses_index_1.volume,
+				price: surpluses_index_1.price,
 			},
-			salt: surplus_tempSurplusIndex_newSalt,
-			publicKey: surplus_tempSurplusIndex_newOwnerPublicKey,
+			salt: surpluses_index_1_newSalt,
+			publicKey: surpluses_index_1_newOwnerPublicKey,
 		},
 		secretKey:
-			surplus_tempSurplusIndex_newOwnerPublicKey.integer === publicKey.integer
+			surpluses_index_1_newOwnerPublicKey.integer === publicKey.integer
 				? secretKey
 				: null,
 		isNullified: false,
@@ -3236,6 +3329,7 @@ let tempSurplusIndex = generalise(parseInt(surplusIndex.integer, 10) + 1);
 		isNullified: false,
 	});
 
+
 	return {
 		tx,
 		encEvent,
@@ -3251,7 +3345,7 @@ let tempSurplusIndex = generalise(parseInt(surplusIndex.integer, 10) + 1);
 			shortfallCharges_billNumber.integer,
 		surplusCharges_billNumber_newCommitmentValue:
 			surplusCharges_billNumber.integer,
-		negativePriceCharges_billNumberValue:
+		negativePriceCharges_billNumber_newCommitmentValue:
 			negativePriceCharges_billNumber.integer,
 	};
 }

@@ -7,18 +7,19 @@ uint256 private strikePrice;
 uint256 private bundlePrice;
 uint256 private volumeShare;
 uint256 private dailyInterestRate;
+uint256 private startDateOfContract;
 uint256 private expiryDateOfContract;
 bool public isContractTerminated;
 
-mapping(uint256 => Shortfall) private shortfalls;
+mapping(uint256 => VolumeGap) private shortfalls;
 uint256 private latestShortfallSequenceNumber;
 
-mapping(uint256 => Shortfall) private surplus;
+mapping(uint256 => VolumeGap) private surpluses;
 uint256 private latestSurplusSequenceNumber;
 
 uint256 private sequenceNumberInterval;
 
-struct Shortfall {
+struct VolumeGap {
 uint256 billNumber;
 uint256 volume;
 uint256 price;
@@ -44,8 +45,7 @@ mapping(uint256 => uint256) private surplusCharges;
 
 modifier onlyOwner() {
 require(
-msg.sender == owner,
-"Caller is unauthorised, it must be the owner"
+msg.sender == owner
 );
 _;
 }
@@ -57,8 +57,7 @@ owner = msg.sender;
 
 function setStrikePrice(uint256 strikePriceParam) public onlyOwner {
 require(
-msg.sender == owner,
-"Caller is unauthorised, it must be the owner"
+msg.sender == owner
 );
 
 strikePrice = strikePriceParam;
@@ -66,8 +65,7 @@ strikePrice = strikePriceParam;
 
 function setBundlePrice(uint256 bundlePriceParam) public onlyOwner {
 require(
-msg.sender == owner,
-"Caller is unauthorised, it must be the owner"
+msg.sender == owner
 );
 
 bundlePrice = bundlePriceParam;
@@ -75,8 +73,7 @@ bundlePrice = bundlePriceParam;
 
 function setShortfallThreshold(uint256 shortfallThresholdParam) public onlyOwner {
 require(
-msg.sender == owner,
-"Caller is unauthorised, it must be the owner"
+msg.sender == owner
 );
 
 shortfallThreshold = shortfallThresholdParam;
@@ -84,8 +81,7 @@ shortfallThreshold = shortfallThresholdParam;
 
 function setShortfallPeriods(uint256 shortfallPeriods) public onlyOwner {
 require(
-msg.sender == owner,
-"Caller is unauthorised, it must be the owner"
+msg.sender == owner
 );
 
 numberOfConsecutivePeriodsForShortfall = shortfallPeriods;
@@ -93,8 +89,7 @@ numberOfConsecutivePeriodsForShortfall = shortfallPeriods;
 
 function setSurplusThreshold(uint256 surplusThresholdParam) public onlyOwner {
 require(
-msg.sender == owner,
-"Caller is unauthorised, it must be the owner"
+msg.sender == owner
 );
 
 surplusThreshold = surplusThresholdParam;
@@ -102,8 +97,7 @@ surplusThreshold = surplusThresholdParam;
 
 function setSurplusPeriods(uint256 surplusPeriods) public onlyOwner {
 require(
-msg.sender == owner,
-"Caller is unauthorised, it must be the owner"
+msg.sender == owner
 );
 
 numberOfConsecutivePeriodsForSurplus = surplusPeriods;
@@ -111,17 +105,23 @@ numberOfConsecutivePeriodsForSurplus = surplusPeriods;
 
 function setDailyInterestRate(uint256 dailyInterestRateParam) public onlyOwner {
 require(
-msg.sender == owner,
-"Caller is unauthorised, it must be the owner"
+msg.sender == owner
 );
 
 dailyInterestRate = dailyInterestRateParam;
 }
 
+function setStartDateOfContract(uint256 startDateOfContractParam) public onlyOwner {
+require(
+msg.sender == owner
+);
+
+startDateOfContract = startDateOfContractParam;
+}
+
 function setExpiryDateOfContract(uint256 expiryDateOfContractParam) public onlyOwner {
 require(
-msg.sender == owner,
-"Caller is unauthorised, it must be the owner"
+msg.sender == owner
 );
 
 expiryDateOfContract = expiryDateOfContractParam;
@@ -129,8 +129,7 @@ expiryDateOfContract = expiryDateOfContractParam;
 
 function setVolumeShare(uint256 volumeShareParam) public onlyOwner {
 require(
-msg.sender == owner,
-"Caller is unauthorised, it must be the owner"
+msg.sender == owner
 );
 
 volumeShare = volumeShareParam;
@@ -138,8 +137,7 @@ volumeShare = volumeShareParam;
 
 function setSequenceNumberInterval(uint256 sequenceNumberIntervalParam) public onlyOwner {
 require(
-msg.sender == owner,
-"Caller is unauthorised, it must be the owner"
+msg.sender == owner
 );
 
 sequenceNumberInterval = sequenceNumberIntervalParam;
@@ -147,19 +145,10 @@ sequenceNumberInterval = sequenceNumberIntervalParam;
 
 function initSequenceNumber() public onlyOwner {
 require(
-msg.sender == owner,
-"Caller is unauthorised, it must be the owner"
+msg.sender == owner
 );
 
 latestShortfallSequenceNumber = 0;
-}
-
-function initSurplusSequenceNumber() public onlyOwner {
-require(
-msg.sender == owner,
-"Caller is unauthorised, it must be the owner"
-);
-
 latestSurplusSequenceNumber = 0;
 }
 
@@ -175,13 +164,13 @@ uint256 shortfallThresholdParam,
 uint256 numberOfConsecutivePeriodsForSurplusParam,
 uint256 surplusThresholdParam,
 uint256 dailyInterestRateParam,
+uint256 startDateOfContractParam,
 uint256 expiryDateOfContractParam,
-uint256 sequenceNumberIntervalParam,
-uint256 referenceDate
+uint256 sequenceNumberIntervalParam
 ) public onlyOwner {
-require(referenceDate > expiryDateOfContract);
-
 require(isContractTerminated == false);
+
+
 volumeShare = volumeShareParam;
 strikePrice = strikePriceParam;
 bundlePrice = bundlePriceParam;
@@ -190,6 +179,7 @@ shortfallThreshold = shortfallThresholdParam;
 numberOfConsecutivePeriodsForSurplus = numberOfConsecutivePeriodsForSurplusParam;
 surplusThreshold = surplusThresholdParam;
 dailyInterestRate = dailyInterestRateParam;
+startDateOfContract = startDateOfContractParam;
 expiryDateOfContract = expiryDateOfContractParam;
 sequenceNumberInterval = sequenceNumberIntervalParam;
 latestShortfallSequenceNumber = 0;
@@ -213,23 +203,39 @@ uint256[5] calldata outstandingGeneratorAmount,
 uint256[5] calldata outstandingOfftakerAmount,
 uint256[5] calldata generatorDelayDays,
 uint256[5] calldata offtakerDelayDays,
+bool negativePriceOccurredParam,
 uint256 referenceDate
 ) public onlyOwner
 returns (uint256, uint256, uint256, uint256, uint256, uint256, uint256) {
 
+require(referenceDate >= startDateOfContract);
 require(referenceDate < expiryDateOfContract);
-require(isContractTerminated == false);
+require(!isContractTerminated);
 
 uint256 offtakerVolume = totalGeneratedVolume * volumeShare;
 uint256 fixedAmount = offtakerVolume * bundlePrice * marginalLossFactor;
-negativePriceCharges[billNumber] = expectedVolume * strikePrice - totalGeneratedVolume * strikePrice;
-uint256 index = shortfallIndex + 1;
-uint256 tempSurplusIndex = surplusIndex + 1; 
 
-if (floatingAmount > fixedAmount) {
-generatorCharges[billNumber] = floatingAmount - fixedAmount + positiveAdjustment - negativeAdjustment;
+uint256 netPositiveAdjustment = 0;
+uint256 netNegativeAdjustment = 0;
+if(negativeAdjustment > positiveAdjustment) {
+netNegativeAdjustment = negativeAdjustment - positiveAdjustment;
+}
+else {
+netPositiveAdjustment = positiveAdjustment - negativeAdjustment;
+}
+
+// Positive adjustment means that the price has been retroactively increased;
+// therefore, it's a debt for the offtaker to the generator.
+// Since a higher fixed amount is also a debt for the offtaker to the generator,
+// positive adjustment and fixed amount can be added together.
+// Negative adjustment works the same with the floating amount.
+// The logic and calculations below need to sacrifice readability in order to
+// avoid nested ifs, brackets and negative numbers.
+
+if (floatingAmount + netNegativeAdjustment > fixedAmount + netPositiveAdjustment) {
+generatorCharges[billNumber] = floatingAmount + netNegativeAdjustment - fixedAmount - netPositiveAdjustment;
 } else {
-offtakerCharges[billNumber] = fixedAmount - floatingAmount + positiveAdjustment - negativeAdjustment;
+offtakerCharges[billNumber] = fixedAmount + netPositiveAdjustment - floatingAmount - netNegativeAdjustment;
 }
 
 bool shortfallSequence = false;
@@ -255,7 +261,7 @@ priceDifference = averagePrice - strikePrice;
 priceDifference = strikePrice - averagePrice;
 }
 
-// Shortfall and suplus difference
+// Shortfall and surplus difference
 uint256 volumeDifference = 0;
 if(expectedVolume > offtakerVolume) { 
 volumeDifference = expectedVolume - totalGeneratedVolume;
@@ -263,12 +269,12 @@ volumeDifference = expectedVolume - totalGeneratedVolume;
 volumeDifference = totalGeneratedVolume - expectedVolume;
 }
 
-
 // Shortfall calculation
+uint256 index = shortfallIndex + 1;
 if (shortfallSequence && expectedVolume > offtakerVolume && volumeDifference >= shortfallThreshold) {
 shortfalls[index].billNumber = billNumber;
 shortfalls[index].price = averagePrice;
-shortfalls[index].volume = shortfallThreshold - offtakerVolume; 
+shortfalls[index].volume = expectedVolume - offtakerVolume;
 shortfallChargeSum += shortfalls[index].volume * priceDifference;
 shortfallIndex += 1;
 latestShortfallSequenceNumber = sequenceNumber;
@@ -288,11 +294,12 @@ latestShortfallSequenceNumber = 0;
 }
 
 // Surplus calculation
+index = surplusIndex + 1;
 if (surplusSequence && expectedVolume < offtakerVolume && volumeDifference >= surplusThreshold) {
-surplus[tempSurplusIndex].billNumber = billNumber;
-surplus[tempSurplusIndex].price = averagePrice;
-surplus[tempSurplusIndex].volume = surplusThreshold - offtakerVolume; 
-surplusChargeSum += surplus[tempSurplusIndex].volume * priceDifference;
+surpluses[index].billNumber = billNumber;
+surpluses[index].price = averagePrice;
+surpluses[index].volume = offtakerVolume - expectedVolume;
+surplusChargeSum += surpluses[index].volume * priceDifference;
 surplusIndex += 1;
 latestSurplusSequenceNumber = sequenceNumber;
 } 
@@ -318,6 +325,10 @@ offtakerInterest[billNumber] += outstandingOfftakerAmount[i] * offtakerDelayDays
 }
 }
 
+if(negativePriceOccurredParam && expectedVolume >= totalGeneratedVolume) {
+negativePriceCharges[billNumber] = expectedVolume * strikePrice - totalGeneratedVolume * strikePrice;
+}
+
 return (
 generatorCharges[billNumber],
 offtakerCharges[billNumber],
@@ -332,8 +343,7 @@ negativePriceCharges[billNumber]
 
 function terminateContract() public onlyOwner {
 require(
-msg.sender == owner,
-"Caller is unauthorised, it must be the owner"
+msg.sender == owner
 );
 
 isContractTerminated = true;

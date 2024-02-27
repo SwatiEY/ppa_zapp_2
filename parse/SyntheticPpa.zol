@@ -7,18 +7,19 @@ contract SyntheticPpa {
     secret uint256 private bundlePrice;
     secret uint256 private volumeShare;
     secret uint256 private dailyInterestRate;
+    secret uint256 private startDateOfContract;
     secret uint256 private expiryDateOfContract;
     bool public isContractTerminated;
 
-    secret mapping(uint256 => Shortfall) private shortfalls;
+    secret mapping(uint256 => VolumeGap) private shortfalls;
     secret uint256 private latestShortfallSequenceNumber;
 
-    secret mapping(uint256 => Shortfall) private surplus;
+    secret mapping(uint256 => VolumeGap) private surpluses;
     secret uint256 private latestSurplusSequenceNumber;
 
     secret uint256 private sequenceNumberInterval;
 
-    struct Shortfall {
+    struct VolumeGap {
         uint256 billNumber;
         uint256 volume;
         uint256 price;
@@ -44,8 +45,7 @@ contract SyntheticPpa {
 
     modifier onlyOwner() {
         require(
-            msg.sender == owner,
-            "Caller is unauthorised, it must be the owner"
+            msg.sender == owner
         );
         _;
     }
@@ -83,6 +83,10 @@ contract SyntheticPpa {
         dailyInterestRate = dailyInterestRateParam;
     }
 
+    function setStartDateOfContract(secret uint256 startDateOfContractParam) public onlyOwner {
+        startDateOfContract = startDateOfContractParam;
+    }
+
     function setExpiryDateOfContract(secret uint256 expiryDateOfContractParam) public onlyOwner {
         expiryDateOfContract = expiryDateOfContractParam;
     }
@@ -97,9 +101,6 @@ contract SyntheticPpa {
 
     function initSequenceNumber() public onlyOwner {
         latestShortfallSequenceNumber = 0;
-    }
-
-    function initSurplusSequenceNumber() public onlyOwner {
         latestSurplusSequenceNumber = 0;
     }
 
@@ -113,13 +114,13 @@ contract SyntheticPpa {
         secret uint256 numberOfConsecutivePeriodsForSurplusParam,
         secret uint256 surplusThresholdParam,
         secret uint256 dailyInterestRateParam,
+        secret uint256 startDateOfContractParam,
         secret uint256 expiryDateOfContractParam,
-        secret uint256 sequenceNumberIntervalParam,
-        secret uint256 referenceDate
+        secret uint256 sequenceNumberIntervalParam
     ) public onlyOwner {
-       require(referenceDate > expiryDateOfContract);
+        require(isContractTerminated == false);
+        
 
-       require(isContractTerminated == false);
         volumeShare = volumeShareParam;
         strikePrice = strikePriceParam;
         bundlePrice = bundlePriceParam;
@@ -128,6 +129,7 @@ contract SyntheticPpa {
         numberOfConsecutivePeriodsForSurplus = numberOfConsecutivePeriodsForSurplusParam;
         surplusThreshold = surplusThresholdParam;
         dailyInterestRate = dailyInterestRateParam;
+        startDateOfContract = startDateOfContractParam;
         expiryDateOfContract = expiryDateOfContractParam;
         sequenceNumberInterval = sequenceNumberIntervalParam;
         latestShortfallSequenceNumber = 0;
@@ -149,23 +151,39 @@ contract SyntheticPpa {
         secret uint256[5] calldata outstandingOfftakerAmount,
         secret uint256[5] calldata generatorDelayDays,
         secret uint256[5] calldata offtakerDelayDays,
+        secret bool negativePriceOccurredParam,
         secret uint256 referenceDate
     ) public onlyOwner
       returns (uint256, uint256, uint256, uint256, uint256, uint256, uint256) {
         
+        require(referenceDate >= startDateOfContract);
         require(referenceDate < expiryDateOfContract);
-        require(isContractTerminated == false);
+        require(!isContractTerminated);
 
         secret uint256 offtakerVolume = totalGeneratedVolume * volumeShare;
         secret uint256 fixedAmount = offtakerVolume * bundlePrice * marginalLossFactor;
-        negativePriceCharges[billNumber] = expectedVolume * strikePrice - totalGeneratedVolume * strikePrice;
-        secret uint256 index = shortfallIndex + 1;
-        secret uint256 tempSurplusIndex = surplusIndex + 1; 
 
-        if (floatingAmount > fixedAmount) {
-            generatorCharges[billNumber] = floatingAmount - fixedAmount + positiveAdjustment - negativeAdjustment;
+        secret uint256 netPositiveAdjustment = 0;
+        secret uint256 netNegativeAdjustment = 0;
+        if(negativeAdjustment > positiveAdjustment) {
+            netNegativeAdjustment = negativeAdjustment - positiveAdjustment;
+        }
+        else {
+            netPositiveAdjustment = positiveAdjustment - negativeAdjustment;
+        }
+
+        // Positive adjustment means that the price has been retroactively increased;
+        // therefore, it's a debt for the offtaker to the generator.
+        // Since a higher fixed amount is also a debt for the offtaker to the generator,
+        // positive adjustment and fixed amount can be added together.
+        // Negative adjustment works the same with the floating amount.
+        // The logic and calculations below need to sacrifice readability in order to
+        // avoid nested ifs, brackets and negative numbers.
+
+        if (floatingAmount + netNegativeAdjustment > fixedAmount + netPositiveAdjustment) {
+            generatorCharges[billNumber] = floatingAmount + netNegativeAdjustment - fixedAmount - netPositiveAdjustment;
         } else {
-            offtakerCharges[billNumber] = fixedAmount - floatingAmount + positiveAdjustment - negativeAdjustment;
+            offtakerCharges[billNumber] = fixedAmount + netPositiveAdjustment - floatingAmount - netNegativeAdjustment;
         }
 
         secret bool shortfallSequence = false;
@@ -191,7 +209,7 @@ contract SyntheticPpa {
             priceDifference = strikePrice - averagePrice;
         }
 
-        // Shortfall and suplus difference
+        // Shortfall and surplus difference
         secret uint256 volumeDifference = 0;
         if(expectedVolume > offtakerVolume) {   
             volumeDifference = expectedVolume - totalGeneratedVolume;
@@ -199,12 +217,12 @@ contract SyntheticPpa {
             volumeDifference = totalGeneratedVolume - expectedVolume;
         }
 
-
         // Shortfall calculation
+        secret uint256 index = shortfallIndex + 1;
         if (shortfallSequence && expectedVolume > offtakerVolume && volumeDifference >= shortfallThreshold) {
             shortfalls[index].billNumber = billNumber;
             shortfalls[index].price = averagePrice;
-            shortfalls[index].volume = shortfallThreshold - offtakerVolume; 
+            shortfalls[index].volume = expectedVolume - offtakerVolume;
             shortfallChargeSum += shortfalls[index].volume * priceDifference;
             shortfallIndex += 1;
             latestShortfallSequenceNumber = sequenceNumber;
@@ -224,11 +242,12 @@ contract SyntheticPpa {
         }
 
         // Surplus calculation
+        index = surplusIndex + 1;
         if (surplusSequence && expectedVolume < offtakerVolume && volumeDifference >= surplusThreshold) {
-            surplus[tempSurplusIndex].billNumber = billNumber;
-            surplus[tempSurplusIndex].price = averagePrice;
-            surplus[tempSurplusIndex].volume = surplusThreshold - offtakerVolume; 
-            surplusChargeSum += surplus[tempSurplusIndex].volume * priceDifference;
+            surpluses[index].billNumber = billNumber;
+            surpluses[index].price = averagePrice;
+            surpluses[index].volume = offtakerVolume - expectedVolume;
+            surplusChargeSum += surpluses[index].volume * priceDifference;
             surplusIndex += 1;
             latestSurplusSequenceNumber = sequenceNumber;
         } 
@@ -252,6 +271,10 @@ contract SyntheticPpa {
             } if (outstandingOfftakerAmount[i] > 0) {
                 offtakerInterest[billNumber] += outstandingOfftakerAmount[i] * offtakerDelayDays[i] * dailyInterestRate;
             }
+        }
+
+        if(negativePriceOccurredParam && expectedVolume >= totalGeneratedVolume) {
+            negativePriceCharges[billNumber] = expectedVolume * strikePrice - totalGeneratedVolume * strikePrice;
         }
 
         return (
