@@ -264,23 +264,23 @@ priceDifference = strikePrice - averagePrice;
 // Shortfall and surplus difference
 uint256 volumeDifference = 0;
 if(expectedVolume > offtakerVolume) { 
-volumeDifference = expectedVolume - totalGeneratedVolume;
+volumeDifference = expectedVolume - offtakerVolume;
 } else {
-volumeDifference = totalGeneratedVolume - expectedVolume;
+volumeDifference = offtakerVolume - expectedVolume;
 }
 
 // Shortfall calculation
-uint256 index = shortfallIndex + 1;
+uint256 index = shortfallIndex + 0;
 if (shortfallSequence && expectedVolume > offtakerVolume && volumeDifference >= shortfallThreshold) {
 shortfalls[index].billNumber = billNumber;
 shortfalls[index].price = averagePrice;
-shortfalls[index].volume = expectedVolume - offtakerVolume;
+shortfalls[index].volume = volumeDifference;
 shortfallChargeSum += shortfalls[index].volume * priceDifference;
 shortfallIndex += 1;
 latestShortfallSequenceNumber = sequenceNumber;
 } 
 
-if (shortfallSequence && expectedVolume < offtakerVolume || volumeDifference <= shortfallThreshold) {
+if (shortfallSequence && (expectedVolume < offtakerVolume || volumeDifference <= shortfallThreshold)) {
 shortfallChargeSum = 0;
 shortfallIndex = 0;
 latestShortfallSequenceNumber = 0;
@@ -294,17 +294,17 @@ latestShortfallSequenceNumber = 0;
 }
 
 // Surplus calculation
-index = surplusIndex + 1;
+index = surplusIndex + 0;
 if (surplusSequence && expectedVolume < offtakerVolume && volumeDifference >= surplusThreshold) {
 surpluses[index].billNumber = billNumber;
 surpluses[index].price = averagePrice;
-surpluses[index].volume = offtakerVolume - expectedVolume;
+surpluses[index].volume = volumeDifference;
 surplusChargeSum += surpluses[index].volume * priceDifference;
 surplusIndex += 1;
 latestSurplusSequenceNumber = sequenceNumber;
 } 
 
-if (surplusSequence && expectedVolume > offtakerVolume || volumeDifference <= surplusThreshold) {
+if (surplusSequence && (expectedVolume > offtakerVolume || volumeDifference <= surplusThreshold)) {
 surplusChargeSum = 0;
 surplusIndex = 0;
 latestSurplusSequenceNumber = 0;
@@ -326,7 +326,7 @@ offtakerInterest[billNumber] += outstandingOfftakerAmount[i] * offtakerDelayDays
 }
 
 if(negativePriceOccurredParam && expectedVolume >= totalGeneratedVolume) {
-negativePriceCharges[billNumber] = expectedVolume * strikePrice - totalGeneratedVolume * strikePrice;
+negativePriceCharges[billNumber] = volumeDifference * strikePrice;
 }
 
 return (

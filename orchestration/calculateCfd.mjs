@@ -265,7 +265,7 @@ export default async function calculateCfd(
 
 	let shortfallIndex = generalise(shortfallIndex_preimage.value);
 
-	let index = generalise(parseInt(shortfallIndex.integer, 10) + 1);
+	let index = generalise(parseInt(shortfallIndex.integer, 10) + 0);
 
 
 	// Initialise commitment preimage of whole state:
@@ -351,7 +351,7 @@ if (!surplusIndex_commitment) {
 
 let surplusIndex = generalise(surplusIndex_preimage.value);
 
-let index_1 = generalise(parseInt(surplusIndex.integer, 10) + 1);
+let index_1 = generalise(parseInt(surplusIndex.integer, 10) + 0);
 	// Initialise commitment preimage of whole state:
 
 	let surpluses_index_1_stateVarId = 27;
@@ -1697,6 +1697,8 @@ let index_1 = generalise(parseInt(surplusIndex.integer, 10) + 1);
 			parseInt(strikePrice.integer, 10) - parseInt(averagePrice.integer, 10);
 	}
 
+	priceDifference = generalise(priceDifference);
+
 	let volumeDifference = generalise(0);
 
 	if (
@@ -1704,17 +1706,16 @@ let index_1 = generalise(parseInt(surplusIndex.integer, 10) + 1);
 	) {
 		volumeDifference =
 			parseInt(expectedVolume.integer, 10) -
-			parseInt(totalGeneratedVolume.integer, 10);
+			parseInt(offtakerVolume.integer, 10);
 	} else {
 		volumeDifference =
-			parseInt(totalGeneratedVolume.integer, 10) -
+			parseInt(offtakerVolume.integer, 10) -
 			parseInt(expectedVolume.integer, 10);
 	}
+	volumeDifference = generalise(volumeDifference);
 
 	if (
-		parseInt(shortfallSequence.integer, 10) === 0
-			? false
-			: true &&
+		!(parseInt(shortfallSequence.integer, 10) === 0) &&
 			  parseInt(expectedVolume.integer, 10) >
 					parseInt(offtakerVolume.integer, 10) &&
 			  parseInt(volumeDifference.integer, 10) >=
@@ -1724,9 +1725,9 @@ let index_1 = generalise(parseInt(surplusIndex.integer, 10) + 1);
 
 		shortfalls_index.price = parseInt(averagePrice.integer, 10);
 
-		shortfalls_index.volume =
-			parseInt(expectedVolume.integer, 10) -
-			parseInt(offtakerVolume.integer, 10);
+		shortfalls_index.volume = parseInt(volumeDifference.integer, 10);
+
+		shortfalls_index = generalise(shortfalls_index);
 
 		shortfallChargeSum =
 			parseInt(shortfallChargeSum.integer, 10) +
@@ -1738,7 +1739,6 @@ let index_1 = generalise(parseInt(surplusIndex.integer, 10) + 1);
 		latestShortfallSequenceNumber = parseInt(sequenceNumber.integer, 10);
 	}
 
-	shortfalls_index = generalise(shortfalls_index);
 
 	shortfalls_index = generalise(shortfalls_index);
 
@@ -1751,11 +1751,9 @@ let index_1 = generalise(parseInt(surplusIndex.integer, 10) + 1);
 	latestShortfallSequenceNumber = generalise(latestShortfallSequenceNumber);
 
 	if (
-		parseInt(shortfallSequence.integer, 10) === 0
-			? false
-			: (true &&
+		!(parseInt(shortfallSequence.integer, 10) === 0) &&
 					(parseInt(expectedVolume.integer, 10) <
-						parseInt(offtakerVolume.integer, 10)) ||
+						parseInt(offtakerVolume.integer, 10) ||
 			  parseInt(volumeDifference.integer, 10) <=
 					parseInt(shortfallThreshold.integer, 10))
 	) {
@@ -1794,9 +1792,7 @@ let index_1 = generalise(parseInt(surplusIndex.integer, 10) + 1);
 	latestShortfallSequenceNumber = generalise(latestShortfallSequenceNumber);
 
 	if (
-		parseInt(surplusSequence.integer, 10) === 0
-			? false
-			: true &&
+		!(parseInt(surplusSequence.integer, 10) === 0) &&
 			  parseInt(expectedVolume.integer, 10) <
 					parseInt(offtakerVolume.integer, 10) &&
 			  parseInt(volumeDifference.integer, 10) >=
@@ -1806,13 +1802,13 @@ let index_1 = generalise(parseInt(surplusIndex.integer, 10) + 1);
 
 		surpluses_index_1.price = parseInt(averagePrice.integer, 10);
 
-		surpluses_index_1.volume =
-		parseInt(offtakerVolume.integer, 10) -
-		parseInt(expectedVolume.integer, 10);
+		surpluses_index_1.volume = parseInt(volumeDifference.integer, 10);
+		
+		surpluses_index_1 = generalise(surpluses_index_1);
 
 		surplusChargeSum =
 			parseInt(surplusChargeSum.integer, 10) +
-			parseInt(surplus_tempSurplusIndex.volume.integer, 10) *
+			parseInt(surpluses_index_1.volume.integer, 10) *
 				parseInt(priceDifference.integer, 10);
 
 		surplusIndex = parseInt(surplusIndex.integer, 10) + 1;
@@ -1820,7 +1816,6 @@ let index_1 = generalise(parseInt(surplusIndex.integer, 10) + 1);
 		latestSurplusSequenceNumber = parseInt(sequenceNumber.integer, 10);
 	}
 
-	surpluses_index_1 = generalise(surpluses_index_1);
 
 	surplusChargeSum = generalise(surplusChargeSum);
 
@@ -1829,9 +1824,8 @@ let index_1 = generalise(parseInt(surplusIndex.integer, 10) + 1);
 	latestSurplusSequenceNumber = generalise(latestSurplusSequenceNumber);
 
 	if (
-		parseInt(surplusSequence.integer, 10) === 0
-			? false
-			: true &&
+		!(parseInt(surplusSequence.integer, 10) === 0)
+			 &&
 					(parseInt(expectedVolume.integer, 10) >
 						parseInt(offtakerVolume.integer, 10) ||
 			  parseInt(volumeDifference.integer, 10) <=
@@ -1896,16 +1890,13 @@ let index_1 = generalise(parseInt(surplusIndex.integer, 10) + 1);
 	offtakerInterest_billNumber = generalise(offtakerInterest_billNumber);
 
 	if (
-		parseInt(negativePriceOccurredParam.integer, 10) === 0
-			? false
-			: true &&
+		!(parseInt(negativePriceOccurredParam.integer, 10) === 0)
+			 &&
 			  parseInt(expectedVolume.integer, 10) >=
 					parseInt(totalGeneratedVolume.integer, 10)
 	) {
-		negativePriceCharges_billNumber =
-			parseInt(expectedVolume.integer, 10) * parseInt(strikePrice.integer, 10) -
-			parseInt(totalGeneratedVolume.integer, 10) *
-				parseInt(strikePrice.integer, 10);
+		negativePriceCharges_billNumber = parseInt(volumeDifference.integer, 10) * 
+		                                 parseInt(strikePrice.integer, 10);
 	}
 
 	negativePriceCharges_billNumber = generalise(negativePriceCharges_billNumber);

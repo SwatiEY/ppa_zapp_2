@@ -450,17 +450,17 @@ def main(\
 
 
 
-		field index = shortfallIndex + 1
+		field index = shortfallIndex + 0
 
-		field index_1 = surplusIndex + 1
+		field index_1 = surplusIndex + 0
 
 
         field floatingAmount_temp = floatingAmount
         field netNegativeAdjustment_temp = netNegativeAdjustment
         field netPositiveAdjustment_temp = netPositiveAdjustment
         field fixedAmount_temp = fixedAmount
-       generatorCharges_billNumber = if (floatingAmount_temp + netNegativeAdjustment_temp) > (fixedAmount_temp + netPositiveAdjustment_temp) then floatingAmount + netNegativeAdjustment - fixedAmount - netPositiveAdjustment else generatorCharges_billNumber fi
-        offtakerCharges_billNumber = if (floatingAmount_temp + netNegativeAdjustment_temp) > (fixedAmount_temp + netPositiveAdjustment_temp) then offtakerCharges_billNumber else fixedAmount + netPositiveAdjustment - floatingAmount - netNegativeAdjustment fi
+       generatorCharges_billNumber = if floatingAmount_temp + netNegativeAdjustment_temp > fixedAmount_temp + netPositiveAdjustment_temp then floatingAmount + netNegativeAdjustment - fixedAmount - netPositiveAdjustment else generatorCharges_billNumber fi
+        offtakerCharges_billNumber = if floatingAmount_temp + netNegativeAdjustment_temp > fixedAmount_temp + netPositiveAdjustment_temp then offtakerCharges_billNumber else fixedAmount + netPositiveAdjustment - floatingAmount - netNegativeAdjustment fi
 
 
 bool shortfallSequence = false
@@ -485,8 +485,8 @@ bool surplusSequence = false
 
 
         field expectedVolume_temp = expectedVolume
-        volumeDifference = if expectedVolume_temp > offtakerVolume then expectedVolume - totalGeneratedVolume else volumeDifference fi
-        volumeDifference = if expectedVolume_temp > offtakerVolume then volumeDifference else totalGeneratedVolume - expectedVolume fi
+        volumeDifference = if expectedVolume_temp > offtakerVolume then expectedVolume - offtakerVolume else volumeDifference fi
+        volumeDifference = if expectedVolume_temp > offtakerVolume then volumeDifference else offtakerVolume - expectedVolume fi
 
 
         bool shortfallSequence_temp = shortfallSequence
@@ -494,7 +494,7 @@ bool surplusSequence = false
         field shortfallThreshold_temp = shortfallThreshold
         shortfalls_index.billNumber = if shortfallSequence_temp && expectedVolume_temp > offtakerVolume && volumeDifference_temp >= shortfallThreshold_temp then billNumber else shortfalls_index.billNumber fi
         shortfalls_index.price = if shortfallSequence_temp && expectedVolume_temp > offtakerVolume && volumeDifference_temp >= shortfallThreshold_temp then averagePrice else shortfalls_index.price fi
-        shortfalls_index.volume = if shortfallSequence_temp && expectedVolume_temp > offtakerVolume && volumeDifference_temp >= shortfallThreshold_temp then expectedVolume - offtakerVolume else shortfalls_index.volume fi
+        shortfalls_index.volume = if shortfallSequence_temp && expectedVolume_temp > offtakerVolume && volumeDifference_temp >= shortfallThreshold_temp then volumeDifference else shortfalls_index.volume fi
         shortfallChargeSum = if shortfallSequence_temp && expectedVolume_temp > offtakerVolume && volumeDifference_temp >= shortfallThreshold_temp then shortfallChargeSum + shortfalls_index.volume * priceDifference else shortfallChargeSum fi
         shortfallIndex = if shortfallSequence_temp && expectedVolume_temp > offtakerVolume && volumeDifference_temp >= shortfallThreshold_temp then shortfallIndex + 1 else shortfallIndex fi
         latestShortfallSequenceNumber = if shortfallSequence_temp && expectedVolume_temp > offtakerVolume && volumeDifference_temp >= shortfallThreshold_temp then sequenceNumber else latestShortfallSequenceNumber fi
@@ -517,7 +517,7 @@ bool surplusSequence = false
         field surplusThreshold_temp = surplusThreshold
         surpluses_index_1.billNumber = if surplusSequence_temp && expectedVolume_temp < offtakerVolume && volumeDifference_temp >= surplusThreshold_temp then billNumber else surpluses_index_1.billNumber fi
         surpluses_index_1.price = if surplusSequence_temp && expectedVolume_temp < offtakerVolume && volumeDifference_temp >= surplusThreshold_temp then averagePrice else surpluses_index_1.price fi
-        surpluses_index_1.volume = if surplusSequence_temp && expectedVolume_temp < offtakerVolume && volumeDifference_temp >= surplusThreshold_temp then offtakerVolume - expectedVolume else surpluses_index_1.volume fi
+        surpluses_index_1.volume = if surplusSequence_temp && expectedVolume_temp < offtakerVolume && volumeDifference_temp >= surplusThreshold_temp then volumeDifference else surpluses_index_1.volume fi
         surplusChargeSum = if surplusSequence_temp && expectedVolume_temp < offtakerVolume && volumeDifference_temp >= surplusThreshold_temp then surplusChargeSum + surpluses_index_1.volume * priceDifference else surplusChargeSum fi
         surplusIndex = if surplusSequence_temp && expectedVolume_temp < offtakerVolume && volumeDifference_temp >= surplusThreshold_temp then surplusIndex + 1 else surplusIndex fi
         latestSurplusSequenceNumber = if surplusSequence_temp && expectedVolume_temp < offtakerVolume && volumeDifference_temp >= surplusThreshold_temp then sequenceNumber else latestSurplusSequenceNumber fi
@@ -527,7 +527,7 @@ bool surplusSequence = false
         
         surplusChargeSum = if surplusSequence_temp && (expectedVolume_temp > offtakerVolume || volumeDifference_temp <= surplusThreshold_temp) then 0 else surplusChargeSum fi
         surplusIndex = if surplusSequence_temp && (expectedVolume_temp > offtakerVolume || volumeDifference_temp <= surplusThreshold_temp) then 0 else surplusIndex fi
-        latestSurplusSequenceNumber = if surplusSequence_temp && expectedVolume_temp > offtakerVolume || volumeDifference_temp <= surplusThreshold_temp then 0 else latestSurplusSequenceNumber fi
+        latestSurplusSequenceNumber = if surplusSequence_temp && (expectedVolume_temp > offtakerVolume || volumeDifference_temp <= surplusThreshold_temp) then 0 else latestSurplusSequenceNumber fi
 
 
         field surplusIndex_temp = surplusIndex
@@ -544,7 +544,7 @@ for u32 i in 0..5 do
             endfor
 
  field totalGeneratedVolume_temp = totalGeneratedVolume 
-negativePriceCharges_billNumber = if negativePriceOccurredParam && expectedVolume_temp >= totalGeneratedVolume_temp then expectedVolume * strikePrice - totalGeneratedVolume * strikePrice else negativePriceCharges_billNumber fi
+negativePriceCharges_billNumber = if negativePriceOccurredParam && expectedVolume_temp >= totalGeneratedVolume_temp then volumeDifference * strikePrice else negativePriceCharges_billNumber fi
 
 
         // strikePrice_oldCommitment - PoKoSK:
