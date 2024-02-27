@@ -17,7 +17,7 @@ def main(\
 	private field[32] latestShortfallSequenceNumber_oldCommitment_membershipWitness_siblingPath,\
 	private field latestShortfallSequenceNumber_newCommitment_owner_publicKey,\
 	private field latestShortfallSequenceNumber_newCommitment_salt,\
-	public field latestShortfallSequenceNumber_newCommitment_commitment\
+	public field latestShortfallSequenceNumber_newCommitment_commitment,\
   private field latestSurplusSequenceNumber_oldCommitment_owner_secretKey,\
 	public field latestSurplusSequenceNumber_oldCommitment_nullifier,\
 	private  field latestSurplusSequenceNumber_oldCommitment_value,\
