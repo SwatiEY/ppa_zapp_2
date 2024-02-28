@@ -1798,7 +1798,7 @@ let index_1 = generalise(parseInt(surplusIndex.integer, 10) + 0);
 			  parseInt(volumeDifference.integer, 10) >=
 					parseInt(surplusThreshold.integer, 10)
 	) {
-		surpluses_index_1.billNumber = parseInt(billNumber.integer, 10);
+		surpluses_index_1.billNumber = billNumber;
 
 		surpluses_index_1.price = parseInt(averagePrice.integer, 10);
 
