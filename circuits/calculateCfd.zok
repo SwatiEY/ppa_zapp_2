@@ -7,7 +7,7 @@ from "./common/hashes/poseidon/poseidon.zok" import main as poseidon
 from "./common/merkle-tree/mimc/altbn254/verify-membership/height32.zok" import main as checkRoot
 from "./common/hashes/mimc/altbn254/mimc2.zok" import main as mimc2
 
-struct Shortfall {
+struct VolumeGap {
         field billNumber
 field volume
 field price
@@ -27,6 +27,7 @@ def main(\
 	private field[5] outstandingOfftakerAmount,\
 	private field[5] generatorDelayDays,\
 	private field[5] offtakerDelayDays,\
+  private bool negativePriceOccurredParam,\
 	private field referenceDate,\
 	private field strikePrice_oldCommitment_owner_secretKey,\
 	public field strikePrice_oldCommitment_nullifier,\
@@ -53,6 +54,12 @@ def main(\
 	private field dailyInterestRate_oldCommitment_salt,\
 	private field dailyInterestRate_oldCommitment_membershipWitness_index,\
 	private field[32] dailyInterestRate_oldCommitment_membershipWitness_siblingPath,\
+  private field startDateOfContract_oldCommitment_owner_secretKey,\
+	public field startDateOfContract_oldCommitment_nullifier,\
+	private  field startDateOfContract_oldCommitment_value,\
+	private field startDateOfContract_oldCommitment_salt,\
+	private field startDateOfContract_oldCommitment_membershipWitness_index,\
+	private field[32] startDateOfContract_oldCommitment_membershipWitness_siblingPath,\
 	private field expiryDateOfContract_oldCommitment_owner_secretKey,\
   public field expiryDateOfContract_oldCommitment_nullifier,\
 	private  field expiryDateOfContract_oldCommitment_value,\
@@ -61,7 +68,7 @@ def main(\
 	private field[32] expiryDateOfContract_oldCommitment_membershipWitness_siblingPath,\
 	private field shortfalls_index_oldCommitment_owner_secretKey,\
 	public field shortfalls_index_oldCommitment_nullifier,\
-	private  Shortfall shortfalls_index_oldCommitment_value,\
+	private  VolumeGap shortfalls_index_oldCommitment_value,\
 	private field shortfalls_index_oldCommitment_salt,\
 	private bool shortfalls_index_oldCommitment_isDummy,\
 	private field shortfalls_index_oldCommitment_membershipWitness_index,\
@@ -79,16 +86,16 @@ def main(\
 	private field latestShortfallSequenceNumber_newCommitment_owner_publicKey,\
 	private field latestShortfallSequenceNumber_newCommitment_salt,\
 	public field latestShortfallSequenceNumber_newCommitment_commitment,\
-	private field surplus_tempSurplusIndex_oldCommitment_owner_secretKey,\
-	public field surplus_tempSurplusIndex_oldCommitment_nullifier,\
-	private  Shortfall surplus_tempSurplusIndex_oldCommitment_value,\
-	private field surplus_tempSurplusIndex_oldCommitment_salt,\
-	private bool surplus_tempSurplusIndex_oldCommitment_isDummy,\
-	private field surplus_tempSurplusIndex_oldCommitment_membershipWitness_index,\
-	private field[32] surplus_tempSurplusIndex_oldCommitment_membershipWitness_siblingPath,\
-	private field surplus_tempSurplusIndex_newCommitment_owner_publicKey,\
-	private field surplus_tempSurplusIndex_newCommitment_salt,\
-	public field surplus_tempSurplusIndex_newCommitment_commitment,\
+	private field surpluses_index_1_oldCommitment_owner_secretKey,\
+	public field surpluses_index_1_oldCommitment_nullifier,\
+	private  VolumeGap surpluses_index_1_oldCommitment_value,\
+	private field surpluses_index_1_oldCommitment_salt,\
+	private bool surpluses_index_1_oldCommitment_isDummy,\
+	private field surpluses_index_1_oldCommitment_membershipWitness_index,\
+	private field[32] surpluses_index_1_oldCommitment_membershipWitness_siblingPath,\
+	private field surpluses_index_1_newCommitment_owner_publicKey,\
+	private field surpluses_index_1_newCommitment_salt,\
+	public field surpluses_index_1_newCommitment_commitment,\
 	private field latestSurplusSequenceNumber_oldCommitment_owner_secretKey,\
 	public field latestSurplusSequenceNumber_oldCommitment_nullifier,\
 	private  field latestSurplusSequenceNumber_oldCommitment_value,\
@@ -269,9 +276,15 @@ def main(\
 
         field dailyInterestRate = dailyInterestRate_oldCommitment_value
 
+        // We need to hard-code each stateVarId into the circuit:
+        field startDateOfContract_stateVarId_field = 13
+
+
+        field startDateOfContract = startDateOfContract_oldCommitment_value
+
 
         // We need to hard-code each stateVarId into the circuit:
-        field expiryDateOfContract_stateVarId_field = 13
+        field expiryDateOfContract_stateVarId_field = 15
 
 
         field expiryDateOfContract = expiryDateOfContract_oldCommitment_value
@@ -281,7 +294,7 @@ def main(\
         field shortfalls_mappingId = 20
 
 
-        Shortfall shortfalls_index = shortfalls_index_oldCommitment_value
+        VolumeGap shortfalls_index = shortfalls_index_oldCommitment_value
 
 
         // We need to hard-code each stateVarId into the circuit:
@@ -292,10 +305,10 @@ def main(\
 
 
         // We need to hard-code the mappingId's of mappings into the circuit:
-        field surplus_mappingId = 27
+        field surpluses_mappingId = 27
 
 
-        Shortfall surplus_tempSurplusIndex = surplus_tempSurplusIndex_oldCommitment_value
+        VolumeGap surpluses_index_1 = surpluses_index_1_oldCommitment_value
 
 
         // We need to hard-code each stateVarId into the circuit:
@@ -415,7 +428,8 @@ def main(\
 
 
         field surplusCharges_billNumber = surplusCharges_billNumber_oldCommitment_value
-
+      
+       assert(referenceDate >= startDateOfContract)
 
         assert(referenceDate < expiryDateOfContract)
 
@@ -423,17 +437,31 @@ def main(\
 
 		field fixedAmount = offtakerVolume * bundlePrice * marginalLossFactor
 
-negativePriceCharges_billNumber = expectedVolume * strikePrice - totalGeneratedVolume * strikePrice
+    field netPositiveAdjustment = 0
 
-		field index = shortfallIndex + 1
+		field netNegativeAdjustment = 0
 
-		field tempSurplusIndex = surplusIndex + 1
+    field negativeAdjustment_temp = negativeAdjustment
+        field positiveAdjustment_temp = positiveAdjustment
+        netNegativeAdjustment = if negativeAdjustment_temp > positiveAdjustment_temp then negativeAdjustment - positiveAdjustment else netNegativeAdjustment fi
+        netPositiveAdjustment = if negativeAdjustment_temp > positiveAdjustment_temp then netPositiveAdjustment else positiveAdjustment - negativeAdjustment fi
+
+
+
+
+
+		field index = shortfallIndex + 0
+
+		field index_1 = surplusIndex + 0
 
 
         field floatingAmount_temp = floatingAmount
+        field netNegativeAdjustment_temp = netNegativeAdjustment
+        field netPositiveAdjustment_temp = netPositiveAdjustment
         field fixedAmount_temp = fixedAmount
-        generatorCharges_billNumber = if floatingAmount_temp > fixedAmount_temp then floatingAmount - fixedAmount + positiveAdjustment - negativeAdjustment else generatorCharges_billNumber fi
-        offtakerCharges_billNumber = if floatingAmount_temp > fixedAmount_temp then offtakerCharges_billNumber else fixedAmount - floatingAmount + positiveAdjustment - negativeAdjustment fi
+       generatorCharges_billNumber = if floatingAmount_temp + netNegativeAdjustment_temp > fixedAmount_temp + netPositiveAdjustment_temp then floatingAmount + netNegativeAdjustment - fixedAmount - netPositiveAdjustment else generatorCharges_billNumber fi
+        offtakerCharges_billNumber = if floatingAmount_temp + netNegativeAdjustment_temp > fixedAmount_temp + netPositiveAdjustment_temp then offtakerCharges_billNumber else fixedAmount + netPositiveAdjustment - floatingAmount - netNegativeAdjustment fi
+
 
 bool shortfallSequence = false
         
@@ -457,8 +485,8 @@ bool surplusSequence = false
 
 
         field expectedVolume_temp = expectedVolume
-        volumeDifference = if expectedVolume_temp > offtakerVolume then expectedVolume - totalGeneratedVolume else volumeDifference fi
-        volumeDifference = if expectedVolume_temp > offtakerVolume then volumeDifference else totalGeneratedVolume - expectedVolume fi
+        volumeDifference = if expectedVolume_temp > offtakerVolume then expectedVolume - offtakerVolume else volumeDifference fi
+        volumeDifference = if expectedVolume_temp > offtakerVolume then volumeDifference else offtakerVolume - expectedVolume fi
 
 
         bool shortfallSequence_temp = shortfallSequence
@@ -466,7 +494,7 @@ bool surplusSequence = false
         field shortfallThreshold_temp = shortfallThreshold
         shortfalls_index.billNumber = if shortfallSequence_temp && expectedVolume_temp > offtakerVolume && volumeDifference_temp >= shortfallThreshold_temp then billNumber else shortfalls_index.billNumber fi
         shortfalls_index.price = if shortfallSequence_temp && expectedVolume_temp > offtakerVolume && volumeDifference_temp >= shortfallThreshold_temp then averagePrice else shortfalls_index.price fi
-        shortfalls_index.volume = if shortfallSequence_temp && expectedVolume_temp > offtakerVolume && volumeDifference_temp >= shortfallThreshold_temp then shortfallThreshold - offtakerVolume else shortfalls_index.volume fi
+        shortfalls_index.volume = if shortfallSequence_temp && expectedVolume_temp > offtakerVolume && volumeDifference_temp >= shortfallThreshold_temp then volumeDifference else shortfalls_index.volume fi
         shortfallChargeSum = if shortfallSequence_temp && expectedVolume_temp > offtakerVolume && volumeDifference_temp >= shortfallThreshold_temp then shortfallChargeSum + shortfalls_index.volume * priceDifference else shortfallChargeSum fi
         shortfallIndex = if shortfallSequence_temp && expectedVolume_temp > offtakerVolume && volumeDifference_temp >= shortfallThreshold_temp then shortfallIndex + 1 else shortfallIndex fi
         latestShortfallSequenceNumber = if shortfallSequence_temp && expectedVolume_temp > offtakerVolume && volumeDifference_temp >= shortfallThreshold_temp then sequenceNumber else latestShortfallSequenceNumber fi
@@ -487,18 +515,19 @@ bool surplusSequence = false
 
         bool surplusSequence_temp = surplusSequence
         field surplusThreshold_temp = surplusThreshold
-        surplus_tempSurplusIndex.billNumber = if surplusSequence_temp && expectedVolume_temp < offtakerVolume && volumeDifference_temp >= surplusThreshold_temp then billNumber else surplus_tempSurplusIndex.billNumber fi
-        surplus_tempSurplusIndex.price = if surplusSequence_temp && expectedVolume_temp < offtakerVolume && volumeDifference_temp >= surplusThreshold_temp then averagePrice else surplus_tempSurplusIndex.price fi
-        surplus_tempSurplusIndex.volume = if surplusSequence_temp && expectedVolume_temp < offtakerVolume && volumeDifference_temp >= surplusThreshold_temp then surplusThreshold - offtakerVolume else surplus_tempSurplusIndex.volume fi
-        surplusChargeSum = if surplusSequence_temp && expectedVolume_temp < offtakerVolume && volumeDifference_temp >= surplusThreshold_temp then surplusChargeSum + surplus_tempSurplusIndex.volume * priceDifference else surplusChargeSum fi
+        surpluses_index_1.billNumber = if surplusSequence_temp && expectedVolume_temp < offtakerVolume && volumeDifference_temp >= surplusThreshold_temp then billNumber else surpluses_index_1.billNumber fi
+        surpluses_index_1.price = if surplusSequence_temp && expectedVolume_temp < offtakerVolume && volumeDifference_temp >= surplusThreshold_temp then averagePrice else surpluses_index_1.price fi
+        surpluses_index_1.volume = if surplusSequence_temp && expectedVolume_temp < offtakerVolume && volumeDifference_temp >= surplusThreshold_temp then volumeDifference else surpluses_index_1.volume fi
+        surplusChargeSum = if surplusSequence_temp && expectedVolume_temp < offtakerVolume && volumeDifference_temp >= surplusThreshold_temp then surplusChargeSum + surpluses_index_1.volume * priceDifference else surplusChargeSum fi
         surplusIndex = if surplusSequence_temp && expectedVolume_temp < offtakerVolume && volumeDifference_temp >= surplusThreshold_temp then surplusIndex + 1 else surplusIndex fi
         latestSurplusSequenceNumber = if surplusSequence_temp && expectedVolume_temp < offtakerVolume && volumeDifference_temp >= surplusThreshold_temp then sequenceNumber else latestSurplusSequenceNumber fi
+
 
 
         
         surplusChargeSum = if surplusSequence_temp && (expectedVolume_temp > offtakerVolume || volumeDifference_temp <= surplusThreshold_temp) then 0 else surplusChargeSum fi
         surplusIndex = if surplusSequence_temp && (expectedVolume_temp > offtakerVolume || volumeDifference_temp <= surplusThreshold_temp) then 0 else surplusIndex fi
-        latestSurplusSequenceNumber = if surplusSequence_temp && expectedVolume_temp > offtakerVolume || volumeDifference_temp <= surplusThreshold_temp then 0 else latestSurplusSequenceNumber fi
+        latestSurplusSequenceNumber = if surplusSequence_temp && (expectedVolume_temp > offtakerVolume || volumeDifference_temp <= surplusThreshold_temp) then 0 else latestSurplusSequenceNumber fi
 
 
         field surplusIndex_temp = surplusIndex
@@ -514,7 +543,8 @@ for u32 i in 0..5 do
         offtakerInterest_billNumber = if outstandingOfftakerAmount[i] > 0 then offtakerInterest_billNumber + outstandingOfftakerAmount[i] * offtakerDelayDays[i] * dailyInterestRate else offtakerInterest_billNumber fi
             endfor
 
- 
+ field totalGeneratedVolume_temp = totalGeneratedVolume 
+negativePriceCharges_billNumber = if negativePriceOccurredParam && expectedVolume_temp >= totalGeneratedVolume_temp then volumeDifference * strikePrice else negativePriceCharges_billNumber fi
 
 
         // strikePrice_oldCommitment - PoKoSK:
@@ -730,6 +760,59 @@ for u32 i in 0..5 do
         )
 
 
+        // startDateOfContract_oldCommitment - PoKoSK:
+        // The correctness of this secret key will be constrained within the oldCommitment existence check.
+
+        field[2] startDateOfContract_oldCommitment_owner_publicKey_point = scalarMult(field_to_bool_256(startDateOfContract_oldCommitment_owner_secretKey), [curveParams().Gu, curveParams().Gv], curveParams())
+
+        bool startDateOfContract_oldCommitment_owner_publicKey_sign = edwardsCompress(startDateOfContract_oldCommitment_owner_publicKey_point)[0]
+
+        bool[254] startDateOfContract_oldCommitment_yBits = field_to_bool_256(startDateOfContract_oldCommitment_owner_publicKey_point[1])[2..256]
+        startDateOfContract_oldCommitment_yBits[0] = startDateOfContract_oldCommitment_owner_publicKey_sign
+
+        field startDateOfContract_oldCommitment_owner_publicKey = bool_256_to_field([false, false, ...startDateOfContract_oldCommitment_yBits])
+
+
+        // Create the Nullifier  for startDateOfContract and no need to nnullify it as its accessed only:
+
+        field startDateOfContract_oldCommitment_nullifier_check_field = poseidon([\
+          startDateOfContract_stateVarId_field,\
+          startDateOfContract_oldCommitment_owner_secretKey,\
+          startDateOfContract_oldCommitment_salt\
+        ])
+
+         assert(\
+        field_to_bool_256(startDateOfContract_oldCommitment_nullifier)[8..256] == field_to_bool_256(startDateOfContract_oldCommitment_nullifier_check_field)[8..256]\
+        )
+
+        
+        // startDateOfContract_oldCommitment_commitment: preimage check
+
+
+        field startDateOfContract_oldCommitment_commitment_field = poseidon([\
+          startDateOfContract_stateVarId_field,\
+          startDateOfContract_oldCommitment_value,\
+          startDateOfContract_oldCommitment_owner_publicKey,\
+          startDateOfContract_oldCommitment_salt        ])
+
+
+        // startDateOfContract_oldCommitment_commitment: existence check
+
+
+        field startDateOfContract_commitmentRoot_check = checkRoot(\
+          startDateOfContract_oldCommitment_membershipWitness_siblingPath,\
+          startDateOfContract_oldCommitment_commitment_field,\
+          startDateOfContract_oldCommitment_membershipWitness_index\
+        )
+
+
+        assert(\
+          field_to_bool_256(commitmentRoot)[8..256] == field_to_bool_256(startDateOfContract_commitmentRoot_check)[8..256]\
+        )
+
+
+
+
         // expiryDateOfContract_oldCommitment - PoKoSK:
         // The correctness of this secret key will be constrained within the oldCommitment existence check.
 
@@ -848,7 +931,7 @@ for u32 i in 0..5 do
 
           // prepare secret state 'shortfalls_index' for commitment
 
-          Shortfall shortfalls_index_newCommitment_value = Shortfall {  billNumber: shortfalls_index.billNumber, volume: shortfalls_index.volume, price: shortfalls_index.price }
+          VolumeGap shortfalls_index_newCommitment_value = VolumeGap {  billNumber: shortfalls_index.billNumber, volume: shortfalls_index.volume, price: shortfalls_index.price }
 
           // shortfalls_index_newCommitment_commitment - preimage check
 
@@ -941,86 +1024,86 @@ for u32 i in 0..5 do
         )
 
 
-        field surplus_tempSurplusIndex_stateVarId_field = mimc2([surplus_mappingId, tempSurplusIndex])
+       field surpluses_index_1_stateVarId_field = mimc2([surpluses_mappingId, index_1])
 
 
-        // surplus_tempSurplusIndex_oldCommitment - PoKoSK:
+        // surpluses_index_1_oldCommitment - PoKoSK:
         // The correctness of this secret key will be constrained within the oldCommitment existence check.
 
-        field[2] surplus_tempSurplusIndex_oldCommitment_owner_publicKey_point = scalarMult(field_to_bool_256(surplus_tempSurplusIndex_oldCommitment_owner_secretKey), [curveParams().Gu, curveParams().Gv], curveParams())
+        field[2] surpluses_index_1_oldCommitment_owner_publicKey_point = scalarMult(field_to_bool_256(surpluses_index_1_oldCommitment_owner_secretKey), [curveParams().Gu, curveParams().Gv], curveParams())
 
-        bool surplus_tempSurplusIndex_oldCommitment_owner_publicKey_sign = edwardsCompress(surplus_tempSurplusIndex_oldCommitment_owner_publicKey_point)[0]
+        bool surpluses_index_1_oldCommitment_owner_publicKey_sign = edwardsCompress(surpluses_index_1_oldCommitment_owner_publicKey_point)[0]
 
-        bool[254] surplus_tempSurplusIndex_oldCommitment_yBits = field_to_bool_256(surplus_tempSurplusIndex_oldCommitment_owner_publicKey_point[1])[2..256]
-        surplus_tempSurplusIndex_oldCommitment_yBits[0] = surplus_tempSurplusIndex_oldCommitment_owner_publicKey_sign
+        bool[254] surpluses_index_1_oldCommitment_yBits = field_to_bool_256(surpluses_index_1_oldCommitment_owner_publicKey_point[1])[2..256]
+        surpluses_index_1_oldCommitment_yBits[0] = surpluses_index_1_oldCommitment_owner_publicKey_sign
 
-        field surplus_tempSurplusIndex_oldCommitment_owner_publicKey = bool_256_to_field([false, false, ...surplus_tempSurplusIndex_oldCommitment_yBits])
+        field surpluses_index_1_oldCommitment_owner_publicKey = bool_256_to_field([false, false, ...surpluses_index_1_oldCommitment_yBits])
 
 
-        // Nullify surplus_tempSurplusIndex:
 
-        field surplus_tempSurplusIndex_oldCommitment_nullifier_check_field = poseidon([\
-          surplus_tempSurplusIndex_stateVarId_field,\
-          surplus_tempSurplusIndex_oldCommitment_owner_secretKey,\
-          surplus_tempSurplusIndex_oldCommitment_salt\
+        // Nullify surpluses_index_1:
+
+        field surpluses_index_1_oldCommitment_nullifier_check_field = poseidon([\
+          surpluses_index_1_stateVarId_field,\
+          surpluses_index_1_oldCommitment_owner_secretKey,\
+          surpluses_index_1_oldCommitment_salt\
         ])
 
         assert(\
-        field_to_bool_256(surplus_tempSurplusIndex_oldCommitment_nullifier)[8..256] == field_to_bool_256(surplus_tempSurplusIndex_oldCommitment_nullifier_check_field)[8..256]\
+        field_to_bool_256(surpluses_index_1_oldCommitment_nullifier)[8..256] == field_to_bool_256(surpluses_index_1_oldCommitment_nullifier_check_field)[8..256]\
         )
-      
 
 
-          // surplus_tempSurplusIndex_oldCommitment_commitment: preimage check
+          // surpluses_index_1_oldCommitment_commitment: preimage check
 
-          field surplus_tempSurplusIndex_oldCommitment_commitment_field = poseidon([\
-            surplus_tempSurplusIndex_stateVarId_field,\
-            	 surplus_tempSurplusIndex_oldCommitment_value.billNumber,\
-	 surplus_tempSurplusIndex_oldCommitment_value.volume,\
-	 surplus_tempSurplusIndex_oldCommitment_value.price,\
-            surplus_tempSurplusIndex_oldCommitment_owner_publicKey,\
-            surplus_tempSurplusIndex_oldCommitment_salt\
+          field surpluses_index_1_oldCommitment_commitment_field = poseidon([\
+            surpluses_index_1_stateVarId_field,\
+            	 surpluses_index_1_oldCommitment_value.billNumber,\
+	 surpluses_index_1_oldCommitment_value.volume,\
+	 surpluses_index_1_oldCommitment_value.price,\
+            surpluses_index_1_oldCommitment_owner_publicKey,\
+            surpluses_index_1_oldCommitment_salt\
           ])
 
 
-        // surplus_tempSurplusIndex_oldCommitment_commitment: existence check
+        // surpluses_index_1_oldCommitment_commitment: existence check
 
 
-        field surplus_tempSurplusIndex_commitmentRoot_check = checkRoot(\
-          surplus_tempSurplusIndex_oldCommitment_membershipWitness_siblingPath,\
-          surplus_tempSurplusIndex_oldCommitment_commitment_field,\
-          surplus_tempSurplusIndex_oldCommitment_membershipWitness_index\
+        field surpluses_index_1_commitmentRoot_check = checkRoot(\
+          surpluses_index_1_oldCommitment_membershipWitness_siblingPath,\
+          surpluses_index_1_oldCommitment_commitment_field,\
+          surpluses_index_1_oldCommitment_membershipWitness_index\
         )
 
 
         // Note: Don't bother actually asserting existence, if the oldCommitment is a dummy:
-        surplus_tempSurplusIndex_commitmentRoot_check = if surplus_tempSurplusIndex_oldCommitment_isDummy == true then commitmentRoot else surplus_tempSurplusIndex_commitmentRoot_check fi
+        surpluses_index_1_commitmentRoot_check = if surpluses_index_1_oldCommitment_isDummy == true then commitmentRoot else surpluses_index_1_commitmentRoot_check fi
 
 
         assert(\
-          field_to_bool_256(commitmentRoot)[8..256] == field_to_bool_256(surplus_tempSurplusIndex_commitmentRoot_check)[8..256]\
+          field_to_bool_256(commitmentRoot)[8..256] == field_to_bool_256(surpluses_index_1_commitmentRoot_check)[8..256]\
         )
 
 
-          // prepare secret state 'surplus_tempSurplusIndex' for commitment
 
-          Shortfall surplus_tempSurplusIndex_newCommitment_value = Shortfall {  billNumber: surplus_tempSurplusIndex.billNumber, volume: surplus_tempSurplusIndex.volume, price: surplus_tempSurplusIndex.price }
+          // prepare secret state 'surpluses_index_1' for commitment
 
-          // surplus_tempSurplusIndex_newCommitment_commitment - preimage check
+          VolumeGap surpluses_index_1_newCommitment_value = VolumeGap {  billNumber: surpluses_index_1.billNumber, volume: surpluses_index_1.volume, price: surpluses_index_1.price }
 
-          field surplus_tempSurplusIndex_newCommitment_commitment_check_field = poseidon([\
-            surplus_tempSurplusIndex_stateVarId_field,\
-            	 surplus_tempSurplusIndex_newCommitment_value.billNumber,\
-	 surplus_tempSurplusIndex_newCommitment_value.volume,\
-	 surplus_tempSurplusIndex_newCommitment_value.price,\
-            surplus_tempSurplusIndex_newCommitment_owner_publicKey,\
-            surplus_tempSurplusIndex_newCommitment_salt\
+          // surpluses_index_1_newCommitment_commitment - preimage check
+
+          field surpluses_index_1_newCommitment_commitment_check_field = poseidon([\
+            surpluses_index_1_stateVarId_field,\
+            	 surpluses_index_1_newCommitment_value.billNumber,\
+	 surpluses_index_1_newCommitment_value.volume,\
+	 surpluses_index_1_newCommitment_value.price,\
+            surpluses_index_1_newCommitment_owner_publicKey,\
+            surpluses_index_1_newCommitment_salt\
           ])
 
           assert(\
-            field_to_bool_256(surplus_tempSurplusIndex_newCommitment_commitment)[8..256] == field_to_bool_256(surplus_tempSurplusIndex_newCommitment_commitment_check_field)[8..256]\
+            field_to_bool_256(surpluses_index_1_newCommitment_commitment)[8..256] == field_to_bool_256(surpluses_index_1_newCommitment_commitment_check_field)[8..256]\
           )
-
 
         // latestSurplusSequenceNumber_oldCommitment - PoKoSK:
         // The correctness of this secret key will be constrained within the oldCommitment existence check.
