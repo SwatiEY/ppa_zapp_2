@@ -25,11 +25,14 @@ uint256 volume;
 uint256 price;
 }
 
-mapping(uint256 => uint256) private generatorCharges;
-mapping(uint256 => uint256) private offtakerCharges;
+mapping(uint256 => uint256) private generatorTotalCharges;
+mapping(uint256 => uint256) private offtakerTotalCharges;
+mapping(uint256 => uint256) private generatorCfdNetPosition;
+mapping(uint256 => uint256) private offtakerCfdNetPosition;
 mapping(uint256 => uint256) private generatorInterest;
 mapping(uint256 => uint256) private offtakerInterest;
-mapping(uint256 => uint256) private negativePriceCharges;
+mapping(uint256 => uint256) private offtakerNegativePriceCharges;
+mapping(uint256 => uint256) private generatorNegativePriceCharges;
 
 uint256 private numberOfConsecutivePeriodsForShortfall;
 uint256 private shortfallThreshold;
@@ -206,7 +209,7 @@ uint256[5] calldata offtakerDelayDays,
 bool negativePriceOccurredParam,
 uint256 referenceDate
 ) public onlyOwner
-returns (uint256, uint256, uint256, uint256, uint256, uint256, uint256) {
+returns (uint256, uint256, uint256, uint256, uint256, uint256, uint256, uint256, uint256, uint256) {
 
 require(referenceDate >= startDateOfContract);
 require(referenceDate < expiryDateOfContract);
@@ -219,8 +222,7 @@ uint256 netPositiveAdjustment = 0;
 uint256 netNegativeAdjustment = 0;
 if(negativeAdjustment > positiveAdjustment) {
 netNegativeAdjustment = negativeAdjustment - positiveAdjustment;
-}
-else {
+} else {
 netPositiveAdjustment = positiveAdjustment - negativeAdjustment;
 }
 
@@ -233,9 +235,9 @@ netPositiveAdjustment = positiveAdjustment - negativeAdjustment;
 // avoid nested ifs, brackets and negative numbers.
 
 if (floatingAmount + netNegativeAdjustment > fixedAmount + netPositiveAdjustment) {
-generatorCharges[billNumber] = floatingAmount + netNegativeAdjustment - fixedAmount - netPositiveAdjustment;
+generatorCfdNetPosition[billNumber] = floatingAmount + netNegativeAdjustment - fixedAmount - netPositiveAdjustment;
 } else {
-offtakerCharges[billNumber] = fixedAmount + netPositiveAdjustment - floatingAmount - netNegativeAdjustment;
+offtakerCfdNetPosition[billNumber] = fixedAmount + netPositiveAdjustment - floatingAmount - netNegativeAdjustment;
 }
 
 bool shortfallSequence = false;
@@ -269,9 +271,17 @@ volumeDifference = expectedVolume - offtakerVolume;
 volumeDifference = offtakerVolume - expectedVolume;
 }
 
+if(negativePriceOccurredParam && expectedVolume > offtakerVolume) { 
+offtakerNegativePriceCharges[billNumber] = volumeDifference * strikePrice;
+} 
+
+if (negativePriceOccurredParam && expectedVolume <= offtakerVolume) {
+generatorNegativePriceCharges[billNumber] = volumeDifference * strikePrice;
+}
+
 // Shortfall calculation
 uint256 index = shortfallIndex + 0;
-if (shortfallSequence && expectedVolume > offtakerVolume && volumeDifference >= shortfallThreshold) {
+if (shortfallSequence && expectedVolume > offtakerVolume && volumeDifference >= shortfallThreshold && numberOfConsecutivePeriodsForShortfall > 0) {
 shortfalls[index].billNumber = billNumber;
 shortfalls[index].price = averagePrice;
 shortfalls[index].volume = volumeDifference;
@@ -280,13 +290,13 @@ shortfallIndex += 1;
 latestShortfallSequenceNumber = sequenceNumber;
 } 
 
-if (shortfallSequence && (expectedVolume < offtakerVolume || volumeDifference <= shortfallThreshold)) {
+if (shortfallSequence && (expectedVolume <= offtakerVolume || volumeDifference < shortfallThreshold)) {
 shortfallChargeSum = 0;
 shortfallIndex = 0;
 latestShortfallSequenceNumber = 0;
 }
 
-if (shortfallIndex >= numberOfConsecutivePeriodsForShortfall) {
+if (shortfallIndex >= numberOfConsecutivePeriodsForShortfall && numberOfConsecutivePeriodsForShortfall > 0 ) {
 shortfallCharges[billNumber] = shortfallChargeSum;
 shortfallChargeSum = 0;
 shortfallIndex = 0;
@@ -295,7 +305,7 @@ latestShortfallSequenceNumber = 0;
 
 // Surplus calculation
 index = surplusIndex + 0;
-if (surplusSequence && expectedVolume < offtakerVolume && volumeDifference >= surplusThreshold) {
+if (surplusSequence && expectedVolume < offtakerVolume && volumeDifference >= surplusThreshold && numberOfConsecutivePeriodsForSurplus > 0) {
 surpluses[index].billNumber = billNumber;
 surpluses[index].price = averagePrice;
 surpluses[index].volume = volumeDifference;
@@ -304,13 +314,13 @@ surplusIndex += 1;
 latestSurplusSequenceNumber = sequenceNumber;
 } 
 
-if (surplusSequence && (expectedVolume > offtakerVolume || volumeDifference <= surplusThreshold)) {
+if (surplusSequence && (expectedVolume >= offtakerVolume || volumeDifference < surplusThreshold)) {
 surplusChargeSum = 0;
 surplusIndex = 0;
 latestSurplusSequenceNumber = 0;
 }
 
-if (surplusIndex >= numberOfConsecutivePeriodsForSurplus) {
+if (surplusIndex >= numberOfConsecutivePeriodsForSurplus && numberOfConsecutivePeriodsForSurplus > 0) {
 surplusCharges[billNumber] = surplusChargeSum;
 surplusChargeSum = 0;
 surplusIndex = 0;
@@ -325,19 +335,19 @@ offtakerInterest[billNumber] += outstandingOfftakerAmount[i] * offtakerDelayDays
 }
 }
 
-if(negativePriceOccurredParam && expectedVolume >= totalGeneratedVolume) {
-negativePriceCharges[billNumber] = volumeDifference * strikePrice;
-}
+generatorTotalCharges[billNumber] = generatorCfdNetPosition[billNumber] + surplusCharges[billNumber] + generatorNegativePriceCharges[billNumber] + generatorInterest[billNumber];
+offtakerTotalCharges[billNumber] = offtakerCfdNetPosition[billNumber] + shortfallCharges[billNumber] + offtakerNegativePriceCharges[billNumber] + offtakerInterest[billNumber];
 
-return (
-generatorCharges[billNumber],
-offtakerCharges[billNumber],
+return ( generatorCfdNetPosition[billNumber],
+offtakerCfdNetPosition[billNumber],
 generatorInterest[billNumber],
 offtakerInterest[billNumber],
 shortfallCharges[billNumber],
 surplusCharges[billNumber],
-negativePriceCharges[billNumber]
-);
+generatorNegativePriceCharges[billNumber],
+offtakerNegativePriceCharges[billNumber],
+generatorTotalCharges[billNumber],
+offtakerTotalCharges[billNumber]);
 }
 
 
