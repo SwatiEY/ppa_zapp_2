@@ -112,27 +112,47 @@ def main(\
 	private field sequenceNumberInterval_oldCommitment_salt,\
 	private field sequenceNumberInterval_oldCommitment_membershipWitness_index,\
 	private field[32] sequenceNumberInterval_oldCommitment_membershipWitness_siblingPath,\
-	private field generatorCharges_billNumber_oldCommitment_owner_secretKey,\
-	public field generatorCharges_billNumber_oldCommitment_nullifier,\
-	private  field generatorCharges_billNumber_oldCommitment_value,\
-	private field generatorCharges_billNumber_oldCommitment_salt,\
-	private bool generatorCharges_billNumber_oldCommitment_isDummy,\
-	private field generatorCharges_billNumber_oldCommitment_membershipWitness_index,\
-	private field[32] generatorCharges_billNumber_oldCommitment_membershipWitness_siblingPath,\
-	private field generatorCharges_billNumber_newCommitment_owner_publicKey,\
-	private field generatorCharges_billNumber_newCommitment_salt,\
-	public field generatorCharges_billNumber_newCommitment_commitment,\
-	private field offtakerCharges_billNumber_oldCommitment_owner_secretKey,\
-	public field offtakerCharges_billNumber_oldCommitment_nullifier,\
-	private  field offtakerCharges_billNumber_oldCommitment_value,\
-	private field offtakerCharges_billNumber_oldCommitment_salt,\
-	private bool offtakerCharges_billNumber_oldCommitment_isDummy,\
-	private field offtakerCharges_billNumber_oldCommitment_membershipWitness_index,\
-	private field[32] offtakerCharges_billNumber_oldCommitment_membershipWitness_siblingPath,\
-	private field offtakerCharges_billNumber_newCommitment_owner_publicKey,\
-	private field offtakerCharges_billNumber_newCommitment_salt,\
-	public field offtakerCharges_billNumber_newCommitment_commitment,\
-	private field generatorInterest_billNumber_oldCommitment_owner_secretKey,\
+	private field generatorTotalCharges_billNumber_oldCommitment_owner_secretKey,\
+	public field generatorTotalCharges_billNumber_oldCommitment_nullifier,\
+	private  field generatorTotalCharges_billNumber_oldCommitment_value,\
+	private field generatorTotalCharges_billNumber_oldCommitment_salt,\
+	private bool generatorTotalCharges_billNumber_oldCommitment_isDummy,\
+	private field generatorTotalCharges_billNumber_oldCommitment_membershipWitness_index,\
+	private field[32] generatorTotalCharges_billNumber_oldCommitment_membershipWitness_siblingPath,\
+	private field generatorTotalCharges_billNumber_newCommitment_owner_publicKey,\
+	private field generatorTotalCharges_billNumber_newCommitment_salt,\
+	public field generatorTotalCharges_billNumber_newCommitment_commitment,\
+	private field offtakerTotalCharges_billNumber_oldCommitment_owner_secretKey,\
+	public field offtakerTotalCharges_billNumber_oldCommitment_nullifier,\
+	private  field offtakerTotalCharges_billNumber_oldCommitment_value,\
+	private field offtakerTotalCharges_billNumber_oldCommitment_salt,\
+	private bool offtakerTotalCharges_billNumber_oldCommitment_isDummy,\
+	private field offtakerTotalCharges_billNumber_oldCommitment_membershipWitness_index,\
+	private field[32] offtakerTotalCharges_billNumber_oldCommitment_membershipWitness_siblingPath,\
+	private field offtakerTotalCharges_billNumber_newCommitment_owner_publicKey,\
+	private field offtakerTotalCharges_billNumber_newCommitment_salt,\
+	public field offtakerTotalCharges_billNumber_newCommitment_commitment,\
+  private field generatorCfdNetPosition_billNumber_oldCommitment_owner_secretKey,\
+	public field generatorCfdNetPosition_billNumber_oldCommitment_nullifier,\
+	private  field generatorCfdNetPosition_billNumber_oldCommitment_value,\
+	private field generatorCfdNetPosition_billNumber_oldCommitment_salt,\
+	private bool generatorCfdNetPosition_billNumber_oldCommitment_isDummy,\
+	private field generatorCfdNetPosition_billNumber_oldCommitment_membershipWitness_index,\
+	private field[32] generatorCfdNetPosition_billNumber_oldCommitment_membershipWitness_siblingPath,\
+	private field generatorCfdNetPosition_billNumber_newCommitment_owner_publicKey,\
+	private field generatorCfdNetPosition_billNumber_newCommitment_salt,\
+	public field generatorCfdNetPosition_billNumber_newCommitment_commitment,\
+  private field offtakerCfdNetPosition_billNumber_oldCommitment_owner_secretKey,\
+	public field offtakerCfdNetPosition_billNumber_oldCommitment_nullifier,\
+	private  field offtakerCfdNetPosition_billNumber_oldCommitment_value,\
+	private field offtakerCfdNetPosition_billNumber_oldCommitment_salt,\
+	private bool offtakerCfdNetPosition_billNumber_oldCommitment_isDummy,\
+	private field offtakerCfdNetPosition_billNumber_oldCommitment_membershipWitness_index,\
+	private field[32] offtakerCfdNetPosition_billNumber_oldCommitment_membershipWitness_siblingPath,\
+	private field offtakerCfdNetPosition_billNumber_newCommitment_owner_publicKey,\
+	private field offtakerCfdNetPosition_billNumber_newCommitment_salt,\
+	public field offtakerCfdNetPosition_billNumber_newCommitment_commitment,\
+  private field generatorInterest_billNumber_oldCommitment_owner_secretKey,\
 	public field generatorInterest_billNumber_oldCommitment_nullifier,\
 	private  field generatorInterest_billNumber_oldCommitment_value,\
 	private field generatorInterest_billNumber_oldCommitment_salt,\
@@ -152,16 +172,26 @@ def main(\
 	private field offtakerInterest_billNumber_newCommitment_owner_publicKey,\
 	private field offtakerInterest_billNumber_newCommitment_salt,\
 	public field offtakerInterest_billNumber_newCommitment_commitment,\
-	private field negativePriceCharges_billNumber_oldCommitment_owner_secretKey,\
-	public field negativePriceCharges_billNumber_oldCommitment_nullifier,\
-	private  field negativePriceCharges_billNumber_oldCommitment_value,\
-	private field negativePriceCharges_billNumber_oldCommitment_salt,\
-	private bool negativePriceCharges_billNumber_oldCommitment_isDummy,\
-	private field negativePriceCharges_billNumber_oldCommitment_membershipWitness_index,\
-	private field[32] negativePriceCharges_billNumber_oldCommitment_membershipWitness_siblingPath,\
-	private field negativePriceCharges_billNumber_newCommitment_owner_publicKey,\
-	private field negativePriceCharges_billNumber_newCommitment_salt,\
-	public field negativePriceCharges_billNumber_newCommitment_commitment,\
+  private field offtakerNegativePriceCharges_billNumber_oldCommitment_owner_secretKey,\
+	public field offtakerNegativePriceCharges_billNumber_oldCommitment_nullifier,\
+	private  field offtakerNegativePriceCharges_billNumber_oldCommitment_value,\
+	private field offtakerNegativePriceCharges_billNumber_oldCommitment_salt,\
+	private bool offtakerNegativePriceCharges_billNumber_oldCommitment_isDummy,\
+	private field offtakerNegativePriceCharges_billNumber_oldCommitment_membershipWitness_index,\
+	private field[32] offtakerNegativePriceCharges_billNumber_oldCommitment_membershipWitness_siblingPath,\
+	private field offtakerNegativePriceCharges_billNumber_newCommitment_owner_publicKey,\
+	private field offtakerNegativePriceCharges_billNumber_newCommitment_salt,\
+	public field offtakerNegativePriceCharges_billNumber_newCommitment_commitment,\
+	private field generatorNegativePriceCharges_billNumber_oldCommitment_owner_secretKey,\
+	public field generatorNegativePriceCharges_billNumber_oldCommitment_nullifier,\
+	private  field generatorNegativePriceCharges_billNumber_oldCommitment_value,\
+	private field generatorNegativePriceCharges_billNumber_oldCommitment_salt,\
+	private bool generatorNegativePriceCharges_billNumber_oldCommitment_isDummy,\
+	private field generatorNegativePriceCharges_billNumber_oldCommitment_membershipWitness_index,\
+	private field[32] generatorNegativePriceCharges_billNumber_oldCommitment_membershipWitness_siblingPath,\
+	private field generatorNegativePriceCharges_billNumber_newCommitment_owner_publicKey,\
+	private field generatorNegativePriceCharges_billNumber_newCommitment_salt,\
+	public field generatorNegativePriceCharges_billNumber_newCommitment_commitment,\
 	private field numberOfConsecutivePeriodsForShortfall_oldCommitment_owner_secretKey,\
 	public field numberOfConsecutivePeriodsForShortfall_oldCommitment_nullifier,\
 	private  field numberOfConsecutivePeriodsForShortfall_oldCommitment_value,\
@@ -246,7 +276,7 @@ def main(\
 	private field surplusCharges_billNumber_newCommitment_owner_publicKey,\
 	private field surplusCharges_billNumber_newCommitment_salt,\
 	public field surplusCharges_billNumber_newCommitment_commitment\
-) -> (field,field,field,field,field,field,field):
+) -> (field,field,field,field,field,field,field,field,field,field):
 
         
         // We need to hard-code each stateVarId into the circuit:
@@ -326,18 +356,31 @@ def main(\
 
 
         // We need to hard-code the mappingId's of mappings into the circuit:
-        field generatorCharges_mappingId = 42
+        field generatorTotalCharges_mappingId = 42
 
 
-        field generatorCharges_billNumber = generatorCharges_billNumber_oldCommitment_value
+        field generatorTotalCharges_billNumber = generatorTotalCharges_billNumber_oldCommitment_value
 
 
         // We need to hard-code the mappingId's of mappings into the circuit:
-        field offtakerCharges_mappingId = 46
+        field offtakerTotalCharges_mappingId = 46
 
 
-        field offtakerCharges_billNumber = offtakerCharges_billNumber_oldCommitment_value
+        field offtakerTotalCharges_billNumber = offtakerTotalCharges_billNumber_oldCommitment_value
 
+         
+         // We need to hard-code the mappingId's of mappings into the circuit:
+        field generatorCfdNetPosition_mappingId = 52
+
+
+        field generatorCfdNetPosition_billNumber = generatorCfdNetPosition_billNumber_oldCommitment_value
+
+
+        // We need to hard-code the mappingId's of mappings into the circuit:
+        field offtakerCfdNetPosition_mappingId = 56
+
+
+        field offtakerCfdNetPosition_billNumber = offtakerCfdNetPosition_billNumber_oldCommitment_value
 
         // We need to hard-code the mappingId's of mappings into the circuit:
         field generatorInterest_mappingId = 50
@@ -354,10 +397,17 @@ def main(\
 
 
         // We need to hard-code the mappingId's of mappings into the circuit:
-        field negativePriceCharges_mappingId = 58
+        field offtakerNegativePriceCharges_mappingId = 68
 
 
-        field negativePriceCharges_billNumber = negativePriceCharges_billNumber_oldCommitment_value
+        field offtakerNegativePriceCharges_billNumber = offtakerNegativePriceCharges_billNumber_oldCommitment_value
+
+
+        // We need to hard-code the mappingId's of mappings into the circuit:
+        field generatorNegativePriceCharges_mappingId = 72
+
+
+        field generatorNegativePriceCharges_billNumber = generatorNegativePriceCharges_billNumber_oldCommitment_value
 
 
         // We need to hard-code each stateVarId into the circuit:
@@ -459,8 +509,8 @@ def main(\
         field netNegativeAdjustment_temp = netNegativeAdjustment
         field netPositiveAdjustment_temp = netPositiveAdjustment
         field fixedAmount_temp = fixedAmount
-       generatorCharges_billNumber = if floatingAmount_temp + netNegativeAdjustment_temp > fixedAmount_temp + netPositiveAdjustment_temp then floatingAmount + netNegativeAdjustment - fixedAmount - netPositiveAdjustment else generatorCharges_billNumber fi
-        offtakerCharges_billNumber = if floatingAmount_temp + netNegativeAdjustment_temp > fixedAmount_temp + netPositiveAdjustment_temp then offtakerCharges_billNumber else fixedAmount + netPositiveAdjustment - floatingAmount - netNegativeAdjustment fi
+       generatorCfdNetPosition_billNumber = if floatingAmount_temp + netNegativeAdjustment_temp > fixedAmount_temp + netPositiveAdjustment_temp then floatingAmount + netNegativeAdjustment - fixedAmount - netPositiveAdjustment else generatorCfdNetPosition_billNumber fi
+        offtakerCfdNetPosition_billNumber = if floatingAmount_temp + netNegativeAdjustment_temp > fixedAmount_temp + netPositiveAdjustment_temp then offtakerCfdNetPosition_billNumber else fixedAmount + netPositiveAdjustment - floatingAmount - netNegativeAdjustment fi
 
 
 bool shortfallSequence = false
@@ -472,7 +522,6 @@ bool surplusSequence = false
         
         field latestSurplusSequenceNumber_temp = latestSurplusSequenceNumber
         surplusSequence = if sequenceNumber == latestSurplusSequenceNumber_temp + sequenceNumberInterval || latestSurplusSequenceNumber_temp == 0 || sequenceNumber == 0 then true else surplusSequence fi
-
 		field priceDifference = 0
 
 
@@ -485,66 +534,78 @@ bool surplusSequence = false
 
 
         field expectedVolume_temp = expectedVolume
+        field offtakerVolume_temp = offtakerVolume
         volumeDifference = if expectedVolume_temp > offtakerVolume then expectedVolume - offtakerVolume else volumeDifference fi
         volumeDifference = if expectedVolume_temp > offtakerVolume then volumeDifference else offtakerVolume - expectedVolume fi
+
+        offtakerNegativePriceCharges_billNumber = if negativePriceOccurredParam && expectedVolume_temp > offtakerVolume_temp then volumeDifference * strikePrice else offtakerNegativePriceCharges_billNumber fi
+
+        generatorNegativePriceCharges_billNumber = if negativePriceOccurredParam && expectedVolume_temp <= offtakerVolume_temp then volumeDifference * strikePrice else generatorNegativePriceCharges_billNumber fi
+
 
 
         bool shortfallSequence_temp = shortfallSequence
         field volumeDifference_temp = volumeDifference
         field shortfallThreshold_temp = shortfallThreshold
-        shortfalls_index.billNumber = if shortfallSequence_temp && expectedVolume_temp > offtakerVolume && volumeDifference_temp >= shortfallThreshold_temp then billNumber else shortfalls_index.billNumber fi
-        shortfalls_index.price = if shortfallSequence_temp && expectedVolume_temp > offtakerVolume && volumeDifference_temp >= shortfallThreshold_temp then averagePrice else shortfalls_index.price fi
-        shortfalls_index.volume = if shortfallSequence_temp && expectedVolume_temp > offtakerVolume && volumeDifference_temp >= shortfallThreshold_temp then volumeDifference else shortfalls_index.volume fi
-        shortfallChargeSum = if shortfallSequence_temp && expectedVolume_temp > offtakerVolume && volumeDifference_temp >= shortfallThreshold_temp then shortfallChargeSum + shortfalls_index.volume * priceDifference else shortfallChargeSum fi
-        shortfallIndex = if shortfallSequence_temp && expectedVolume_temp > offtakerVolume && volumeDifference_temp >= shortfallThreshold_temp then shortfallIndex + 1 else shortfallIndex fi
-        latestShortfallSequenceNumber = if shortfallSequence_temp && expectedVolume_temp > offtakerVolume && volumeDifference_temp >= shortfallThreshold_temp then sequenceNumber else latestShortfallSequenceNumber fi
+        shortfalls_index.billNumber = if shortfallSequence_temp && expectedVolume_temp > offtakerVolume_temp && volumeDifference_temp >= shortfallThreshold && numberOfConsecutivePeriodsForShortfall > 0 then billNumber else shortfalls_index.billNumber fi
+        shortfalls_index.price = if shortfallSequence_temp && expectedVolume_temp > offtakerVolume_temp && volumeDifference_temp >= shortfallThreshold && numberOfConsecutivePeriodsForShortfall > 0 then averagePrice else shortfalls_index.price fi
+        shortfalls_index.volume = if shortfallSequence_temp && expectedVolume_temp > offtakerVolume_temp && volumeDifference_temp >= shortfallThreshold && numberOfConsecutivePeriodsForShortfall > 0 then volumeDifference else shortfalls_index.volume fi
+        shortfallChargeSum = if shortfallSequence_temp && expectedVolume_temp > offtakerVolume_temp && volumeDifference_temp >= shortfallThreshold && numberOfConsecutivePeriodsForShortfall > 0 then shortfallChargeSum + shortfalls_index.volume * priceDifference else shortfallChargeSum fi
+        shortfallIndex = if shortfallSequence_temp && expectedVolume_temp > offtakerVolume_temp && volumeDifference_temp >= shortfallThreshold && numberOfConsecutivePeriodsForShortfall > 0 then shortfallIndex + 1 else shortfallIndex fi
+        latestShortfallSequenceNumber = if shortfallSequence_temp && expectedVolume_temp > offtakerVolume_temp && volumeDifference_temp >= shortfallThreshold && numberOfConsecutivePeriodsForShortfall > 0 then sequenceNumber else latestShortfallSequenceNumber fi
 
 
         
-        shortfallChargeSum = if shortfallSequence_temp && (expectedVolume_temp < offtakerVolume || volumeDifference_temp <= shortfallThreshold_temp) then 0 else shortfallChargeSum fi
-        shortfallIndex = if shortfallSequence_temp && (expectedVolume_temp < offtakerVolume || volumeDifference_temp <= shortfallThreshold_temp) then 0 else shortfallIndex fi
-        latestShortfallSequenceNumber = if shortfallSequence_temp && (expectedVolume_temp < offtakerVolume || volumeDifference_temp <= shortfallThreshold_temp) then 0 else latestShortfallSequenceNumber fi
+        shortfallChargeSum = if shortfallSequence_temp && (expectedVolume_temp <= offtakerVolume_temp || volumeDifference_temp < shortfallThreshold) then 0 else shortfallChargeSum fi
+        shortfallIndex = if shortfallSequence_temp && (expectedVolume_temp <= offtakerVolume_temp || volumeDifference_temp < shortfallThreshold) then 0 else shortfallIndex fi
+        latestShortfallSequenceNumber = if shortfallSequence_temp && (expectedVolume_temp <= offtakerVolume_temp || volumeDifference_temp < shortfallThreshold) then 0 else latestShortfallSequenceNumber fi
 
 
         field shortfallIndex_temp = shortfallIndex
-        shortfallCharges_billNumber = if shortfallIndex_temp >= numberOfConsecutivePeriodsForShortfall then shortfallChargeSum else shortfallCharges_billNumber fi
-        shortfallChargeSum = if shortfallIndex_temp >= numberOfConsecutivePeriodsForShortfall then 0 else shortfallChargeSum fi
-        shortfallIndex = if shortfallIndex_temp >= numberOfConsecutivePeriodsForShortfall then 0 else shortfallIndex fi
-        latestShortfallSequenceNumber = if shortfallIndex_temp >= numberOfConsecutivePeriodsForShortfall then 0 else latestShortfallSequenceNumber fi
+        shortfallCharges_billNumber = if shortfallIndex_temp >= numberOfConsecutivePeriodsForShortfall && numberOfConsecutivePeriodsForShortfall > 0 then shortfallChargeSum else shortfallCharges_billNumber fi
+        shortfallChargeSum = if shortfallIndex_temp >= numberOfConsecutivePeriodsForShortfall && numberOfConsecutivePeriodsForShortfall > 0 then 0 else shortfallChargeSum fi
+        shortfallIndex = if shortfallIndex_temp >= numberOfConsecutivePeriodsForShortfall && numberOfConsecutivePeriodsForShortfall > 0 then 0 else shortfallIndex fi
+        latestShortfallSequenceNumber = if shortfallIndex_temp >= numberOfConsecutivePeriodsForShortfall && numberOfConsecutivePeriodsForShortfall > 0 then 0 else latestShortfallSequenceNumber fi
 
 
         bool surplusSequence_temp = surplusSequence
         field surplusThreshold_temp = surplusThreshold
-        surpluses_index_1.billNumber = if surplusSequence_temp && expectedVolume_temp < offtakerVolume && volumeDifference_temp >= surplusThreshold_temp then billNumber else surpluses_index_1.billNumber fi
-        surpluses_index_1.price = if surplusSequence_temp && expectedVolume_temp < offtakerVolume && volumeDifference_temp >= surplusThreshold_temp then averagePrice else surpluses_index_1.price fi
-        surpluses_index_1.volume = if surplusSequence_temp && expectedVolume_temp < offtakerVolume && volumeDifference_temp >= surplusThreshold_temp then volumeDifference else surpluses_index_1.volume fi
-        surplusChargeSum = if surplusSequence_temp && expectedVolume_temp < offtakerVolume && volumeDifference_temp >= surplusThreshold_temp then surplusChargeSum + surpluses_index_1.volume * priceDifference else surplusChargeSum fi
-        surplusIndex = if surplusSequence_temp && expectedVolume_temp < offtakerVolume && volumeDifference_temp >= surplusThreshold_temp then surplusIndex + 1 else surplusIndex fi
-        latestSurplusSequenceNumber = if surplusSequence_temp && expectedVolume_temp < offtakerVolume && volumeDifference_temp >= surplusThreshold_temp then sequenceNumber else latestSurplusSequenceNumber fi
+        surpluses_index_1.billNumber = if surplusSequence_temp && expectedVolume_temp < offtakerVolume_temp && volumeDifference_temp >= surplusThreshold && numberOfConsecutivePeriodsForSurplus > 0 then billNumber else surpluses_index_1.billNumber fi
+        surpluses_index_1.price = if surplusSequence_temp && expectedVolume_temp < offtakerVolume_temp && volumeDifference_temp >= surplusThreshold && numberOfConsecutivePeriodsForSurplus > 0 then averagePrice else surpluses_index_1.price fi
+        surpluses_index_1.volume = if surplusSequence_temp && expectedVolume_temp < offtakerVolume_temp && volumeDifference_temp >= surplusThreshold && numberOfConsecutivePeriodsForSurplus > 0 then volumeDifference else surpluses_index_1.volume fi
+        surplusChargeSum = if surplusSequence_temp && expectedVolume_temp < offtakerVolume_temp && volumeDifference_temp >= surplusThreshold && numberOfConsecutivePeriodsForSurplus > 0 then surplusChargeSum + surpluses_index_1.volume * priceDifference else surplusChargeSum fi
+        surplusIndex = if surplusSequence_temp && expectedVolume_temp < offtakerVolume_temp && volumeDifference_temp >= surplusThreshold && numberOfConsecutivePeriodsForSurplus > 0 then surplusIndex + 1 else surplusIndex fi
+        latestSurplusSequenceNumber = if surplusSequence_temp && expectedVolume_temp < offtakerVolume_temp && volumeDifference_temp >= surplusThreshold && numberOfConsecutivePeriodsForSurplus > 0 then sequenceNumber else latestSurplusSequenceNumber fi
 
 
 
         
-        surplusChargeSum = if surplusSequence_temp && (expectedVolume_temp > offtakerVolume || volumeDifference_temp <= surplusThreshold_temp) then 0 else surplusChargeSum fi
-        surplusIndex = if surplusSequence_temp && (expectedVolume_temp > offtakerVolume || volumeDifference_temp <= surplusThreshold_temp) then 0 else surplusIndex fi
-        latestSurplusSequenceNumber = if surplusSequence_temp && (expectedVolume_temp > offtakerVolume || volumeDifference_temp <= surplusThreshold_temp) then 0 else latestSurplusSequenceNumber fi
+        surplusChargeSum = if surplusSequence_temp && (expectedVolume_temp >= offtakerVolume_temp || volumeDifference_temp < surplusThreshold) then 0 else surplusChargeSum fi
+        surplusIndex = if surplusSequence_temp && (expectedVolume_temp >= offtakerVolume_temp || volumeDifference_temp < surplusThreshold) then 0 else surplusIndex fi
+        latestSurplusSequenceNumber = if surplusSequence_temp && (expectedVolume_temp >= offtakerVolume_temp || volumeDifference_temp < surplusThreshold) then 0 else latestSurplusSequenceNumber fi
+
 
 
         field surplusIndex_temp = surplusIndex
-        surplusCharges_billNumber = if surplusIndex_temp >= numberOfConsecutivePeriodsForSurplus then surplusChargeSum else surplusCharges_billNumber fi
-        surplusChargeSum = if surplusIndex_temp >= numberOfConsecutivePeriodsForSurplus then 0 else surplusChargeSum fi
-        surplusIndex = if surplusIndex_temp >= numberOfConsecutivePeriodsForSurplus then 0 else surplusIndex fi
-        latestSurplusSequenceNumber = if surplusIndex_temp >= numberOfConsecutivePeriodsForSurplus then 0 else latestSurplusSequenceNumber fi
+       surplusCharges_billNumber = if surplusIndex_temp >= numberOfConsecutivePeriodsForSurplus && numberOfConsecutivePeriodsForSurplus > 0 then surplusChargeSum else surplusCharges_billNumber fi
+        surplusChargeSum = if surplusIndex_temp >= numberOfConsecutivePeriodsForSurplus && numberOfConsecutivePeriodsForSurplus > 0 then 0 else surplusChargeSum fi
+        surplusIndex = if surplusIndex_temp >= numberOfConsecutivePeriodsForSurplus && numberOfConsecutivePeriodsForSurplus > 0 then 0 else surplusIndex fi
+        latestSurplusSequenceNumber = if surplusIndex_temp >= numberOfConsecutivePeriodsForSurplus && numberOfConsecutivePeriodsForSurplus > 0 then 0 else latestSurplusSequenceNumber fi
+
 
 for u32 i in 0..5 do
             
         generatorInterest_billNumber = if outstandingGeneratorAmount[i] > 0 then generatorInterest_billNumber + outstandingGeneratorAmount[i] * generatorDelayDays[i] * dailyInterestRate else generatorInterest_billNumber fi
 
+
         offtakerInterest_billNumber = if outstandingOfftakerAmount[i] > 0 then offtakerInterest_billNumber + outstandingOfftakerAmount[i] * offtakerDelayDays[i] * dailyInterestRate else offtakerInterest_billNumber fi
             endfor
 
- field totalGeneratedVolume_temp = totalGeneratedVolume 
-negativePriceCharges_billNumber = if negativePriceOccurredParam && expectedVolume_temp >= totalGeneratedVolume_temp then volumeDifference * strikePrice else negativePriceCharges_billNumber fi
+
+generatorTotalCharges_billNumber = generatorCfdNetPosition_billNumber + surplusCharges_billNumber + generatorNegativePriceCharges_billNumber + generatorInterest_billNumber
+
+offtakerTotalCharges_billNumber = offtakerCfdNetPosition_billNumber + shortfallCharges_billNumber + offtakerNegativePriceCharges_billNumber + offtakerInterest_billNumber
+
 
 
         // strikePrice_oldCommitment - PoKoSK:
@@ -1232,158 +1293,310 @@ negativePriceCharges_billNumber = if negativePriceOccurredParam && expectedVolum
         )
 
 
-        field generatorCharges_billNumber_stateVarId_field = mimc2([generatorCharges_mappingId, billNumber])
+        field generatorTotalCharges_billNumber_stateVarId_field = mimc2([generatorTotalCharges_mappingId, billNumber])
 
 
-        // generatorCharges_billNumber_oldCommitment - PoKoSK:
+        // generatorTotalCharges_billNumber_oldCommitment - PoKoSK:
         // The correctness of this secret key will be constrained within the oldCommitment existence check.
 
-        field[2] generatorCharges_billNumber_oldCommitment_owner_publicKey_point = scalarMult(field_to_bool_256(generatorCharges_billNumber_oldCommitment_owner_secretKey), [curveParams().Gu, curveParams().Gv], curveParams())
+        field[2] generatorTotalCharges_billNumber_oldCommitment_owner_publicKey_point = scalarMult(field_to_bool_256(generatorTotalCharges_billNumber_oldCommitment_owner_secretKey), [curveParams().Gu, curveParams().Gv], curveParams())
 
-        bool generatorCharges_billNumber_oldCommitment_owner_publicKey_sign = edwardsCompress(generatorCharges_billNumber_oldCommitment_owner_publicKey_point)[0]
+        bool generatorTotalCharges_billNumber_oldCommitment_owner_publicKey_sign = edwardsCompress(generatorTotalCharges_billNumber_oldCommitment_owner_publicKey_point)[0]
 
-        bool[254] generatorCharges_billNumber_oldCommitment_yBits = field_to_bool_256(generatorCharges_billNumber_oldCommitment_owner_publicKey_point[1])[2..256]
-        generatorCharges_billNumber_oldCommitment_yBits[0] = generatorCharges_billNumber_oldCommitment_owner_publicKey_sign
+        bool[254] generatorTotalCharges_billNumber_oldCommitment_yBits = field_to_bool_256(generatorTotalCharges_billNumber_oldCommitment_owner_publicKey_point[1])[2..256]
+        generatorTotalCharges_billNumber_oldCommitment_yBits[0] = generatorTotalCharges_billNumber_oldCommitment_owner_publicKey_sign
 
-        field generatorCharges_billNumber_oldCommitment_owner_publicKey = bool_256_to_field([false, false, ...generatorCharges_billNumber_oldCommitment_yBits])
+        field generatorTotalCharges_billNumber_oldCommitment_owner_publicKey = bool_256_to_field([false, false, ...generatorTotalCharges_billNumber_oldCommitment_yBits])
 
 
-        // Nullify generatorCharges_billNumber:
+        // Nullify generatorTotalCharges_billNumber:
 
-        field generatorCharges_billNumber_oldCommitment_nullifier_check_field = poseidon([\
-          generatorCharges_billNumber_stateVarId_field,\
-          generatorCharges_billNumber_oldCommitment_owner_secretKey,\
-          generatorCharges_billNumber_oldCommitment_salt\
+        field generatorTotalCharges_billNumber_oldCommitment_nullifier_check_field = poseidon([\
+          generatorTotalCharges_billNumber_stateVarId_field,\
+          generatorTotalCharges_billNumber_oldCommitment_owner_secretKey,\
+          generatorTotalCharges_billNumber_oldCommitment_salt\
         ])
 
         assert(\
-        field_to_bool_256(generatorCharges_billNumber_oldCommitment_nullifier)[8..256] == field_to_bool_256(generatorCharges_billNumber_oldCommitment_nullifier_check_field)[8..256]\
+        field_to_bool_256(generatorTotalCharges_billNumber_oldCommitment_nullifier)[8..256] == field_to_bool_256(generatorTotalCharges_billNumber_oldCommitment_nullifier_check_field)[8..256]\
         )
        
 
 
-        // generatorCharges_billNumber_oldCommitment_commitment: preimage check
+        // generatorTotalCharges_billNumber_oldCommitment_commitment: preimage check
 
 
-        field generatorCharges_billNumber_oldCommitment_commitment_field = poseidon([\
-          generatorCharges_billNumber_stateVarId_field,\
-          generatorCharges_billNumber_oldCommitment_value,\
-          generatorCharges_billNumber_oldCommitment_owner_publicKey,\
-          generatorCharges_billNumber_oldCommitment_salt        ])
+        field generatorTotalCharges_billNumber_oldCommitment_commitment_field = poseidon([\
+          generatorTotalCharges_billNumber_stateVarId_field,\
+          generatorTotalCharges_billNumber_oldCommitment_value,\
+          generatorTotalCharges_billNumber_oldCommitment_owner_publicKey,\
+          generatorTotalCharges_billNumber_oldCommitment_salt        ])
 
 
-        // generatorCharges_billNumber_oldCommitment_commitment: existence check
+        // generatorTotalCharges_billNumber_oldCommitment_commitment: existence check
 
 
-        field generatorCharges_billNumber_commitmentRoot_check = checkRoot(\
-          generatorCharges_billNumber_oldCommitment_membershipWitness_siblingPath,\
-          generatorCharges_billNumber_oldCommitment_commitment_field,\
-          generatorCharges_billNumber_oldCommitment_membershipWitness_index\
+        field generatorTotalCharges_billNumber_commitmentRoot_check = checkRoot(\
+          generatorTotalCharges_billNumber_oldCommitment_membershipWitness_siblingPath,\
+          generatorTotalCharges_billNumber_oldCommitment_commitment_field,\
+          generatorTotalCharges_billNumber_oldCommitment_membershipWitness_index\
         )
 
 
         // Note: Don't bother actually asserting existence, if the oldCommitment is a dummy:
-        generatorCharges_billNumber_commitmentRoot_check = if generatorCharges_billNumber_oldCommitment_isDummy == true then commitmentRoot else generatorCharges_billNumber_commitmentRoot_check fi
+        generatorTotalCharges_billNumber_commitmentRoot_check = if generatorTotalCharges_billNumber_oldCommitment_isDummy == true then commitmentRoot else generatorTotalCharges_billNumber_commitmentRoot_check fi
 
 
         assert(\
-          field_to_bool_256(commitmentRoot)[8..256] == field_to_bool_256(generatorCharges_billNumber_commitmentRoot_check)[8..256]\
+          field_to_bool_256(commitmentRoot)[8..256] == field_to_bool_256(generatorTotalCharges_billNumber_commitmentRoot_check)[8..256]\
         )
 
 
-        // prepare secret state 'generatorCharges_billNumber' for commitment
+        // prepare secret state 'generatorTotalCharges_billNumber' for commitment
 
-        field generatorCharges_billNumber_newCommitment_value_field = generatorCharges_billNumber
+        field generatorTotalCharges_billNumber_newCommitment_value_field = generatorTotalCharges_billNumber
 
-        // generatorCharges_billNumber_newCommitment_commitment - preimage check
+        // generatorTotalCharges_billNumber_newCommitment_commitment - preimage check
 
-        field generatorCharges_billNumber_newCommitment_commitment_check_field = poseidon([\
-          generatorCharges_billNumber_stateVarId_field,\
-          generatorCharges_billNumber_newCommitment_value_field,\
-          generatorCharges_billNumber_newCommitment_owner_publicKey,\
-          generatorCharges_billNumber_newCommitment_salt\
+        field generatorTotalCharges_billNumber_newCommitment_commitment_check_field = poseidon([\
+          generatorTotalCharges_billNumber_stateVarId_field,\
+          generatorTotalCharges_billNumber_newCommitment_value_field,\
+          generatorTotalCharges_billNumber_newCommitment_owner_publicKey,\
+          generatorTotalCharges_billNumber_newCommitment_salt\
         ])
 
         assert(\
-          field_to_bool_256(generatorCharges_billNumber_newCommitment_commitment)[8..256] == field_to_bool_256(generatorCharges_billNumber_newCommitment_commitment_check_field)[8..256]\
+          field_to_bool_256(generatorTotalCharges_billNumber_newCommitment_commitment)[8..256] == field_to_bool_256(generatorTotalCharges_billNumber_newCommitment_commitment_check_field)[8..256]\
         )
 
 
-        field offtakerCharges_billNumber_stateVarId_field = mimc2([offtakerCharges_mappingId, billNumber])
+        field offtakerTotalCharges_billNumber_stateVarId_field = mimc2([offtakerTotalCharges_mappingId, billNumber])
 
 
-        // offtakerCharges_billNumber_oldCommitment - PoKoSK:
+        // offtakerTotalCharges_billNumber_oldCommitment - PoKoSK:
         // The correctness of this secret key will be constrained within the oldCommitment existence check.
 
-        field[2] offtakerCharges_billNumber_oldCommitment_owner_publicKey_point = scalarMult(field_to_bool_256(offtakerCharges_billNumber_oldCommitment_owner_secretKey), [curveParams().Gu, curveParams().Gv], curveParams())
+        field[2] offtakerTotalCharges_billNumber_oldCommitment_owner_publicKey_point = scalarMult(field_to_bool_256(offtakerTotalCharges_billNumber_oldCommitment_owner_secretKey), [curveParams().Gu, curveParams().Gv], curveParams())
 
-        bool offtakerCharges_billNumber_oldCommitment_owner_publicKey_sign = edwardsCompress(offtakerCharges_billNumber_oldCommitment_owner_publicKey_point)[0]
+        bool offtakerTotalCharges_billNumber_oldCommitment_owner_publicKey_sign = edwardsCompress(offtakerTotalCharges_billNumber_oldCommitment_owner_publicKey_point)[0]
 
-        bool[254] offtakerCharges_billNumber_oldCommitment_yBits = field_to_bool_256(offtakerCharges_billNumber_oldCommitment_owner_publicKey_point[1])[2..256]
-        offtakerCharges_billNumber_oldCommitment_yBits[0] = offtakerCharges_billNumber_oldCommitment_owner_publicKey_sign
+        bool[254] offtakerTotalCharges_billNumber_oldCommitment_yBits = field_to_bool_256(offtakerTotalCharges_billNumber_oldCommitment_owner_publicKey_point[1])[2..256]
+        offtakerTotalCharges_billNumber_oldCommitment_yBits[0] = offtakerTotalCharges_billNumber_oldCommitment_owner_publicKey_sign
 
-        field offtakerCharges_billNumber_oldCommitment_owner_publicKey = bool_256_to_field([false, false, ...offtakerCharges_billNumber_oldCommitment_yBits])
+        field offtakerTotalCharges_billNumber_oldCommitment_owner_publicKey = bool_256_to_field([false, false, ...offtakerTotalCharges_billNumber_oldCommitment_yBits])
 
 
-        // Nullify offtakerCharges_billNumber:
+        // Nullify offtakerTotalCharges_billNumber:
 
-        field offtakerCharges_billNumber_oldCommitment_nullifier_check_field = poseidon([\
-          offtakerCharges_billNumber_stateVarId_field,\
-          offtakerCharges_billNumber_oldCommitment_owner_secretKey,\
-          offtakerCharges_billNumber_oldCommitment_salt\
+        field offtakerTotalCharges_billNumber_oldCommitment_nullifier_check_field = poseidon([\
+          offtakerTotalCharges_billNumber_stateVarId_field,\
+          offtakerTotalCharges_billNumber_oldCommitment_owner_secretKey,\
+          offtakerTotalCharges_billNumber_oldCommitment_salt\
         ])
 
         assert(\
-        field_to_bool_256(offtakerCharges_billNumber_oldCommitment_nullifier)[8..256] == field_to_bool_256(offtakerCharges_billNumber_oldCommitment_nullifier_check_field)[8..256]\
+        field_to_bool_256(offtakerTotalCharges_billNumber_oldCommitment_nullifier)[8..256] == field_to_bool_256(offtakerTotalCharges_billNumber_oldCommitment_nullifier_check_field)[8..256]\
         )
         
         
 
 
-        // offtakerCharges_billNumber_oldCommitment_commitment: preimage check
+        // offtakerTotalCharges_billNumber_oldCommitment_commitment: preimage check
 
 
-        field offtakerCharges_billNumber_oldCommitment_commitment_field = poseidon([\
-          offtakerCharges_billNumber_stateVarId_field,\
-          offtakerCharges_billNumber_oldCommitment_value,\
-          offtakerCharges_billNumber_oldCommitment_owner_publicKey,\
-          offtakerCharges_billNumber_oldCommitment_salt        ])
+        field offtakerTotalCharges_billNumber_oldCommitment_commitment_field = poseidon([\
+          offtakerTotalCharges_billNumber_stateVarId_field,\
+          offtakerTotalCharges_billNumber_oldCommitment_value,\
+          offtakerTotalCharges_billNumber_oldCommitment_owner_publicKey,\
+          offtakerTotalCharges_billNumber_oldCommitment_salt        ])
 
 
-        // offtakerCharges_billNumber_oldCommitment_commitment: existence check
+        // offtakerTotalCharges_billNumber_oldCommitment_commitment: existence check
 
 
-        field offtakerCharges_billNumber_commitmentRoot_check = checkRoot(\
-          offtakerCharges_billNumber_oldCommitment_membershipWitness_siblingPath,\
-          offtakerCharges_billNumber_oldCommitment_commitment_field,\
-          offtakerCharges_billNumber_oldCommitment_membershipWitness_index\
+        field offtakerTotalCharges_billNumber_commitmentRoot_check = checkRoot(\
+          offtakerTotalCharges_billNumber_oldCommitment_membershipWitness_siblingPath,\
+          offtakerTotalCharges_billNumber_oldCommitment_commitment_field,\
+          offtakerTotalCharges_billNumber_oldCommitment_membershipWitness_index\
         )
 
 
         // Note: Don't bother actually asserting existence, if the oldCommitment is a dummy:
-        offtakerCharges_billNumber_commitmentRoot_check = if offtakerCharges_billNumber_oldCommitment_isDummy == true then commitmentRoot else offtakerCharges_billNumber_commitmentRoot_check fi
+        offtakerTotalCharges_billNumber_commitmentRoot_check = if offtakerTotalCharges_billNumber_oldCommitment_isDummy == true then commitmentRoot else offtakerTotalCharges_billNumber_commitmentRoot_check fi
 
 
         assert(\
-          field_to_bool_256(commitmentRoot)[8..256] == field_to_bool_256(offtakerCharges_billNumber_commitmentRoot_check)[8..256]\
+          field_to_bool_256(commitmentRoot)[8..256] == field_to_bool_256(offtakerTotalCharges_billNumber_commitmentRoot_check)[8..256]\
         )
 
 
-        // prepare secret state 'offtakerCharges_billNumber' for commitment
+        // prepare secret state 'offtakerTotalCharges_billNumber' for commitment
 
-        field offtakerCharges_billNumber_newCommitment_value_field = offtakerCharges_billNumber
+        field offtakerTotalCharges_billNumber_newCommitment_value_field = offtakerTotalCharges_billNumber
 
-        // offtakerCharges_billNumber_newCommitment_commitment - preimage check
+        // offtakerTotalCharges_billNumber_newCommitment_commitment - preimage check
 
-        field offtakerCharges_billNumber_newCommitment_commitment_check_field = poseidon([\
-          offtakerCharges_billNumber_stateVarId_field,\
-          offtakerCharges_billNumber_newCommitment_value_field,\
-          offtakerCharges_billNumber_newCommitment_owner_publicKey,\
-          offtakerCharges_billNumber_newCommitment_salt\
+        field offtakerTotalCharges_billNumber_newCommitment_commitment_check_field = poseidon([\
+          offtakerTotalCharges_billNumber_stateVarId_field,\
+          offtakerTotalCharges_billNumber_newCommitment_value_field,\
+          offtakerTotalCharges_billNumber_newCommitment_owner_publicKey,\
+          offtakerTotalCharges_billNumber_newCommitment_salt\
         ])
 
         assert(\
-          field_to_bool_256(offtakerCharges_billNumber_newCommitment_commitment)[8..256] == field_to_bool_256(offtakerCharges_billNumber_newCommitment_commitment_check_field)[8..256]\
+          field_to_bool_256(offtakerTotalCharges_billNumber_newCommitment_commitment)[8..256] == field_to_bool_256(offtakerTotalCharges_billNumber_newCommitment_commitment_check_field)[8..256]\
+        )
+
+
+        field generatorCfdNetPosition_billNumber_stateVarId_field = mimc2([generatorCfdNetPosition_mappingId, billNumber])
+
+
+        // generatorCfdNetPosition_billNumber_oldCommitment - PoKoSK:
+        // The correctness of this secret key will be constrained within the oldCommitment existence check.
+
+        field[2] generatorCfdNetPosition_billNumber_oldCommitment_owner_publicKey_point = scalarMult(field_to_bool_256(generatorCfdNetPosition_billNumber_oldCommitment_owner_secretKey), [curveParams().Gu, curveParams().Gv], curveParams())
+
+        bool generatorCfdNetPosition_billNumber_oldCommitment_owner_publicKey_sign = edwardsCompress(generatorCfdNetPosition_billNumber_oldCommitment_owner_publicKey_point)[0]
+
+        bool[254] generatorCfdNetPosition_billNumber_oldCommitment_yBits = field_to_bool_256(generatorCfdNetPosition_billNumber_oldCommitment_owner_publicKey_point[1])[2..256]
+        generatorCfdNetPosition_billNumber_oldCommitment_yBits[0] = generatorCfdNetPosition_billNumber_oldCommitment_owner_publicKey_sign
+
+        field generatorCfdNetPosition_billNumber_oldCommitment_owner_publicKey = bool_256_to_field([false, false, ...generatorCfdNetPosition_billNumber_oldCommitment_yBits])
+
+
+        // Nullify generatorCfdNetPosition_billNumber:
+
+        field generatorCfdNetPosition_billNumber_oldCommitment_nullifier_check_field = poseidon([\
+          generatorCfdNetPosition_billNumber_stateVarId_field,\
+          generatorCfdNetPosition_billNumber_oldCommitment_owner_secretKey,\
+          generatorCfdNetPosition_billNumber_oldCommitment_salt\
+        ])
+
+        assert(\
+        field_to_bool_256(generatorCfdNetPosition_billNumber_oldCommitment_nullifier)[8..256] == field_to_bool_256(generatorCfdNetPosition_billNumber_oldCommitment_nullifier_check_field)[8..256]\
+        )
+        
+
+
+        // generatorCfdNetPosition_billNumber_oldCommitment_commitment: preimage check
+
+
+        field generatorCfdNetPosition_billNumber_oldCommitment_commitment_field = poseidon([\
+          generatorCfdNetPosition_billNumber_stateVarId_field,\
+          generatorCfdNetPosition_billNumber_oldCommitment_value,\
+          generatorCfdNetPosition_billNumber_oldCommitment_owner_publicKey,\
+          generatorCfdNetPosition_billNumber_oldCommitment_salt        ])
+
+
+        // generatorCfdNetPosition_billNumber_oldCommitment_commitment: existence check
+
+
+        field generatorCfdNetPosition_billNumber_commitmentRoot_check = checkRoot(\
+          generatorCfdNetPosition_billNumber_oldCommitment_membershipWitness_siblingPath,\
+          generatorCfdNetPosition_billNumber_oldCommitment_commitment_field,\
+          generatorCfdNetPosition_billNumber_oldCommitment_membershipWitness_index\
+        )
+
+
+        // Note: Don't bother actually asserting existence, if the oldCommitment is a dummy:
+        generatorCfdNetPosition_billNumber_commitmentRoot_check = if generatorCfdNetPosition_billNumber_oldCommitment_isDummy == true then commitmentRoot else generatorCfdNetPosition_billNumber_commitmentRoot_check fi
+
+
+        assert(\
+          field_to_bool_256(commitmentRoot)[8..256] == field_to_bool_256(generatorCfdNetPosition_billNumber_commitmentRoot_check)[8..256]\
+        )
+
+
+        // prepare secret state 'generatorCfdNetPosition_billNumber' for commitment
+
+        field generatorCfdNetPosition_billNumber_newCommitment_value_field = generatorCfdNetPosition_billNumber
+
+        // generatorCfdNetPosition_billNumber_newCommitment_commitment - preimage check
+
+        field generatorCfdNetPosition_billNumber_newCommitment_commitment_check_field = poseidon([\
+          generatorCfdNetPosition_billNumber_stateVarId_field,\
+          generatorCfdNetPosition_billNumber_newCommitment_value_field,\
+          generatorCfdNetPosition_billNumber_newCommitment_owner_publicKey,\
+          generatorCfdNetPosition_billNumber_newCommitment_salt\
+        ])
+
+        assert(\
+          field_to_bool_256(generatorCfdNetPosition_billNumber_newCommitment_commitment)[8..256] == field_to_bool_256(generatorCfdNetPosition_billNumber_newCommitment_commitment_check_field)[8..256]\
+        )
+
+
+        field offtakerCfdNetPosition_billNumber_stateVarId_field = mimc2([offtakerCfdNetPosition_mappingId, billNumber])
+
+
+        // offtakerCfdNetPosition_billNumber_oldCommitment - PoKoSK:
+        // The correctness of this secret key will be constrained within the oldCommitment existence check.
+
+        field[2] offtakerCfdNetPosition_billNumber_oldCommitment_owner_publicKey_point = scalarMult(field_to_bool_256(offtakerCfdNetPosition_billNumber_oldCommitment_owner_secretKey), [curveParams().Gu, curveParams().Gv], curveParams())
+
+        bool offtakerCfdNetPosition_billNumber_oldCommitment_owner_publicKey_sign = edwardsCompress(offtakerCfdNetPosition_billNumber_oldCommitment_owner_publicKey_point)[0]
+
+        bool[254] offtakerCfdNetPosition_billNumber_oldCommitment_yBits = field_to_bool_256(offtakerCfdNetPosition_billNumber_oldCommitment_owner_publicKey_point[1])[2..256]
+        offtakerCfdNetPosition_billNumber_oldCommitment_yBits[0] = offtakerCfdNetPosition_billNumber_oldCommitment_owner_publicKey_sign
+
+        field offtakerCfdNetPosition_billNumber_oldCommitment_owner_publicKey = bool_256_to_field([false, false, ...offtakerCfdNetPosition_billNumber_oldCommitment_yBits])
+
+
+        // Nullify offtakerCfdNetPosition_billNumber:
+
+        field offtakerCfdNetPosition_billNumber_oldCommitment_nullifier_check_field = poseidon([\
+          offtakerCfdNetPosition_billNumber_stateVarId_field,\
+          offtakerCfdNetPosition_billNumber_oldCommitment_owner_secretKey,\
+          offtakerCfdNetPosition_billNumber_oldCommitment_salt\
+        ])
+
+        assert(\
+        field_to_bool_256(offtakerCfdNetPosition_billNumber_oldCommitment_nullifier)[8..256] == field_to_bool_256(offtakerCfdNetPosition_billNumber_oldCommitment_nullifier_check_field)[8..256]\
+        )
+        
+        // offtakerCfdNetPosition_billNumber_oldCommitment_commitment: preimage check
+
+
+        field offtakerCfdNetPosition_billNumber_oldCommitment_commitment_field = poseidon([\
+          offtakerCfdNetPosition_billNumber_stateVarId_field,\
+          offtakerCfdNetPosition_billNumber_oldCommitment_value,\
+          offtakerCfdNetPosition_billNumber_oldCommitment_owner_publicKey,\
+          offtakerCfdNetPosition_billNumber_oldCommitment_salt        ])
+
+
+        // offtakerCfdNetPosition_billNumber_oldCommitment_commitment: existence check
+
+
+        field offtakerCfdNetPosition_billNumber_commitmentRoot_check = checkRoot(\
+          offtakerCfdNetPosition_billNumber_oldCommitment_membershipWitness_siblingPath,\
+          offtakerCfdNetPosition_billNumber_oldCommitment_commitment_field,\
+          offtakerCfdNetPosition_billNumber_oldCommitment_membershipWitness_index\
+        )
+
+
+        // Note: Don't bother actually asserting existence, if the oldCommitment is a dummy:
+        offtakerCfdNetPosition_billNumber_commitmentRoot_check = if offtakerCfdNetPosition_billNumber_oldCommitment_isDummy == true then commitmentRoot else offtakerCfdNetPosition_billNumber_commitmentRoot_check fi
+
+
+        assert(\
+          field_to_bool_256(commitmentRoot)[8..256] == field_to_bool_256(offtakerCfdNetPosition_billNumber_commitmentRoot_check)[8..256]\
+        )
+
+
+        // prepare secret state 'offtakerCfdNetPosition_billNumber' for commitment
+
+        field offtakerCfdNetPosition_billNumber_newCommitment_value_field = offtakerCfdNetPosition_billNumber
+
+        // offtakerCfdNetPosition_billNumber_newCommitment_commitment - preimage check
+
+        field offtakerCfdNetPosition_billNumber_newCommitment_commitment_check_field = poseidon([\
+          offtakerCfdNetPosition_billNumber_stateVarId_field,\
+          offtakerCfdNetPosition_billNumber_newCommitment_value_field,\
+          offtakerCfdNetPosition_billNumber_newCommitment_owner_publicKey,\
+          offtakerCfdNetPosition_billNumber_newCommitment_salt\
+        ])
+
+        assert(\
+          field_to_bool_256(offtakerCfdNetPosition_billNumber_newCommitment_commitment)[8..256] == field_to_bool_256(offtakerCfdNetPosition_billNumber_newCommitment_commitment_check_field)[8..256]\
         )
 
 
@@ -1542,82 +1755,155 @@ negativePriceCharges_billNumber = if negativePriceOccurredParam && expectedVolum
         )
 
 
-        field negativePriceCharges_billNumber_stateVarId_field = mimc2([negativePriceCharges_mappingId, billNumber])
+        field offtakerNegativePriceCharges_billNumber_stateVarId_field = mimc2([offtakerNegativePriceCharges_mappingId, billNumber])
 
 
-        // negativePriceCharges_billNumber_oldCommitment - PoKoSK:
+        // offtakerNegativePriceCharges_billNumber_oldCommitment - PoKoSK:
         // The correctness of this secret key will be constrained within the oldCommitment existence check.
 
-        field[2] negativePriceCharges_billNumber_oldCommitment_owner_publicKey_point = scalarMult(field_to_bool_256(negativePriceCharges_billNumber_oldCommitment_owner_secretKey), [curveParams().Gu, curveParams().Gv], curveParams())
+        field[2] offtakerNegativePriceCharges_billNumber_oldCommitment_owner_publicKey_point = scalarMult(field_to_bool_256(offtakerNegativePriceCharges_billNumber_oldCommitment_owner_secretKey), [curveParams().Gu, curveParams().Gv], curveParams())
 
-        bool negativePriceCharges_billNumber_oldCommitment_owner_publicKey_sign = edwardsCompress(negativePriceCharges_billNumber_oldCommitment_owner_publicKey_point)[0]
+        bool offtakerNegativePriceCharges_billNumber_oldCommitment_owner_publicKey_sign = edwardsCompress(offtakerNegativePriceCharges_billNumber_oldCommitment_owner_publicKey_point)[0]
 
-        bool[254] negativePriceCharges_billNumber_oldCommitment_yBits = field_to_bool_256(negativePriceCharges_billNumber_oldCommitment_owner_publicKey_point[1])[2..256]
-        negativePriceCharges_billNumber_oldCommitment_yBits[0] = negativePriceCharges_billNumber_oldCommitment_owner_publicKey_sign
+        bool[254] offtakerNegativePriceCharges_billNumber_oldCommitment_yBits = field_to_bool_256(offtakerNegativePriceCharges_billNumber_oldCommitment_owner_publicKey_point[1])[2..256]
+        offtakerNegativePriceCharges_billNumber_oldCommitment_yBits[0] = offtakerNegativePriceCharges_billNumber_oldCommitment_owner_publicKey_sign
 
-        field negativePriceCharges_billNumber_oldCommitment_owner_publicKey = bool_256_to_field([false, false, ...negativePriceCharges_billNumber_oldCommitment_yBits])
+        field offtakerNegativePriceCharges_billNumber_oldCommitment_owner_publicKey = bool_256_to_field([false, false, ...offtakerNegativePriceCharges_billNumber_oldCommitment_yBits])
 
 
-        // Nullify negativePriceCharges_billNumber:
+        // Nullify offtakerNegativePriceCharges_billNumber:
 
-        field negativePriceCharges_billNumber_oldCommitment_nullifier_check_field = poseidon([\
-          negativePriceCharges_billNumber_stateVarId_field,\
-          negativePriceCharges_billNumber_oldCommitment_owner_secretKey,\
-          negativePriceCharges_billNumber_oldCommitment_salt\
+        field offtakerNegativePriceCharges_billNumber_oldCommitment_nullifier_check_field = poseidon([\
+          offtakerNegativePriceCharges_billNumber_stateVarId_field,\
+          offtakerNegativePriceCharges_billNumber_oldCommitment_owner_secretKey,\
+          offtakerNegativePriceCharges_billNumber_oldCommitment_salt\
         ])
 
         assert(\
-        field_to_bool_256(negativePriceCharges_billNumber_oldCommitment_nullifier)[8..256] == field_to_bool_256(negativePriceCharges_billNumber_oldCommitment_nullifier_check_field)[8..256]\
+        field_to_bool_256(offtakerNegativePriceCharges_billNumber_oldCommitment_nullifier)[8..256] == field_to_bool_256(offtakerNegativePriceCharges_billNumber_oldCommitment_nullifier_check_field)[8..256]\
         )
         
 
-
-        // negativePriceCharges_billNumber_oldCommitment_commitment: preimage check
-
-
-        field negativePriceCharges_billNumber_oldCommitment_commitment_field = poseidon([\
-          negativePriceCharges_billNumber_stateVarId_field,\
-          negativePriceCharges_billNumber_oldCommitment_value,\
-          negativePriceCharges_billNumber_oldCommitment_owner_publicKey,\
-          negativePriceCharges_billNumber_oldCommitment_salt        ])
+        // offtakerNegativePriceCharges_billNumber_oldCommitment_commitment: preimage check
 
 
-        // negativePriceCharges_billNumber_oldCommitment_commitment: existence check
+        field offtakerNegativePriceCharges_billNumber_oldCommitment_commitment_field = poseidon([\
+          offtakerNegativePriceCharges_billNumber_stateVarId_field,\
+          offtakerNegativePriceCharges_billNumber_oldCommitment_value,\
+          offtakerNegativePriceCharges_billNumber_oldCommitment_owner_publicKey,\
+          offtakerNegativePriceCharges_billNumber_oldCommitment_salt        ])
 
 
-        field negativePriceCharges_billNumber_commitmentRoot_check = checkRoot(\
-          negativePriceCharges_billNumber_oldCommitment_membershipWitness_siblingPath,\
-          negativePriceCharges_billNumber_oldCommitment_commitment_field,\
-          negativePriceCharges_billNumber_oldCommitment_membershipWitness_index\
+        // offtakerNegativePriceCharges_billNumber_oldCommitment_commitment: existence check
+
+
+        field offtakerNegativePriceCharges_billNumber_commitmentRoot_check = checkRoot(\
+          offtakerNegativePriceCharges_billNumber_oldCommitment_membershipWitness_siblingPath,\
+          offtakerNegativePriceCharges_billNumber_oldCommitment_commitment_field,\
+          offtakerNegativePriceCharges_billNumber_oldCommitment_membershipWitness_index\
         )
 
 
         // Note: Don't bother actually asserting existence, if the oldCommitment is a dummy:
-        negativePriceCharges_billNumber_commitmentRoot_check = if negativePriceCharges_billNumber_oldCommitment_isDummy == true then commitmentRoot else negativePriceCharges_billNumber_commitmentRoot_check fi
+        offtakerNegativePriceCharges_billNumber_commitmentRoot_check = if offtakerNegativePriceCharges_billNumber_oldCommitment_isDummy == true then commitmentRoot else offtakerNegativePriceCharges_billNumber_commitmentRoot_check fi
 
 
         assert(\
-          field_to_bool_256(commitmentRoot)[8..256] == field_to_bool_256(negativePriceCharges_billNumber_commitmentRoot_check)[8..256]\
+          field_to_bool_256(commitmentRoot)[8..256] == field_to_bool_256(offtakerNegativePriceCharges_billNumber_commitmentRoot_check)[8..256]\
         )
 
 
-        // prepare secret state 'negativePriceCharges_billNumber' for commitment
+        // prepare secret state 'offtakerNegativePriceCharges_billNumber' for commitment
 
-        field negativePriceCharges_billNumber_newCommitment_value_field = negativePriceCharges_billNumber
+        field offtakerNegativePriceCharges_billNumber_newCommitment_value_field = offtakerNegativePriceCharges_billNumber
 
-        // negativePriceCharges_billNumber_newCommitment_commitment - preimage check
+        // offtakerNegativePriceCharges_billNumber_newCommitment_commitment - preimage check
 
-        field negativePriceCharges_billNumber_newCommitment_commitment_check_field = poseidon([\
-          negativePriceCharges_billNumber_stateVarId_field,\
-          negativePriceCharges_billNumber_newCommitment_value_field,\
-          negativePriceCharges_billNumber_newCommitment_owner_publicKey,\
-          negativePriceCharges_billNumber_newCommitment_salt\
+        field offtakerNegativePriceCharges_billNumber_newCommitment_commitment_check_field = poseidon([\
+          offtakerNegativePriceCharges_billNumber_stateVarId_field,\
+          offtakerNegativePriceCharges_billNumber_newCommitment_value_field,\
+          offtakerNegativePriceCharges_billNumber_newCommitment_owner_publicKey,\
+          offtakerNegativePriceCharges_billNumber_newCommitment_salt\
         ])
 
         assert(\
-          field_to_bool_256(negativePriceCharges_billNumber_newCommitment_commitment)[8..256] == field_to_bool_256(negativePriceCharges_billNumber_newCommitment_commitment_check_field)[8..256]\
+          field_to_bool_256(offtakerNegativePriceCharges_billNumber_newCommitment_commitment)[8..256] == field_to_bool_256(offtakerNegativePriceCharges_billNumber_newCommitment_commitment_check_field)[8..256]\
         )
 
+
+        field generatorNegativePriceCharges_billNumber_stateVarId_field = mimc2([generatorNegativePriceCharges_mappingId, billNumber])
+
+
+        // generatorNegativePriceCharges_billNumber_oldCommitment - PoKoSK:
+        // The correctness of this secret key will be constrained within the oldCommitment existence check.
+
+        field[2] generatorNegativePriceCharges_billNumber_oldCommitment_owner_publicKey_point = scalarMult(field_to_bool_256(generatorNegativePriceCharges_billNumber_oldCommitment_owner_secretKey), [curveParams().Gu, curveParams().Gv], curveParams())
+
+        bool generatorNegativePriceCharges_billNumber_oldCommitment_owner_publicKey_sign = edwardsCompress(generatorNegativePriceCharges_billNumber_oldCommitment_owner_publicKey_point)[0]
+
+        bool[254] generatorNegativePriceCharges_billNumber_oldCommitment_yBits = field_to_bool_256(generatorNegativePriceCharges_billNumber_oldCommitment_owner_publicKey_point[1])[2..256]
+        generatorNegativePriceCharges_billNumber_oldCommitment_yBits[0] = generatorNegativePriceCharges_billNumber_oldCommitment_owner_publicKey_sign
+
+        field generatorNegativePriceCharges_billNumber_oldCommitment_owner_publicKey = bool_256_to_field([false, false, ...generatorNegativePriceCharges_billNumber_oldCommitment_yBits])
+
+
+        // Nullify generatorNegativePriceCharges_billNumber:
+
+        field generatorNegativePriceCharges_billNumber_oldCommitment_nullifier_check_field = poseidon([\
+          generatorNegativePriceCharges_billNumber_stateVarId_field,\
+          generatorNegativePriceCharges_billNumber_oldCommitment_owner_secretKey,\
+          generatorNegativePriceCharges_billNumber_oldCommitment_salt\
+        ])
+
+        assert(\
+        field_to_bool_256(generatorNegativePriceCharges_billNumber_oldCommitment_nullifier)[8..256] == field_to_bool_256(generatorNegativePriceCharges_billNumber_oldCommitment_nullifier_check_field)[8..256]\
+        )
+       
+           // generatorNegativePriceCharges_billNumber_oldCommitment_commitment: preimage check
+
+
+        field generatorNegativePriceCharges_billNumber_oldCommitment_commitment_field = poseidon([\
+          generatorNegativePriceCharges_billNumber_stateVarId_field,\
+          generatorNegativePriceCharges_billNumber_oldCommitment_value,\
+          generatorNegativePriceCharges_billNumber_oldCommitment_owner_publicKey,\
+          generatorNegativePriceCharges_billNumber_oldCommitment_salt        ])
+
+
+        // generatorNegativePriceCharges_billNumber_oldCommitment_commitment: existence check
+
+
+        field generatorNegativePriceCharges_billNumber_commitmentRoot_check = checkRoot(\
+          generatorNegativePriceCharges_billNumber_oldCommitment_membershipWitness_siblingPath,\
+          generatorNegativePriceCharges_billNumber_oldCommitment_commitment_field,\
+          generatorNegativePriceCharges_billNumber_oldCommitment_membershipWitness_index\
+        )
+
+
+        // Note: Don't bother actually asserting existence, if the oldCommitment is a dummy:
+        generatorNegativePriceCharges_billNumber_commitmentRoot_check = if generatorNegativePriceCharges_billNumber_oldCommitment_isDummy == true then commitmentRoot else generatorNegativePriceCharges_billNumber_commitmentRoot_check fi
+
+
+        assert(\
+          field_to_bool_256(commitmentRoot)[8..256] == field_to_bool_256(generatorNegativePriceCharges_billNumber_commitmentRoot_check)[8..256]\
+        )
+
+
+        // prepare secret state 'generatorNegativePriceCharges_billNumber' for commitment
+
+        field generatorNegativePriceCharges_billNumber_newCommitment_value_field = generatorNegativePriceCharges_billNumber
+
+        // generatorNegativePriceCharges_billNumber_newCommitment_commitment - preimage check
+
+        field generatorNegativePriceCharges_billNumber_newCommitment_commitment_check_field = poseidon([\
+          generatorNegativePriceCharges_billNumber_stateVarId_field,\
+          generatorNegativePriceCharges_billNumber_newCommitment_value_field,\
+          generatorNegativePriceCharges_billNumber_newCommitment_owner_publicKey,\
+          generatorNegativePriceCharges_billNumber_newCommitment_salt\
+        ])
+
+        assert(\
+          field_to_bool_256(generatorNegativePriceCharges_billNumber_newCommitment_commitment)[8..256] == field_to_bool_256(generatorNegativePriceCharges_billNumber_newCommitment_commitment_check_field)[8..256]\
+        )
 
         // numberOfConsecutivePeriodsForShortfall_oldCommitment - PoKoSK:
         // The correctness of this secret key will be constrained within the oldCommitment existence check.
@@ -2282,4 +2568,4 @@ negativePriceCharges_billNumber = if negativePriceOccurredParam && expectedVolum
           field_to_bool_256(surplusCharges_billNumber_newCommitment_commitment)[8..256] == field_to_bool_256(surplusCharges_billNumber_newCommitment_commitment_check_field)[8..256]\
         )
 
-         return generatorCharges_billNumber_newCommitment_commitment,offtakerCharges_billNumber_newCommitment_commitment,generatorInterest_billNumber_newCommitment_commitment,offtakerInterest_billNumber_newCommitment_commitment,shortfallCharges_billNumber_newCommitment_commitment,surplusCharges_billNumber_newCommitment_commitment,negativePriceCharges_billNumber_newCommitment_commitment
+         return generatorCfdNetPosition_billNumber_newCommitment_commitment,offtakerCfdNetPosition_billNumber_newCommitment_commitment,generatorInterest_billNumber_newCommitment_commitment,offtakerInterest_billNumber_newCommitment_commitment,shortfallCharges_billNumber_newCommitment_commitment,surplusCharges_billNumber_newCommitment_commitment,generatorNegativePriceCharges_billNumber_newCommitment_commitment,offtakerNegativePriceCharges_billNumber_newCommitment_commitment,generatorTotalCharges_billNumber_newCommitment_commitment,offtakerTotalCharges_billNumber_newCommitment_commitment
