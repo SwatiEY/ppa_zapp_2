@@ -682,7 +682,7 @@ require(isContractTerminated == false, "The contract is terminated!");
 
           Inputs memory inputs;
 
-          inputs.customInputs = new uint[](7);
+          inputs.customInputs = new uint[](10);
           inputs.customInputs[0] = newCommitments[6];
             inputs.customInputs[1] = newCommitments[7];
             inputs.customInputs[2] = newCommitments[8];
