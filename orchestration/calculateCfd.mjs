@@ -1647,15 +1647,15 @@ let index_1 = generalise(parseInt(surplusIndex.integer, 10) + 0);
 			parseInt(netPositiveAdjustment.integer, 10))
 	) {
 		generatorCharges_billNumber =
-			parseInt(floatingAmount.integer, 10) -
-			parseInt(fixedAmount.integer, 10) +
-			parseInt(positiveAdjustment.integer, 10) -
-			parseInt(negativeAdjustment.integer, 10);
+			parseInt(floatingAmount.integer, 10) +
+			parseInt(negativeAdjustment.integer, 10) -
+			parseInt(fixedAmount.integer, 10) -
+			parseInt(positiveAdjustment.integer, 10);
 	} else {
 		offtakerCharges_billNumber =
-			parseInt(fixedAmount.integer, 10) -
-			parseInt(floatingAmount.integer, 10) +
-			parseInt(positiveAdjustment.integer, 10) -
+			parseInt(fixedAmount.integer, 10) + 
+			parseInt(positiveAdjustment.integer, 10)-
+			parseInt(floatingAmount.integer, 10) -
 			parseInt(negativeAdjustment.integer, 10);
 	}
 

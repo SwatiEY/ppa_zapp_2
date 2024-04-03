@@ -459,8 +459,8 @@ def main(\
         field netNegativeAdjustment_temp = netNegativeAdjustment
         field netPositiveAdjustment_temp = netPositiveAdjustment
         field fixedAmount_temp = fixedAmount
-       generatorCharges_billNumber = if floatingAmount_temp + netNegativeAdjustment_temp > fixedAmount_temp + netPositiveAdjustment_temp then floatingAmount + netNegativeAdjustment - fixedAmount - netPositiveAdjustment else generatorCharges_billNumber fi
-        offtakerCharges_billNumber = if floatingAmount_temp + netNegativeAdjustment_temp > fixedAmount_temp + netPositiveAdjustment_temp then offtakerCharges_billNumber else fixedAmount + netPositiveAdjustment - floatingAmount - netNegativeAdjustment fi
+       generatorCharges_billNumber = if (floatingAmount_temp + netNegativeAdjustment_temp) > (fixedAmount_temp + netPositiveAdjustment_temp) then floatingAmount + netNegativeAdjustment - fixedAmount - netPositiveAdjustment else generatorCharges_billNumber fi
+        offtakerCharges_billNumber = if (floatingAmount_temp + netNegativeAdjustment_temp) > (fixedAmount_temp + netPositiveAdjustment_temp) then offtakerCharges_billNumber else fixedAmount + netPositiveAdjustment - floatingAmount - netNegativeAdjustment fi
 
 
 bool shortfallSequence = false
