@@ -1886,10 +1886,10 @@ let index_1 = generalise(parseInt(surplusIndex.integer, 10) + 0);
 
 	
 	if (
-		parseInt(floatingAmount.integer, 10) +
-			parseInt(netNegativeAdjustment.integer, 10) >
-		parseInt(fixedAmount.integer, 10) +
-			parseInt(netPositiveAdjustment.integer, 10)
+		(parseInt(floatingAmount.integer, 10) +
+			parseInt(netNegativeAdjustment.integer, 10)) >
+		(parseInt(fixedAmount.integer, 10) +
+			parseInt(netPositiveAdjustment.integer, 10))
 	) {
 		generatorCfdNetPosition_billNumber =
 			parseInt(floatingAmount.integer, 10) +
