@@ -41,13 +41,14 @@ export default async function setInitialContractParams(
 	_numberOfConsecutivePeriodsForSurplusParam,
 	_surplusThresholdParam,
 	_dailyInterestRateParam,
+	_startDateOfContractParam,
 	_expiryDateOfContractParam,
 	_sequenceNumberIntervalParam,
-	_referenceDate,
 	_strikePrice_newOwnerPublicKey = 0,
 	_bundlePrice_newOwnerPublicKey = 0,
 	_volumeShare_newOwnerPublicKey = 0,
 	_dailyInterestRate_newOwnerPublicKey = 0,
+	_startDateOfContract_newOwnerPublicKey = 0,
 	_expiryDateOfContract_newOwnerPublicKey = 0,
 	_latestShortfallSequenceNumber_newOwnerPublicKey = 0,
 	_latestSurplusSequenceNumber_newOwnerPublicKey = 0,
@@ -76,9 +77,9 @@ export default async function setInitialContractParams(
 	);
 	const surplusThresholdParam = generalise(_surplusThresholdParam);
 	const dailyInterestRateParam = generalise(_dailyInterestRateParam);
+	const startDateOfContractParam = generalise(_startDateOfContractParam);
 	const expiryDateOfContractParam = generalise(_expiryDateOfContractParam);
 	const sequenceNumberIntervalParam = generalise(_sequenceNumberIntervalParam);
-	const referenceDate = generalise(_referenceDate);
 	let strikePrice_newOwnerPublicKey = generalise(
 		_strikePrice_newOwnerPublicKey
 	);
@@ -90,6 +91,9 @@ export default async function setInitialContractParams(
 	);
 	let dailyInterestRate_newOwnerPublicKey = generalise(
 		_dailyInterestRate_newOwnerPublicKey
+	);
+	let startDateOfContract_newOwnerPublicKey = generalise(
+		_startDateOfContract_newOwnerPublicKey
 	);
 	let expiryDateOfContract_newOwnerPublicKey = generalise(
 		_expiryDateOfContract_newOwnerPublicKey
@@ -223,7 +227,31 @@ export default async function setInitialContractParams(
 
 	// Initialise commitment preimage of whole state:
 
-	const expiryDateOfContract_stateVarId = generalise(13).hex(32);
+	const startDateOfContract_stateVarId = generalise(13).hex(32);
+
+	let startDateOfContract_commitmentExists = true;
+	let startDateOfContract_witnessRequired = true;
+
+	const startDateOfContract_commitment = await getCurrentWholeCommitment(
+		startDateOfContract_stateVarId
+	);
+
+	let startDateOfContract_preimage = {
+		value: 0,
+		salt: 0,
+		commitment: 0,
+	};
+	if (!startDateOfContract_commitment) {
+		startDateOfContract_commitmentExists = false;
+		startDateOfContract_witnessRequired = false;
+	} else {
+		startDateOfContract_preimage = startDateOfContract_commitment.preimage;
+	}
+
+
+	// Initialise commitment preimage of whole state:
+
+	const expiryDateOfContract_stateVarId = generalise(15).hex(32);
 
 	let expiryDateOfContract_commitmentExists = true;
 	let expiryDateOfContract_witnessRequired = true;
@@ -481,6 +509,26 @@ export default async function setInitialContractParams(
 	);
 
 	// read preimage for whole state
+	startDateOfContract_newOwnerPublicKey =
+		_startDateOfContract_newOwnerPublicKey === 0
+			? generalise(
+					await instance.methods
+						.zkpPublicKeys(await instance.methods.owner().call())
+						.call()
+			  )
+			: startDateOfContract_newOwnerPublicKey;
+
+	const startDateOfContract_currentCommitment = startDateOfContract_commitmentExists
+		? generalise(startDateOfContract_commitment._id)
+		: generalise(0);
+	const startDateOfContract_prev = generalise(
+		startDateOfContract_preimage.value
+	);
+	const startDateOfContract_prevSalt = generalise(
+		startDateOfContract_preimage.salt
+	);
+
+	// read preimage for whole state
 	expiryDateOfContract_newOwnerPublicKey =
 		_expiryDateOfContract_newOwnerPublicKey === 0
 			? generalise(
@@ -701,6 +749,26 @@ export default async function setInitialContractParams(
 	const dailyInterestRate_path = generalise(dailyInterestRate_witness.path).all;
 
 	// generate witness for whole state
+	const startDateOfContract_emptyPath = new Array(32).fill(0);
+	const startDateOfContract_witness = startDateOfContract_witnessRequired
+		? await getMembershipWitness(
+				"SyntheticPpaShield",
+				startDateOfContract_currentCommitment.integer
+		  )
+		: {
+				index: 0,
+				path: startDateOfContract_emptyPath,
+				root: (await getRoot("SyntheticPpaShield")) || 0,
+		  };
+	const startDateOfContract_index = generalise(
+		startDateOfContract_witness.index
+	);
+	const startDateOfContract_root = generalise(startDateOfContract_witness.root);
+	const startDateOfContract_path = generalise(startDateOfContract_witness.path)
+		.all;
+
+
+	// generate witness for whole state
 	const expiryDateOfContract_emptyPath = new Array(32).fill(0);
 	const expiryDateOfContract_witness = expiryDateOfContract_witnessRequired
 		? await getMembershipWitness(
@@ -911,6 +979,10 @@ export default async function setInitialContractParams(
 
 	dailyInterestRate = generalise(dailyInterestRate);
 
+	let startDateOfContract = parseInt(startDateOfContractParam.integer, 10);
+
+	startDateOfContract = generalise(startDateOfContract);
+
 	expiryDateOfContract = parseInt(expiryDateOfContractParam.integer, 10);
 
 	expiryDateOfContract = generalise(expiryDateOfContract);
@@ -993,7 +1065,21 @@ export default async function setInitialContractParams(
 
 	dailyInterestRate_nullifier = generalise(dailyInterestRate_nullifier.hex(32)); // truncate
 
-	
+	let startDateOfContract_nullifier = startDateOfContract_commitmentExists
+		? poseidonHash([
+				BigInt(startDateOfContract_stateVarId),
+				BigInt(secretKey.hex(32)),
+				BigInt(startDateOfContract_prevSalt.hex(32)),
+		  ])
+		: poseidonHash([
+				BigInt(startDateOfContract_stateVarId),
+				BigInt(generalise(0).hex(32)),
+				BigInt(startDateOfContract_prevSalt.hex(32)),
+		  ]);
+
+	startDateOfContract_nullifier = generalise(
+		startDateOfContract_nullifier.hex(32)
+	); // truncate
 
 	let expiryDateOfContract_nullifier = expiryDateOfContract_commitmentExists
 		? poseidonHash([
@@ -1184,6 +1270,19 @@ export default async function setInitialContractParams(
 		dailyInterestRate_newCommitment.hex(32)
 	); // truncate
 
+	const startDateOfContract_newSalt = generalise(utils.randomHex(31));
+
+	let startDateOfContract_newCommitment = poseidonHash([
+		BigInt(startDateOfContract_stateVarId),
+		BigInt(startDateOfContract.hex(32)),
+		BigInt(startDateOfContract_newOwnerPublicKey.hex(32)),
+		BigInt(startDateOfContract_newSalt.hex(32)),
+	]);
+
+	startDateOfContract_newCommitment = generalise(
+		startDateOfContract_newCommitment.hex(32)
+	); // truncate
+
 	const expiryDateOfContract_newSalt = generalise(utils.randomHex(31));
 
 	let expiryDateOfContract_newCommitment = poseidonHash([
@@ -1303,9 +1402,9 @@ export default async function setInitialContractParams(
 		numberOfConsecutivePeriodsForSurplusParam.integer,
 		surplusThresholdParam.integer,
 		dailyInterestRateParam.integer,
+		startDateOfContractParam.integer,
 		expiryDateOfContractParam.integer,
 		sequenceNumberIntervalParam.integer,
-		referenceDate.integer,
 		strikePrice_commitmentExists ? secretKey.integer : generalise(0).integer,
 		strikePrice_nullifier.integer,
 		strikePrice_prev.integer,
@@ -1355,6 +1454,20 @@ export default async function setInitialContractParams(
 		dailyInterestRate_newOwnerPublicKey.integer,
 		dailyInterestRate_newSalt.integer,
 		dailyInterestRate_newCommitment.integer,
+		startDateOfContract_commitmentExists
+		? secretKey.integer
+		: generalise(0).integer,
+
+		startDateOfContract_nullifier.integer,
+		startDateOfContract_prev.integer,
+		startDateOfContract_prevSalt.integer,
+		startDateOfContract_commitmentExists ? 0 : 1,
+
+		startDateOfContract_index.integer,
+		startDateOfContract_path.integer,
+		startDateOfContract_newOwnerPublicKey.integer,
+		startDateOfContract_newSalt.integer,
+		startDateOfContract_newCommitment.integer,
 		expiryDateOfContract_commitmentExists
 			? secretKey.integer
 			: generalise(0).integer,
@@ -1482,6 +1595,7 @@ export default async function setInitialContractParams(
 				bundlePrice_nullifier.integer,
 				volumeShare_nullifier.integer,
 				dailyInterestRate_nullifier.integer,
+				startDateOfContract_nullifier.integer,
 				expiryDateOfContract_nullifier.integer,
 				latestShortfallSequenceNumber_nullifier.integer,
 				latestSurplusSequenceNumber_nullifier.integer,
@@ -1497,6 +1611,7 @@ export default async function setInitialContractParams(
 				bundlePrice_newCommitment.integer,
 				volumeShare_newCommitment.integer,
 				dailyInterestRate_newCommitment.integer,
+				startDateOfContract_newCommitment.integer,
 				expiryDateOfContract_newCommitment.integer,
 				latestShortfallSequenceNumber_newCommitment.integer,
 				latestSurplusSequenceNumber_newCommitment.integer,
@@ -1624,6 +1739,29 @@ export default async function setInitialContractParams(
 		},
 		secretKey:
 			dailyInterestRate_newOwnerPublicKey.integer === publicKey.integer
+				? secretKey
+				: null,
+		isNullified: false,
+	});
+
+	if (startDateOfContract_commitmentExists)
+		await markNullified(
+			startDateOfContract_currentCommitment,
+			secretKey.hex(32)
+		);
+
+	await storeCommitment({
+		hash: startDateOfContract_newCommitment,
+		name: "startDateOfContract",
+		mappingKey: null,
+		preimage: {
+			stateVarId: generalise(startDateOfContract_stateVarId),
+			value: startDateOfContract,
+			salt: startDateOfContract_newSalt,
+			publicKey: startDateOfContract_newOwnerPublicKey,
+		},
+		secretKey:
+			startDateOfContract_newOwnerPublicKey.integer === publicKey.integer
 				? secretKey
 				: null,
 		isNullified: false,

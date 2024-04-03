@@ -20,7 +20,7 @@ import { service_setSequenceNumberInterval } from "./api_services.mjs";
 
 import { service_initSequenceNumber } from "./api_services.mjs";
 
-import { service_initSurplusSequenceNumber } from "./api_services.mjs";
+import { service_setStartDateOfContract } from "./api_services.mjs";
 
 import { service_setInitialContractParams } from "./api_services.mjs";
 
@@ -58,6 +58,9 @@ router.post("/setSurplusPeriods", service_setSurplusPeriods);
 router.post("/setDailyInterestRate", service_setDailyInterestRate);
 
 // eslint-disable-next-line func-names
+router.post("/setStartDateOfContract", service_setStartDateOfContract);
+
+// eslint-disable-next-line func-names
 router.post("/setExpiryDateOfContract", service_setExpiryDateOfContract);
 
 // eslint-disable-next-line func-names
@@ -68,9 +71,6 @@ router.post("/setSequenceNumberInterval", service_setSequenceNumberInterval);
 
 // eslint-disable-next-line func-names
 router.post("/initSequenceNumber", service_initSequenceNumber);
-
-// eslint-disable-next-line func-names
-router.post("/initSurplusSequenceNumber", service_initSurplusSequenceNumber);
 
 // eslint-disable-next-line func-names
 router.post("/setInitialContractParams", service_setInitialContractParams);

@@ -23,7 +23,7 @@ def main(\
 
         
         // We need to hard-code each stateVarId into the circuit:
-        field expiryDateOfContract_stateVarId_field = 13
+        field expiryDateOfContract_stateVarId_field = 15
 
 
         field expiryDateOfContract = expiryDateOfContract_oldCommitment_value

@@ -8,7 +8,8 @@ import "./merkle-tree/MerkleTree.sol";
 contract SyntheticPpaShield is MerkleTree {
 
 
-          enum FunctionNames { setStrikePrice, setBundlePrice, setShortfallThreshold, setShortfallPeriods, setSurplusThreshold, setSurplusPeriods, setDailyInterestRate, setExpiryDateOfContract, setVolumeShare, setSequenceNumberInterval, initSequenceNumber, initSurplusSequenceNumber, setInitialContractParams, calculateCfd }
+          enum FunctionNames { setStrikePrice, setBundlePrice, setShortfallThreshold, setShortfallPeriods, setSurplusThreshold, setSurplusPeriods, setDailyInterestRate, setStartDateOfContract, setExpiryDateOfContract, setVolumeShare, setSequenceNumberInterval, initSequenceNumber, setInitialContractParams, calculateCfd }
+
 
           IVerifier private verifier;
 
@@ -137,6 +138,16 @@ uint256[] memory inputs = new uint256[](customInputs.length + newNullifiers.leng
             
           }
 
+          if (functionId == uint(FunctionNames.setStartDateOfContract)) {
+            uint k = 0;
+
+            inputs[k++] = newNullifiers[0];
+            inputs[k++] = _inputs.commitmentRoot;
+            inputs[k++] = newCommitments[0];
+            inputs[k++] = 1;
+            
+          }
+
           if (functionId == uint(FunctionNames.setExpiryDateOfContract)) {
             uint k = 0;
 
@@ -173,16 +184,8 @@ uint256[] memory inputs = new uint256[](customInputs.length + newNullifiers.leng
             inputs[k++] = newNullifiers[0];
             inputs[k++] = _inputs.commitmentRoot;
             inputs[k++] = newCommitments[0];
-            inputs[k++] = 1;
-            
-          }
-
-          if (functionId == uint(FunctionNames.initSurplusSequenceNumber)) {
-            uint k = 0;
- 
-            inputs[k++] = newNullifiers[0];
-            inputs[k++] = _inputs.commitmentRoot;
-            inputs[k++] = newCommitments[0];
+            inputs[k++] = newNullifiers[1];
+            inputs[k++] = newCommitments[1];
             inputs[k++] = 1;
             
           }
@@ -214,6 +217,8 @@ uint256[] memory inputs = new uint256[](customInputs.length + newNullifiers.leng
             inputs[k++] = newCommitments[10];
             inputs[k++] = newNullifiers[11];
             inputs[k++] = newCommitments[11];
+            inputs[k++] = newNullifiers[12];
+            inputs[k++] = newCommitments[12];
             inputs[k++] = 1;
             
           }
@@ -227,6 +232,7 @@ uint256[] memory inputs = new uint256[](customInputs.length + newNullifiers.leng
             inputs[k++] = checkNullifiers[2];
             inputs[k++] = checkNullifiers[3];
             inputs[k++] = checkNullifiers[4];
+            inputs[k++] = checkNullifiers[5];
 
 
             inputs[k++] = newNullifiers[0];
@@ -238,7 +244,7 @@ uint256[] memory inputs = new uint256[](customInputs.length + newNullifiers.leng
             inputs[k++] = newNullifiers[3];
             inputs[k++] = newCommitments[3];
 
-            inputs[k++] = checkNullifiers[5];
+            inputs[k++] = checkNullifiers[6];
             inputs[k++] = newNullifiers[4];
             inputs[k++] = newCommitments[4];
             inputs[k++] = newNullifiers[5];
@@ -250,16 +256,16 @@ uint256[] memory inputs = new uint256[](customInputs.length + newNullifiers.leng
             inputs[k++] = newNullifiers[8];
             inputs[k++] = newCommitments[8];
 
-            inputs[k++] = checkNullifiers[6];
-           inputs[k++] = checkNullifiers[7];
+            inputs[k++] = checkNullifiers[7];
+           inputs[k++] = checkNullifiers[8];
             inputs[k++] = newNullifiers[9];
             inputs[k++] = newCommitments[9];
             inputs[k++] = newNullifiers[10];
             inputs[k++] = newCommitments[10];
             inputs[k++] = newNullifiers[11];
             inputs[k++] = newCommitments[11];
-          inputs[k++] = checkNullifiers[8];
           inputs[k++] = checkNullifiers[9];
+          inputs[k++] = checkNullifiers[10];
           inputs[k++] = newNullifiers[12];
             inputs[k++] = newCommitments[12];
             inputs[k++] = newNullifiers[13];
@@ -315,7 +321,7 @@ uint256[] memory inputs = new uint256[](customInputs.length + newNullifiers.leng
 
 
 
-struct Shortfall {
+struct VolumeGap {
         
         uint256 billNumber;
 
@@ -522,6 +528,28 @@ owner = msg.sender;
            verify(proof, uint(FunctionNames.setDailyInterestRate), inputs);
       }
 
+      function setStartDateOfContract (uint256[] calldata newNullifiers, uint256 commitmentRoot, uint256[] calldata newCommitments, uint256[] calldata proof) public  {
+
+        require(msg.sender == owner, "Caller is unauthorised, it must be the owner");
+
+
+          Inputs memory inputs;
+
+          inputs.customInputs = new uint[](1);
+        	inputs.customInputs[0] = 1;
+
+
+
+          inputs.newNullifiers = newNullifiers;
+           
+
+          inputs.commitmentRoot = commitmentRoot;
+
+          inputs.newCommitments = newCommitments;
+
+           verify(proof, uint(FunctionNames.setStartDateOfContract), inputs);
+      }
+
 
       function setExpiryDateOfContract (uint256[] calldata newNullifiers, uint256 commitmentRoot, uint256[] calldata newCommitments, uint256[] calldata proof) public  {
 
@@ -610,28 +638,6 @@ owner = msg.sender;
           inputs.newCommitments = newCommitments;
 
            verify(proof, uint(FunctionNames.initSequenceNumber), inputs);
-      }
-
-
-      function initSurplusSequenceNumber (uint256[] calldata newNullifiers, uint256 commitmentRoot, uint256[] calldata newCommitments, uint256[] calldata proof) public  {
-
-        require(msg.sender == owner, "Caller is unauthorised, it must be the owner");
-
-
-          Inputs memory inputs;
-
-          inputs.customInputs = new uint[](1);
-        	inputs.customInputs[0] = 1;
-
-
-          inputs.newNullifiers = newNullifiers;
-           
-
-          inputs.commitmentRoot = commitmentRoot;
-
-          inputs.newCommitments = newCommitments;
-
-           verify(proof, uint(FunctionNames.initSurplusSequenceNumber), inputs);
       }
 
 
