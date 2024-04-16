@@ -257,39 +257,32 @@ uint256[] memory inputs = new uint256[](customInputs.length + newNullifiers.leng
             inputs[k++] = newCommitments[8];
             inputs[k++] = newNullifiers[9];
             inputs[k++] = newCommitments[9];
+
+            inputs[k++] = checkNullifiers[7];
+            inputs[k++] = checkNullifiers[8];
             inputs[k++] = newNullifiers[10];
             inputs[k++] = newCommitments[10];
             inputs[k++] = newNullifiers[11];
             inputs[k++] = newCommitments[11];
-
-            inputs[k++] = checkNullifiers[7];
-            inputs[k++] = checkNullifiers[8];
             inputs[k++] = newNullifiers[12];
             inputs[k++] = newCommitments[12];
-            inputs[k++] = newNullifiers[13];
+          inputs[k++] = checkNullifiers[9];
+          inputs[k++] = checkNullifiers[10];
+          inputs[k++] = newNullifiers[13];
             inputs[k++] = newCommitments[13];
             inputs[k++] = newNullifiers[14];
             inputs[k++] = newCommitments[14];
-          inputs[k++] = checkNullifiers[9];
-          inputs[k++] = checkNullifiers[10];
-          inputs[k++] = newNullifiers[15];
+            inputs[k++] = newNullifiers[15];
             inputs[k++] = newCommitments[15];
-            inputs[k++] = newNullifiers[16];
-            inputs[k++] = newCommitments[16];
-            inputs[k++] = newNullifiers[17];
-            inputs[k++] = newCommitments[17];
 
-             inputs[k++] = newCommitments[6];
-              inputs[k++] = newCommitments[7];
-              inputs[k++] = newCommitments[8];
-              inputs[k++] = newCommitments[9];
-              inputs[k++] = newCommitments[14];
-              inputs[k++] = newCommitments[17];
-              inputs[k++] = newCommitments[11];
-              inputs[k++] = newCommitments[10];
-              inputs[k++] = newCommitments[4];
+             inputs[k++] = newCommitments[4];
               inputs[k++] = newCommitments[5];
-
+              inputs[k++] = newCommitments[6];
+              inputs[k++] = newCommitments[7];
+              inputs[k++] = newCommitments[12];
+              inputs[k++] = newCommitments[15];
+              inputs[k++] = newCommitments[9];
+              inputs[k++] = newCommitments[8];
             
           }
           
@@ -682,18 +675,15 @@ require(isContractTerminated == false, "The contract is terminated!");
 
           Inputs memory inputs;
 
-          inputs.customInputs = new uint[](10);
-          inputs.customInputs[0] = newCommitments[6];
-            inputs.customInputs[1] = newCommitments[7];
-            inputs.customInputs[2] = newCommitments[8];
-            inputs.customInputs[3] = newCommitments[9];
-            inputs.customInputs[4] = newCommitments[14];
-            inputs.customInputs[5] = newCommitments[17];
-            inputs.customInputs[6] = newCommitments[11];
-            inputs.customInputs[7] = newCommitments[10];
-            inputs.customInputs[8] = newCommitments[4];
-            inputs.customInputs[9] = newCommitments[5];
-      
+          inputs.customInputs = new uint[](8);
+          inputs.customInputs[0] = newCommitments[4];
+            inputs.customInputs[1] = newCommitments[5];
+            inputs.customInputs[2] = newCommitments[6];
+            inputs.customInputs[3] = newCommitments[7];
+            inputs.customInputs[4] = newCommitments[12];
+            inputs.customInputs[5] = newCommitments[15];
+            inputs.customInputs[6] = newCommitments[9];
+            inputs.customInputs[7] = newCommitments[8];
 
           inputs.newNullifiers = newNullifiers;
            

@@ -53,8 +53,6 @@ export default async function calculateCfd(
 	_latestShortfallSequenceNumber_newOwnerPublicKey = 0,
 	_surpluses_index_1_newOwnerPublicKey = 0,
 	_latestSurplusSequenceNumber_newOwnerPublicKey = 0,
-	_generatorTotalCharges_billNumber_newOwnerPublicKey = 0,
-	_offtakerTotalCharges_billNumber_newOwnerPublicKey = 0,
 	_generatorCfdNetPosition_billNumber_newOwnerPublicKey = 0,
 	_offtakerCfdNetPosition_billNumber_newOwnerPublicKey = 0,
 	_generatorInterest_billNumber_newOwnerPublicKey = 0,
@@ -102,12 +100,6 @@ export default async function calculateCfd(
 	);
 	let latestSurplusSequenceNumber_newOwnerPublicKey = generalise(
 		_latestSurplusSequenceNumber_newOwnerPublicKey
-	);
-	let generatorTotalCharges_billNumber_newOwnerPublicKey = generalise(
-		_generatorTotalCharges_billNumber_newOwnerPublicKey
-	);
-	let offtakerTotalCharges_billNumber_newOwnerPublicKey = generalise(
-		_offtakerTotalCharges_billNumber_newOwnerPublicKey
 	);
 	let generatorCfdNetPosition_billNumber_newOwnerPublicKey = generalise(
 		_generatorCfdNetPosition_billNumber_newOwnerPublicKey
@@ -437,79 +429,7 @@ let index_1 = generalise(parseInt(surplusIndex.integer, 10) + 0);
 		sequenceNumberInterval_preimage.value
 	);
 
-	// Initialise commitment preimage of whole state:
-
-	let generatorTotalCharges_billNumber_stateVarId = 42;
-
-	const generatorTotalCharges_billNumber_stateVarId_key = billNumber;
-
-	generatorTotalCharges_billNumber_stateVarId = generalise(
-		utils.mimcHash(
-			[
-				generalise(generatorTotalCharges_billNumber_stateVarId).bigInt,
-				generatorTotalCharges_billNumber_stateVarId_key.bigInt,
-			],
-			"ALT_BN_254"
-		)
-	).hex(32);
-
-	let generatorTotalCharges_billNumber_commitmentExists = true;
-	let generatorTotalCharges_billNumber_witnessRequired = true;
-
-	const generatorTotalCharges_billNumber_commitment = await getCurrentWholeCommitment(
-		generatorTotalCharges_billNumber_stateVarId
-	);
-
-	let generatorTotalCharges_billNumber_preimage = {
-		value: 0,
-		salt: 0,
-		commitment: 0,
-	};
-	if (!generatorTotalCharges_billNumber_commitment) {
-		generatorTotalCharges_billNumber_commitmentExists = false;
-		generatorTotalCharges_billNumber_witnessRequired = false;
-	} else {
-		generatorTotalCharges_billNumber_preimage =
-			generatorTotalCharges_billNumber_commitment.preimage;
-	}
-
-	// Initialise commitment preimage of whole state:
-
-	let offtakerTotalCharges_billNumber_stateVarId = 46;
-
 	
-	const offtakerTotalCharges_billNumber_stateVarId_key = billNumber;
-
-	offtakerTotalCharges_billNumber_stateVarId = generalise(
-		utils.mimcHash(
-			[
-				generalise(offtakerTotalCharges_billNumber_stateVarId).bigInt,
-				offtakerTotalCharges_billNumber_stateVarId_key.bigInt,
-			],
-			"ALT_BN_254"
-		)
-	).hex(32);
-
-	let offtakerTotalCharges_billNumber_commitmentExists = true;
-	let offtakerTotalCharges_billNumber_witnessRequired = true;
-
-	const offtakerTotalCharges_billNumber_commitment = await getCurrentWholeCommitment(
-		offtakerTotalCharges_billNumber_stateVarId
-	);
-
-	let offtakerTotalCharges_billNumber_preimage = {
-		value: 0,
-		salt: 0,
-		commitment: 0,
-	};
-	if (!offtakerTotalCharges_billNumber_commitment) {
-		offtakerTotalCharges_billNumber_commitmentExists = false;
-		offtakerTotalCharges_billNumber_witnessRequired = false;
-	} else {
-		offtakerTotalCharges_billNumber_preimage =
-			offtakerTotalCharges_billNumber_commitment.preimage;
-	}
-
 	// Initialise commitment preimage of whole state:
 
 	let generatorCfdNetPosition_billNumber_stateVarId = 52;
@@ -1045,38 +965,6 @@ let index_1 = generalise(parseInt(surplusIndex.integer, 10) + 0);
 	);
 
 	// read preimage for whole state
-	generatorTotalCharges_billNumber_newOwnerPublicKey =
-		_generatorTotalCharges_billNumber_newOwnerPublicKey === 0
-			? publicKey
-			: generatorTotalCharges_billNumber_newOwnerPublicKey;
-
-	const generatorTotalCharges_billNumber_currentCommitment = generatorTotalCharges_billNumber_commitmentExists
-		? generalise(generatorTotalCharges_billNumber_commitment._id)
-		: generalise(0);
-	const generatorTotalCharges_billNumber_prev = generalise(
-		generatorTotalCharges_billNumber_preimage.value
-	);
-	const generatorTotalCharges_billNumber_prevSalt = generalise(
-		generatorTotalCharges_billNumber_preimage.salt
-	);
-
-	// read preimage for whole state
-	offtakerTotalCharges_billNumber_newOwnerPublicKey =
-		_offtakerTotalCharges_billNumber_newOwnerPublicKey === 0
-			? publicKey
-			: offtakerTotalCharges_billNumber_newOwnerPublicKey;
-
-	const offtakerTotalCharges_billNumber_currentCommitment = offtakerTotalCharges_billNumber_commitmentExists
-		? generalise(offtakerTotalCharges_billNumber_commitment._id)
-		: generalise(0);
-	const offtakerTotalCharges_billNumber_prev = generalise(
-		offtakerTotalCharges_billNumber_preimage.value
-	);
-	const offtakerTotalCharges_billNumber_prevSalt = generalise(
-		offtakerTotalCharges_billNumber_preimage.salt
-	);
-
-	// read preimage for whole state
 	generatorCfdNetPosition_billNumber_newOwnerPublicKey =
 		_generatorCfdNetPosition_billNumber_newOwnerPublicKey === 0
 			? publicKey
@@ -1450,50 +1338,7 @@ let index_1 = generalise(parseInt(surplusIndex.integer, 10) + 0);
 		sequenceNumberInterval_witness.path
 	).all;
 
-	// generate witness for whole state
-	const generatorTotalCharges_billNumber_emptyPath = new Array(32).fill(0);
-	const generatorTotalCharges_billNumber_witness = generatorTotalCharges_billNumber_witnessRequired
-		? await getMembershipWitness(
-				"SyntheticPpaShield",
-				generatorTotalCharges_billNumber_currentCommitment.integer
-		  )
-		: {
-				index: 0,
-				path: generatorTotalCharges_billNumber_emptyPath,
-				root: (await getRoot("SyntheticPpaShield")) || 0,
-		  };
-	const generatorTotalCharges_billNumber_index = generalise(
-		generatorTotalCharges_billNumber_witness.index
-	);
-	const generatorTotalCharges_billNumber_root = generalise(
-		generatorTotalCharges_billNumber_witness.root
-	);
-	const generatorTotalCharges_billNumber_path = generalise(
-		generatorTotalCharges_billNumber_witness.path
-	).all;
-
-	// generate witness for whole state
-	const offtakerTotalCharges_billNumber_emptyPath = new Array(32).fill(0);
-	const offtakerTotalCharges_billNumber_witness = offtakerTotalCharges_billNumber_witnessRequired
-		? await getMembershipWitness(
-				"SyntheticPpaShield",
-				offtakerTotalCharges_billNumber_currentCommitment.integer
-		  )
-		: {
-				index: 0,
-				path: offtakerTotalCharges_billNumber_emptyPath,
-				root: (await getRoot("SyntheticPpaShield")) || 0,
-		  };
-	const offtakerTotalCharges_billNumber_index = generalise(
-		offtakerTotalCharges_billNumber_witness.index
-	);
-	const offtakerTotalCharges_billNumber_root = generalise(
-		offtakerTotalCharges_billNumber_witness.root
-	);
-	const offtakerTotalCharges_billNumber_path = generalise(
-		offtakerTotalCharges_billNumber_witness.path
-	).all;
-
+	
 	// generate witness for whole state
 	const generatorCfdNetPosition_billNumber_emptyPath = new Array(32).fill(0);
 	const generatorCfdNetPosition_billNumber_witness = generatorCfdNetPosition_billNumber_witnessRequired
@@ -1845,13 +1690,12 @@ let index_1 = generalise(parseInt(surplusIndex.integer, 10) + 0);
 
 	let offtakerVolume = generalise(
 		parseInt(totalGeneratedVolume.integer, 10) *
-			parseInt(volumeShare.integer, 10)
+			parseInt(volumeShare.integer, 10) *
+			parseInt(marginalLossFactor.integer, 10)
 	);
 
 	let fixedAmount = generalise(
-		parseInt(offtakerVolume.integer, 10) *
-			parseInt(bundlePrice.integer, 10) *
-			parseInt(marginalLossFactor.integer, 10)
+		parseInt(offtakerVolume.integer, 10) * parseInt(bundlePrice.integer, 10)
 	);
 
 
@@ -1913,7 +1757,7 @@ let index_1 = generalise(parseInt(surplusIndex.integer, 10) + 0);
 	);
 
 
-	let shortfallSequence = generalise(false);
+	let shortfallSequence = generalise(0);
 
 	if (
 		parseInt(sequenceNumber.integer, 10) ==
@@ -1922,10 +1766,10 @@ let index_1 = generalise(parseInt(surplusIndex.integer, 10) + 0);
 		parseInt(latestShortfallSequenceNumber.integer, 10) == 0 ||
 		parseInt(sequenceNumber.integer, 10) == 0
 	) {
-		shortfallSequence = true;
+		shortfallSequence = 1;
 	}
 
-	let surplusSequence = generalise(false);
+	let surplusSequence = generalise(0);
 
 	if (
 		parseInt(sequenceNumber.integer, 10) ==
@@ -1934,7 +1778,7 @@ let index_1 = generalise(parseInt(surplusIndex.integer, 10) + 0);
 		parseInt(latestSurplusSequenceNumber.integer, 10) == 0 ||
 		parseInt(sequenceNumber.integer, 10) == 0
 	) {
-		surplusSequence = true;
+		surplusSequence = 1;
 	}
 
 	let priceDifference = generalise(0);
@@ -1972,7 +1816,6 @@ let index_1 = generalise(parseInt(surplusIndex.integer, 10) + 0);
 			parseInt(volumeDifference.integer, 10) *
 			parseInt(strikePrice.integer, 10);
 	}
-
 	offtakerNegativePriceCharges_billNumber = generalise(
 		offtakerNegativePriceCharges_billNumber
 	);
@@ -1992,7 +1835,7 @@ let index_1 = generalise(parseInt(surplusIndex.integer, 10) + 0);
 
 
 	if (
-		!(parseInt(shortfallSequence.integer, 10) === 0) &&
+		parseInt(shortfallSequence.integer, 10) != 0 &&
 		parseInt(expectedVolume.integer, 10) >
 			parseInt(offtakerVolume.integer, 10) &&
 		parseInt(volumeDifference.integer, 10) >=
@@ -2004,7 +1847,6 @@ let index_1 = generalise(parseInt(surplusIndex.integer, 10) + 0);
 		shortfalls_index.price = parseInt(averagePrice.integer, 10);
 
 		shortfalls_index.volume = parseInt(volumeDifference.integer, 10);
-        
 		shortfalls_index = generalise(shortfalls_index);
 		shortfallChargeSum =
 			parseInt(shortfallChargeSum.integer, 10) +
@@ -2026,7 +1868,7 @@ let index_1 = generalise(parseInt(surplusIndex.integer, 10) + 0);
 	latestShortfallSequenceNumber = generalise(latestShortfallSequenceNumber);
 
 	if (
-		!(parseInt(shortfallSequence.integer, 10) === 0) &&
+		parseInt(shortfallSequence.integer, 10) != 0 &&
 		(parseInt(expectedVolume.integer, 10) <=
 			parseInt(offtakerVolume.integer, 10) ||
 			parseInt(volumeDifference.integer, 10) <
@@ -2059,6 +1901,7 @@ let index_1 = generalise(parseInt(surplusIndex.integer, 10) + 0);
 		latestShortfallSequenceNumber = 0;
 	}
 
+
 	shortfallCharges_billNumber = generalise(shortfallCharges_billNumber);
 
 	shortfallChargeSum = generalise(shortfallChargeSum);
@@ -2068,7 +1911,7 @@ let index_1 = generalise(parseInt(surplusIndex.integer, 10) + 0);
 	latestShortfallSequenceNumber = generalise(latestShortfallSequenceNumber);
 
 	if (
-		!(parseInt(surplusSequence.integer, 10) === 0) &&
+		parseInt(surplusSequence.integer, 10) != 0 &&
 		parseInt(expectedVolume.integer, 10) <
 			parseInt(offtakerVolume.integer, 10) &&
 		parseInt(volumeDifference.integer, 10) >=
@@ -2082,7 +1925,6 @@ let index_1 = generalise(parseInt(surplusIndex.integer, 10) + 0);
 		surpluses_index_1.volume = parseInt(volumeDifference.integer, 10);
 
 		surpluses_index_1 = generalise(surpluses_index_1);
-
 		surplusChargeSum =
 			parseInt(surplusChargeSum.integer, 10) +
 			parseInt(surpluses_index_1.volume.integer, 10) *
@@ -2100,7 +1942,7 @@ let index_1 = generalise(parseInt(surplusIndex.integer, 10) + 0);
 	latestSurplusSequenceNumber = generalise(latestSurplusSequenceNumber);
 
 	if (
-		!(parseInt(surplusSequence.integer, 10) === 0) &&
+		parseInt(surplusSequence.integer, 10) != 0 &&
 		(parseInt(expectedVolume.integer, 10) >=
 			parseInt(offtakerVolume.integer, 10) ||
 			parseInt(volumeDifference.integer, 10) <
@@ -2166,23 +2008,6 @@ let index_1 = generalise(parseInt(surplusIndex.integer, 10) + 0);
 
 	offtakerInterest_billNumber = generalise(offtakerInterest_billNumber);
 
-	let generatorTotalCharges_billNumber =
-		parseInt(generatorCfdNetPosition_billNumber.integer, 10) +
-		parseInt(surplusCharges_billNumber.integer, 10) +
-		parseInt(generatorNegativePriceCharges_billNumber.integer, 10) +
-		parseInt(generatorInterest_billNumber.integer, 10);
-
-	generatorTotalCharges_billNumber = generalise(
-		generatorTotalCharges_billNumber
-	);
-
-	let offtakerTotalCharges_billNumber =
-		parseInt(offtakerCfdNetPosition_billNumber.integer, 10) +
-		parseInt(shortfallCharges_billNumber.integer, 10) +
-		parseInt(offtakerNegativePriceCharges_billNumber.integer, 10) +
-		parseInt(offtakerInterest_billNumber.integer, 10);
-
-	offtakerTotalCharges_billNumber = generalise(offtakerTotalCharges_billNumber);
 
 
 	// Calculate nullifier(s):
@@ -2355,38 +2180,6 @@ let index_1 = generalise(parseInt(surplusIndex.integer, 10) + 0);
 		sequenceNumberInterval_nullifier.hex(32)
 	); // truncate
 
-
-	let generatorTotalCharges_billNumber_nullifier = generatorTotalCharges_billNumber_commitmentExists
-		? poseidonHash([
-				BigInt(generatorTotalCharges_billNumber_stateVarId),
-				BigInt(secretKey.hex(32)),
-				BigInt(generatorTotalCharges_billNumber_prevSalt.hex(32)),
-		  ])
-		: poseidonHash([
-				BigInt(generatorTotalCharges_billNumber_stateVarId),
-				BigInt(generalise(0).hex(32)),
-				BigInt(generatorTotalCharges_billNumber_prevSalt.hex(32)),
-		  ]);
-
-	generatorTotalCharges_billNumber_nullifier = generalise(
-		generatorTotalCharges_billNumber_nullifier.hex(32)
-	); // truncate
-
-	let offtakerTotalCharges_billNumber_nullifier = offtakerTotalCharges_billNumber_commitmentExists
-		? poseidonHash([
-				BigInt(offtakerTotalCharges_billNumber_stateVarId),
-				BigInt(secretKey.hex(32)),
-				BigInt(offtakerTotalCharges_billNumber_prevSalt.hex(32)),
-		  ])
-		: poseidonHash([
-				BigInt(offtakerTotalCharges_billNumber_stateVarId),
-				BigInt(generalise(0).hex(32)),
-				BigInt(offtakerTotalCharges_billNumber_prevSalt.hex(32)),
-		  ]);
-
-	offtakerTotalCharges_billNumber_nullifier = generalise(
-		offtakerTotalCharges_billNumber_nullifier.hex(32)
-	); // truncate
 
 	let generatorCfdNetPosition_billNumber_nullifier = generatorCfdNetPosition_billNumber_commitmentExists
 		? poseidonHash([
@@ -2730,35 +2523,6 @@ let index_1 = generalise(parseInt(surplusIndex.integer, 10) + 0);
 		latestSurplusSequenceNumber_newCommitment.hex(32)
 	); // truncate
 
-	const generatorTotalCharges_billNumber_newSalt = generalise(
-		utils.randomHex(31)
-	);
-
-	let generatorTotalCharges_billNumber_newCommitment = poseidonHash([
-		BigInt(generatorTotalCharges_billNumber_stateVarId),
-		BigInt(generatorTotalCharges_billNumber.hex(32)),
-		BigInt(generatorTotalCharges_billNumber_newOwnerPublicKey.hex(32)),
-		BigInt(generatorTotalCharges_billNumber_newSalt.hex(32)),
-	]);
-
-	generatorTotalCharges_billNumber_newCommitment = generalise(
-		generatorTotalCharges_billNumber_newCommitment.hex(32)
-	); // truncate
-
-	const offtakerTotalCharges_billNumber_newSalt = generalise(
-		utils.randomHex(31)
-	);
-
-	let offtakerTotalCharges_billNumber_newCommitment = poseidonHash([
-		BigInt(offtakerTotalCharges_billNumber_stateVarId),
-		BigInt(offtakerTotalCharges_billNumber.hex(32)),
-		BigInt(offtakerTotalCharges_billNumber_newOwnerPublicKey.hex(32)),
-		BigInt(offtakerTotalCharges_billNumber_newSalt.hex(32)),
-	]);
-
-	offtakerTotalCharges_billNumber_newCommitment = generalise(
-		offtakerTotalCharges_billNumber_newCommitment.hex(32)
-	); // truncate
 
 	const generatorCfdNetPosition_billNumber_newSalt = generalise(
 		utils.randomHex(31)
@@ -3055,34 +2819,6 @@ let index_1 = generalise(parseInt(surplusIndex.integer, 10) + 0);
 		sequenceNumberInterval_index.integer,
 		sequenceNumberInterval_path.integer,
 
-		generatorTotalCharges_billNumber_commitmentExists
-			? secretKey.integer
-			: generalise(0).integer,
-
-		generatorTotalCharges_billNumber_nullifier.integer,
-		generatorTotalCharges_billNumber_prev.integer,
-		generatorTotalCharges_billNumber_prevSalt.integer,
-		generatorTotalCharges_billNumber_commitmentExists ? 0 : 1,
-
-		generatorTotalCharges_billNumber_index.integer,
-		generatorTotalCharges_billNumber_path.integer,
-		generatorTotalCharges_billNumber_newOwnerPublicKey.integer,
-		generatorTotalCharges_billNumber_newSalt.integer,
-		generatorTotalCharges_billNumber_newCommitment.integer,
-		offtakerTotalCharges_billNumber_commitmentExists
-			? secretKey.integer
-			: generalise(0).integer,
-
-		offtakerTotalCharges_billNumber_nullifier.integer,
-		offtakerTotalCharges_billNumber_prev.integer,
-		offtakerTotalCharges_billNumber_prevSalt.integer,
-		offtakerTotalCharges_billNumber_commitmentExists ? 0 : 1,
-
-		offtakerTotalCharges_billNumber_index.integer,
-		offtakerTotalCharges_billNumber_path.integer,
-		offtakerTotalCharges_billNumber_newOwnerPublicKey.integer,
-		offtakerTotalCharges_billNumber_newSalt.integer,
-		offtakerTotalCharges_billNumber_newCommitment.integer,
 		generatorCfdNetPosition_billNumber_commitmentExists
 			? secretKey.integer
 			: generalise(0).integer,
@@ -3298,8 +3034,6 @@ let index_1 = generalise(parseInt(surplusIndex.integer, 10) + 0);
 				latestShortfallSequenceNumber_nullifier.integer,
 				surpluses_index_1_nullifier.integer,
 				latestSurplusSequenceNumber_nullifier.integer,
-				generatorTotalCharges_billNumber_nullifier.integer,
-				offtakerTotalCharges_billNumber_nullifier.integer,
 				generatorCfdNetPosition_billNumber_nullifier.integer,
 				offtakerCfdNetPosition_billNumber_nullifier.integer,
 				generatorInterest_billNumber_nullifier.integer,
@@ -3319,8 +3053,6 @@ let index_1 = generalise(parseInt(surplusIndex.integer, 10) + 0);
 				latestShortfallSequenceNumber_newCommitment.integer,
 				surpluses_index_1_newCommitment.integer,
 				latestSurplusSequenceNumber_newCommitment.integer,
-				generatorTotalCharges_billNumber_newCommitment.integer,
-				offtakerTotalCharges_billNumber_newCommitment.integer,
 				generatorCfdNetPosition_billNumber_newCommitment.integer,
 				offtakerCfdNetPosition_billNumber_newCommitment.integer,
 				generatorInterest_billNumber_newCommitment.integer,
@@ -3481,55 +3213,6 @@ let index_1 = generalise(parseInt(surplusIndex.integer, 10) + 0);
 		},
 		secretKey:
 			latestSurplusSequenceNumber_newOwnerPublicKey.integer ===
-			publicKey.integer
-				? secretKey
-				: null,
-		isNullified: false,
-	});
-
-	if (generatorTotalCharges_billNumber_commitmentExists)
-		await markNullified(
-			generatorTotalCharges_billNumber_currentCommitment,
-			secretKey.hex(32)
-		);
-	
-
-	await storeCommitment({
-		hash: generatorTotalCharges_billNumber_newCommitment,
-		name: "generatorTotalCharges",
-		mappingKey: generatorTotalCharges_billNumber_stateVarId_key.integer,
-		preimage: {
-			stateVarId: generalise(generatorTotalCharges_billNumber_stateVarId),
-			value: generatorTotalCharges_billNumber,
-			salt: generatorTotalCharges_billNumber_newSalt,
-			publicKey: generatorTotalCharges_billNumber_newOwnerPublicKey,
-		},
-		secretKey:
-			generatorTotalCharges_billNumber_newOwnerPublicKey.integer ===
-			publicKey.integer
-				? secretKey
-				: null,
-		isNullified: false,
-	});
-
-	if (offtakerTotalCharges_billNumber_commitmentExists)
-		await markNullified(
-			offtakerTotalCharges_billNumber_currentCommitment,
-			secretKey.hex(32)
-		);
-
-	await storeCommitment({
-		hash: offtakerTotalCharges_billNumber_newCommitment,
-		name: "offtakerTotalCharges",
-		mappingKey: offtakerTotalCharges_billNumber_stateVarId_key.integer,
-		preimage: {
-			stateVarId: generalise(offtakerTotalCharges_billNumber_stateVarId),
-			value: offtakerTotalCharges_billNumber,
-			salt: offtakerTotalCharges_billNumber_newSalt,
-			publicKey: offtakerTotalCharges_billNumber_newOwnerPublicKey,
-		},
-		secretKey:
-			offtakerTotalCharges_billNumber_newOwnerPublicKey.integer ===
 			publicKey.integer
 				? secretKey
 				: null,
@@ -3845,9 +3528,5 @@ await storeCommitment({
 			generatorNegativePriceCharges_billNumber.integer,
 		offtakerNegativePriceCharges_billNumber_newCommitmentValue:
 			offtakerNegativePriceCharges_billNumber.integer,
-		generatorTotalCharges_billNumber_newCommitmentValue:
-			generatorTotalCharges_billNumber.integer,
-		offtakerTotalCharges_billNumber_newCommitmentValue:
-			offtakerTotalCharges_billNumber.integer,
 	};
 }

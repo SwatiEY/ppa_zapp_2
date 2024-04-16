@@ -672,10 +672,6 @@ export async function service_calculateCfd(req, res, next) {
 			req.body.surpluses_index_1_newOwnerPublicKey || 0;
 		const latestSurplusSequenceNumber_newOwnerPublicKey =
 			req.body.latestSurplusSequenceNumber_newOwnerPublicKey || 0;
-		const generatorTotalCharges_billNumber_newOwnerPublicKey =
-			req.body.generatorTotalCharges_billNumber_newOwnerPublicKey || 0;
-		const offtakerTotalCharges_billNumber_newOwnerPublicKey =
-			req.body.offtakerTotalCharges_billNumber_newOwnerPublicKey || 0;
 		const generatorCfdNetPosition_billNumber_newOwnerPublicKey =
 			req.body.generatorCfdNetPosition_billNumber_newOwnerPublicKey || 0;
 		const offtakerCfdNetPosition_billNumber_newOwnerPublicKey =
@@ -711,8 +707,6 @@ export async function service_calculateCfd(req, res, next) {
 			surplusCharges_billNumber_newCommitmentValue,
 			generatorNegativePriceCharges_billNumber_newCommitmentValue,
 			offtakerNegativePriceCharges_billNumber_newCommitmentValue,
-			generatorTotalCharges_billNumber_newCommitmentValue,
-			offtakerTotalCharges_billNumber_newCommitmentValue,
 		} = await calculateCfd(
 			billNumber,
 			sequenceNumber,
@@ -734,8 +728,6 @@ export async function service_calculateCfd(req, res, next) {
 			latestShortfallSequenceNumber_newOwnerPublicKey,
 			surpluses_index_1_newOwnerPublicKey,
 			latestSurplusSequenceNumber_newOwnerPublicKey,
-			generatorTotalCharges_billNumber_newOwnerPublicKey,
-			offtakerTotalCharges_billNumber_newOwnerPublicKey,
 			generatorCfdNetPosition_billNumber_newOwnerPublicKey,
 			offtakerCfdNetPosition_billNumber_newOwnerPublicKey,
 			generatorInterest_billNumber_newOwnerPublicKey,
@@ -762,8 +754,6 @@ export async function service_calculateCfd(req, res, next) {
 			surplusCharges_billNumber_newCommitmentValue,
 			generatorNegativePriceCharges_billNumber_newCommitmentValue,
 			offtakerNegativePriceCharges_billNumber_newCommitmentValue,
-			generatorTotalCharges_billNumber_newCommitmentValue,
-			offtakerTotalCharges_billNumber_newCommitmentValue,
 		});
 		// reassigns leafIndex to the index of the first commitment added by this function
 		if (tx.event) {
