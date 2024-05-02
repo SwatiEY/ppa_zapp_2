@@ -447,7 +447,7 @@ def main(\
       
        assert(referenceDate >= startDateOfContract)
 
-        assert(referenceDate < expiryDateOfContract)
+        assert(referenceDate <= expiryDateOfContract)
 
 		field offtakerVolume = totalGeneratedVolume * volumeShare * marginalLossFactor
 

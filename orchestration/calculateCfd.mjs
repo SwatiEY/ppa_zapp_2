@@ -1698,15 +1698,6 @@ let index_1 = generalise(parseInt(surplusIndex.integer, 10) + 0);
 		parseInt(offtakerVolume.integer, 10) * parseInt(bundlePrice.integer, 10)
 	);
 
-
-	// Added check : if bills are not in correct sequence
-
-	if(parseInt(sequenceNumber.integer, 10) != (parseInt(latestShortfallSequenceNumber.integer, 10) + parseInt(sequenceNumberInterval.integer, 10))){
-		throw new Error(
-		"Bills are not in a correct sequence. Please make sure they are in a order."
-	   );
-    }
-
 	let netPositiveAdjustment = generalise(0);
 
 	let netNegativeAdjustment = generalise(0);
@@ -1755,7 +1746,7 @@ let index_1 = generalise(parseInt(surplusIndex.integer, 10) + 0);
 	offtakerCfdNetPosition_billNumber = generalise(
 		offtakerCfdNetPosition_billNumber
 	);
-
+console.log("offtakerCfdNetPosition_billNumber -------->",offtakerCfdNetPosition_billNumber );
 
 	let shortfallSequence = generalise(0);
 
