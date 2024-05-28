@@ -274,7 +274,7 @@ export default async function setInitialContractParams(
 
 	// Initialise commitment preimage of whole state:
 
-	const latestShortfallSequenceNumber_stateVarId = generalise(22).hex(32);
+	const latestShortfallSequenceNumber_stateVarId = generalise(19).hex(32);
 
 	let latestShortfallSequenceNumber_commitmentExists = true;
 	let latestShortfallSequenceNumber_witnessRequired = true;
@@ -298,7 +298,7 @@ export default async function setInitialContractParams(
 
 	// Initialise commitment preimage of whole state:
 
-	const latestSurplusSequenceNumber_stateVarId = generalise(29).hex(32);
+	const latestSurplusSequenceNumber_stateVarId = generalise(23).hex(32);
 
 	let latestSurplusSequenceNumber_commitmentExists = true;
 	let latestSurplusSequenceNumber_witnessRequired = true;
@@ -322,7 +322,7 @@ export default async function setInitialContractParams(
 
 	// Initialise commitment preimage of whole state:
 
-	const sequenceNumberInterval_stateVarId = generalise(31).hex(32);
+	const sequenceNumberInterval_stateVarId = generalise(25).hex(32);
 
 	let sequenceNumberInterval_commitmentExists = true;
 	let sequenceNumberInterval_witnessRequired = true;
@@ -346,7 +346,7 @@ export default async function setInitialContractParams(
 
 	// Initialise commitment preimage of whole state:
 
-	const numberOfConsecutivePeriodsForShortfall_stateVarId = generalise(60).hex(
+	const numberOfConsecutivePeriodsForShortfall_stateVarId = generalise(39).hex(
 		32
 	);
 
@@ -372,7 +372,7 @@ export default async function setInitialContractParams(
 
 	// Initialise commitment preimage of whole state:
 
-	const shortfallThreshold_stateVarId = generalise(62).hex(32);
+	const shortfallThreshold_stateVarId = generalise(41).hex(32);
 
 	let shortfallThreshold_commitmentExists = true;
 	let shortfallThreshold_witnessRequired = true;
@@ -395,7 +395,7 @@ export default async function setInitialContractParams(
 
 	// Initialise commitment preimage of whole state:
 
-	const numberOfConsecutivePeriodsForSurplus_stateVarId = generalise(72).hex(
+	const numberOfConsecutivePeriodsForSurplus_stateVarId = generalise(53).hex(
 		32
 	);
 
@@ -421,7 +421,7 @@ export default async function setInitialContractParams(
 
 	// Initialise commitment preimage of whole state:
 
-	const surplusThreshold_stateVarId = generalise(74).hex(32);
+	const surplusThreshold_stateVarId = generalise(55).hex(32);
 
 	let surplusThreshold_commitmentExists = true;
 	let surplusThreshold_witnessRequired = true;

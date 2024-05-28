@@ -61,7 +61,7 @@ export default async function initSurplusSequenceNumber(
 
 	// Initialise commitment preimage of whole state:
 
-	const latestSurplusSequenceNumber_stateVarId = generalise(29).hex(32);
+	const latestSurplusSequenceNumber_stateVarId = generalise(23).hex(32);
 
 	let latestSurplusSequenceNumber_commitmentExists = true;
 	let latestSurplusSequenceNumber_witnessRequired = true;

@@ -25,7 +25,7 @@ def main(\
 
         
         // We need to hard-code each stateVarId into the circuit:
-        field shortfallThreshold_stateVarId_field = 62
+        field shortfallThreshold_stateVarId_field = 41
 
 
         field shortfallThreshold = shortfallThreshold_oldCommitment_value

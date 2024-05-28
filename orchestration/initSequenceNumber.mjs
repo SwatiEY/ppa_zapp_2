@@ -61,7 +61,7 @@ export default async function initSequenceNumber(
 
 	// Initialise commitment preimage of whole state:
 
-	const latestShortfallSequenceNumber_stateVarId = generalise(22).hex(32);
+	const latestShortfallSequenceNumber_stateVarId = generalise(19).hex(32);
 
 	let latestShortfallSequenceNumber_commitmentExists = true;
 	let latestShortfallSequenceNumber_witnessRequired = true;

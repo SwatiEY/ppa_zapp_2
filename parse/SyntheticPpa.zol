@@ -34,15 +34,19 @@ contract SyntheticPpa {
 
     secret uint256 private numberOfConsecutivePeriodsForShortfall;
     secret uint256 private shortfallThreshold;
-    secret uint256 private shortfallChargeSum;
+    secret uint256 private shortfallPositiveChargeSum;
+    secret uint256 private shortfallNegativeChargeSum;
     secret uint256 private shortfallIndex;
-    secret mapping(uint256 => uint256) private shortfallCharges;
+    secret mapping(uint256 => uint256) private shortfallPositiveCharges;
+    secret mapping(uint256 => uint256) private shortfallNegativeCharges;
 
     secret uint256 private numberOfConsecutivePeriodsForSurplus;
     secret uint256 private surplusThreshold;
-    secret uint256 private surplusChargeSum;
+    secret uint256 private surplusPositiveChargeSum;
+    secret uint256 private surplusNegativeChargeSum;
     secret uint256 private surplusIndex;
-    secret mapping(uint256 => uint256) private surplusCharges;
+    secret mapping(uint256 => uint256) private surplusPositiveCharges;
+    secret mapping(uint256 => uint256) private surplusNegativeCharges;
 
     modifier onlyOwner() {
         require(
@@ -155,14 +159,19 @@ contract SyntheticPpa {
         secret bool negativePriceOccurredParam,
         secret uint256 referenceDate
     ) public onlyOwner
-      returns (uint256, uint256, uint256, uint256, uint256, uint256, uint256, uint256) {
+      returns (uint256, uint256, uint256, uint256, uint256, uint256, uint256, uint256, uint256, uint256) {
         
         require(referenceDate >= startDateOfContract);
         require(referenceDate <= expiryDateOfContract);
         require(!isContractTerminated);
 
         secret uint256 offtakerVolume = totalGeneratedVolume * volumeShare * marginalLossFactor;
-        secret uint256 fixedAmount = offtakerVolume * bundlePrice;
+        secret uint256 fixedAmount = 0;
+        if(bundlePrice <= 0) {
+            fixedAmount = offtakerVolume * strikePrice; 
+        } else {
+            fixedAmount = offtakerVolume * bundlePrice;
+        }
 
         secret uint256 netPositiveAdjustment = 0;
         secret uint256 netNegativeAdjustment = 0;
@@ -202,11 +211,12 @@ contract SyntheticPpa {
             surplusSequence = 1;
         }
         
-        secret uint256 priceDifference = 0;
+        secret uint256 positivePriceDifference = 0;
+        secret uint256 negativePriceDifference = 0;
         if(averagePrice > strikePrice) {
-            priceDifference = averagePrice - strikePrice;
+            positivePriceDifference = averagePrice - strikePrice;
         } else {
-            priceDifference = strikePrice - averagePrice;
+            negativePriceDifference = strikePrice - averagePrice;
         }
 
         // Shortfall and surplus difference
@@ -218,11 +228,11 @@ contract SyntheticPpa {
         }
 
         if(negativePriceOccurredParam && expectedVolume > offtakerVolume) {   
-            offtakerNegativePriceCharges[billNumber] = volumeDifference * strikePrice;
+            generatorNegativePriceCharges[billNumber] = volumeDifference * strikePrice;
         } 
         
         if (negativePriceOccurredParam && expectedVolume <= offtakerVolume) {
-            generatorNegativePriceCharges[billNumber] = volumeDifference * strikePrice;
+            offtakerNegativePriceCharges[billNumber] = volumeDifference * strikePrice;
         }
 
         // Shortfall calculation
@@ -231,20 +241,24 @@ contract SyntheticPpa {
             shortfalls[index].billNumber = billNumber;
             shortfalls[index].price = averagePrice;
             shortfalls[index].volume = volumeDifference;
-            shortfallChargeSum += shortfalls[index].volume * priceDifference;
+            shortfallPositiveChargeSum += shortfalls[index].volume * positivePriceDifference;
+            shortfallNegativeChargeSum += shortfalls[index].volume * negativePriceDifference;
             shortfallIndex += 1;
             latestShortfallSequenceNumber = sequenceNumber;
         } 
 
         if (shortfallSequence != 0 && (expectedVolume <= offtakerVolume || volumeDifference < shortfallThreshold)) {
-            shortfallChargeSum = 0;
+            shortfallPositiveChargeSum = 0;
+            shortfallNegativeChargeSum = 0;
             shortfallIndex = 0;
             latestShortfallSequenceNumber = 0;
         }
 
         if (shortfallIndex >= numberOfConsecutivePeriodsForShortfall && numberOfConsecutivePeriodsForShortfall > 0 ) {
-            shortfallCharges[billNumber] = shortfallChargeSum;
-            shortfallChargeSum = 0;
+            shortfallPositiveCharges[billNumber] = shortfallPositiveChargeSum;
+            shortfallNegativeCharges[billNumber] = shortfallNegativeChargeSum;
+            shortfallPositiveChargeSum = 0;
+            shortfallNegativeChargeSum = 0;
             shortfallIndex = 0;
             latestShortfallSequenceNumber = 0;
         }
@@ -255,20 +269,24 @@ contract SyntheticPpa {
             surpluses[index].billNumber = billNumber;
             surpluses[index].price = averagePrice;
             surpluses[index].volume = volumeDifference;
-            surplusChargeSum += surpluses[index].volume * priceDifference;
+            surplusPositiveChargeSum += surpluses[index].volume * positivePriceDifference;
+            surplusNegativeChargeSum += surpluses[index].volume * negativePriceDifference;
             surplusIndex += 1;
             latestSurplusSequenceNumber = sequenceNumber;
-        } 
+        }
 
         if (surplusSequence != 0 && (expectedVolume >= offtakerVolume || volumeDifference < surplusThreshold)) {
-            surplusChargeSum = 0;
+            surplusPositiveChargeSum = 0;
+            surplusNegativeChargeSum = 0;
             surplusIndex = 0;
             latestSurplusSequenceNumber = 0;
         }
 
         if (surplusIndex >= numberOfConsecutivePeriodsForSurplus && numberOfConsecutivePeriodsForSurplus > 0) {
-            surplusCharges[billNumber] = surplusChargeSum;
-            surplusChargeSum = 0;
+            surplusPositiveCharges[billNumber] = surplusPositiveChargeSum;
+            surplusNegativeCharges[billNumber] = surplusNegativeChargeSum;
+            surplusPositiveChargeSum = 0;
+            surplusNegativeChargeSum = 0;
             surplusIndex = 0;
             latestSurplusSequenceNumber = 0;
         }
@@ -286,8 +304,10 @@ contract SyntheticPpa {
             offtakerCfdNetPosition[billNumber],
             generatorInterest[billNumber],
             offtakerInterest[billNumber],
-            shortfallCharges[billNumber],
-            surplusCharges[billNumber],
+            shortfallPositiveCharges[billNumber],
+            shortfallNegativeCharges[billNumber],
+            surplusPositiveCharges[billNumber],
+            surplusNegativeCharges[billNumber],
             generatorNegativePriceCharges[billNumber],
             offtakerNegativePriceCharges[billNumber]
         );

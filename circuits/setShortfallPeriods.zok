@@ -23,7 +23,7 @@ def main(\
 
         
         // We need to hard-code each stateVarId into the circuit:
-        field numberOfConsecutivePeriodsForShortfall_stateVarId_field = 60
+        field numberOfConsecutivePeriodsForShortfall_stateVarId_field = 39
 
 
         field numberOfConsecutivePeriodsForShortfall = numberOfConsecutivePeriodsForShortfall_oldCommitment_value

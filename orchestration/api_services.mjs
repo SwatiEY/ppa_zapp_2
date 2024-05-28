@@ -662,8 +662,6 @@ export async function service_calculateCfd(req, res, next) {
 		const { offtakerDelayDays } = req.body;
 		const { negativePriceOccurredParam } = req.body;
 		const { referenceDate } = req.body;
-		const strikePrice_newOwnerPublicKey =
-			req.body.strikePrice_newOwnerPublicKey || 0;
 		const shortfalls_index_newOwnerPublicKey =
 			req.body.shortfalls_index_newOwnerPublicKey || 0;
 		const latestShortfallSequenceNumber_newOwnerPublicKey =
@@ -684,18 +682,26 @@ export async function service_calculateCfd(req, res, next) {
 			req.body.offtakerNegativePriceCharges_billNumber_newOwnerPublicKey || 0;
 		const generatorNegativePriceCharges_billNumber_newOwnerPublicKey =
 			req.body.generatorNegativePriceCharges_billNumber_newOwnerPublicKey || 0;
-		const shortfallChargeSum_newOwnerPublicKey =
-			req.body.shortfallChargeSum_newOwnerPublicKey || 0;
+		const shortfallPositiveChargeSum_newOwnerPublicKey =
+			req.body.shortfallPositiveChargeSum_newOwnerPublicKey || 0;
+		const shortfallNegativeChargeSum_newOwnerPublicKey =
+			req.body.shortfallNegativeChargeSum_newOwnerPublicKey || 0;
 		const shortfallIndex_newOwnerPublicKey =
 			req.body.shortfallIndex_newOwnerPublicKey || 0;
-		const shortfallCharges_billNumber_newOwnerPublicKey =
-			req.body.shortfallCharges_billNumber_newOwnerPublicKey || 0;
-		const surplusChargeSum_newOwnerPublicKey =
-			req.body.surplusChargeSum_newOwnerPublicKey || 0;
+		const shortfallPositiveCharges_billNumber_newOwnerPublicKey =
+			req.body.shortfallPositiveCharges_billNumber_newOwnerPublicKey || 0;
+		const shortfallNegativeCharges_billNumber_newOwnerPublicKey =
+			req.body.shortfallNegativeCharges_billNumber_newOwnerPublicKey || 0;
+		const surplusPositiveChargeSum_newOwnerPublicKey =
+			req.body.surplusPositiveChargeSum_newOwnerPublicKey || 0;
+		const surplusNegativeChargeSum_newOwnerPublicKey =
+			req.body.surplusNegativeChargeSum_newOwnerPublicKey || 0;
 		const surplusIndex_newOwnerPublicKey =
 			req.body.surplusIndex_newOwnerPublicKey || 0;
-		const surplusCharges_billNumber_newOwnerPublicKey =
-			req.body.surplusCharges_billNumber_newOwnerPublicKey || 0;
+		const surplusPositiveCharges_billNumber_newOwnerPublicKey =
+			req.body.surplusPositiveCharges_billNumber_newOwnerPublicKey || 0;
+		const surplusNegativeCharges_billNumber_newOwnerPublicKey =
+			req.body.surplusNegativeCharges_billNumber_newOwnerPublicKey || 0;
 		const {
 			tx,
 			encEvent,
@@ -703,8 +709,10 @@ export async function service_calculateCfd(req, res, next) {
 			offtakerCfdNetPosition_billNumber_newCommitmentValue,
 			generatorInterest_billNumber_newCommitmentValue,
 			offtakerInterest_billNumber_newCommitmentValue,
-			shortfallCharges_billNumber_newCommitmentValue,
-			surplusCharges_billNumber_newCommitmentValue,
+			shortfallPositiveCharges_billNumber_newCommitmentValue,
+			shortfallNegativeCharges_billNumber_newCommitmentValue,
+			surplusPositiveCharges_billNumber_newCommitmentValue,
+			surplusNegativeCharges_billNumber_newCommitmentValue,
 			generatorNegativePriceCharges_billNumber_newCommitmentValue,
 			offtakerNegativePriceCharges_billNumber_newCommitmentValue,
 		} = await calculateCfd(
@@ -723,7 +731,6 @@ export async function service_calculateCfd(req, res, next) {
 			offtakerDelayDays,
 			negativePriceOccurredParam,
 			referenceDate,
-			strikePrice_newOwnerPublicKey,
 			shortfalls_index_newOwnerPublicKey,
 			latestShortfallSequenceNumber_newOwnerPublicKey,
 			surpluses_index_1_newOwnerPublicKey,
@@ -734,12 +741,16 @@ export async function service_calculateCfd(req, res, next) {
 			offtakerInterest_billNumber_newOwnerPublicKey,
 			offtakerNegativePriceCharges_billNumber_newOwnerPublicKey,
 			generatorNegativePriceCharges_billNumber_newOwnerPublicKey,
-			shortfallChargeSum_newOwnerPublicKey,
+			shortfallPositiveChargeSum_newOwnerPublicKey,
+			shortfallNegativeChargeSum_newOwnerPublicKey,
 			shortfallIndex_newOwnerPublicKey,
-			shortfallCharges_billNumber_newOwnerPublicKey,
-			surplusChargeSum_newOwnerPublicKey,
+			shortfallPositiveCharges_billNumber_newOwnerPublicKey,
+			shortfallNegativeCharges_billNumber_newOwnerPublicKey,
+			surplusPositiveChargeSum_newOwnerPublicKey,
+			surplusNegativeChargeSum_newOwnerPublicKey,
 			surplusIndex_newOwnerPublicKey,
-			surplusCharges_billNumber_newOwnerPublicKey
+			surplusPositiveCharges_billNumber_newOwnerPublicKey,
+			surplusNegativeCharges_billNumber_newOwnerPublicKey
 		);
 		// prints the tx
 		console.log(tx);
@@ -750,8 +761,10 @@ export async function service_calculateCfd(req, res, next) {
 			offtakerCfdNetPosition_billNumber_newCommitmentValue,
 			generatorInterest_billNumber_newCommitmentValue,
 			offtakerInterest_billNumber_newCommitmentValue,
-			shortfallCharges_billNumber_newCommitmentValue,
-			surplusCharges_billNumber_newCommitmentValue,
+			shortfallPositiveCharges_billNumber_newCommitmentValue,
+			shortfallNegativeCharges_billNumber_newCommitmentValue,
+			surplusPositiveCharges_billNumber_newCommitmentValue,
+			surplusNegativeCharges_billNumber_newCommitmentValue,
 			generatorNegativePriceCharges_billNumber_newCommitmentValue,
 			offtakerNegativePriceCharges_billNumber_newCommitmentValue,
 		});

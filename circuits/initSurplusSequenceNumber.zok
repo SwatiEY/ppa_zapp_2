@@ -22,7 +22,7 @@ def main(\
 
         
         // We need to hard-code each stateVarId into the circuit:
-        field latestSurplusSequenceNumber_stateVarId_field = 29
+        field latestSurplusSequenceNumber_stateVarId_field = 23
 
 
         field latestSurplusSequenceNumber = latestSurplusSequenceNumber_oldCommitment_value

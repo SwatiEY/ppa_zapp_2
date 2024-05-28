@@ -234,7 +234,6 @@ uint256[] memory inputs = new uint256[](customInputs.length + newNullifiers.leng
             inputs[k++] = checkNullifiers[4];
             inputs[k++] = checkNullifiers[5];
 
-
             inputs[k++] = newNullifiers[0];
             inputs[k++] = newCommitments[0];
             inputs[k++] = newNullifiers[1];
@@ -266,21 +265,32 @@ uint256[] memory inputs = new uint256[](customInputs.length + newNullifiers.leng
             inputs[k++] = newCommitments[11];
             inputs[k++] = newNullifiers[12];
             inputs[k++] = newCommitments[12];
-          inputs[k++] = checkNullifiers[9];
-          inputs[k++] = checkNullifiers[10];
-          inputs[k++] = newNullifiers[13];
+            inputs[k++] = newNullifiers[13];
             inputs[k++] = newCommitments[13];
             inputs[k++] = newNullifiers[14];
             inputs[k++] = newCommitments[14];
-            inputs[k++] = newNullifiers[15];
+
+          inputs[k++] = checkNullifiers[9];
+          inputs[k++] = checkNullifiers[10];
+          inputs[k++] = newNullifiers[15];
             inputs[k++] = newCommitments[15];
+            inputs[k++] = newNullifiers[16];
+            inputs[k++] = newCommitments[16];
+            inputs[k++] = newNullifiers[17];
+            inputs[k++] = newCommitments[17];
+            inputs[k++] = newNullifiers[18];
+            inputs[k++] = newCommitments[18];
+            inputs[k++] = newNullifiers[19];
+            inputs[k++] = newCommitments[19];
 
              inputs[k++] = newCommitments[4];
               inputs[k++] = newCommitments[5];
               inputs[k++] = newCommitments[6];
               inputs[k++] = newCommitments[7];
-              inputs[k++] = newCommitments[12];
-              inputs[k++] = newCommitments[15];
+              inputs[k++] = newCommitments[13];
+              inputs[k++] = newCommitments[14];
+              inputs[k++] = newCommitments[18];
+               inputs[k++] = newCommitments[19];
               inputs[k++] = newCommitments[9];
               inputs[k++] = newCommitments[8];
             
@@ -666,41 +676,18 @@ require(isContractTerminated == false, "The contract is terminated!");
       }
 
 
-      function calculateCfd (uint256[] calldata newNullifiers, uint256 commitmentRoot, uint256[] calldata newCommitments, uint256[] calldata checkNullifiers, uint256[] calldata proof) public  {
+      function calculateCfd (Inputs calldata inputs, uint256[] calldata proof) public  {
 
         
-require(isContractTerminated == false, "The contract is terminated!");
+         require(isContractTerminated == false, "The contract is terminated!");
 
- 
-
-          Inputs memory inputs;
-
-          inputs.customInputs = new uint[](8);
-          inputs.customInputs[0] = newCommitments[4];
-            inputs.customInputs[1] = newCommitments[5];
-            inputs.customInputs[2] = newCommitments[6];
-            inputs.customInputs[3] = newCommitments[7];
-            inputs.customInputs[4] = newCommitments[12];
-            inputs.customInputs[5] = newCommitments[15];
-            inputs.customInputs[6] = newCommitments[9];
-            inputs.customInputs[7] = newCommitments[8];
-
-          inputs.newNullifiers = newNullifiers;
-           
-
-        inputs.checkNullifiers = checkNullifiers;
-
-          inputs.commitmentRoot = commitmentRoot;
-
-          inputs.newCommitments = newCommitments;
-
-           verify(proof, uint(FunctionNames.calculateCfd), inputs);
+          verify(proof, uint(FunctionNames.calculateCfd), inputs);
       }
 
 
       function terminateContract () public  {
 
          require(msg.sender == owner, "Caller is unauthorised, it must be the owner");
-isContractTerminated = true;
+         isContractTerminated = true;
       }
 }

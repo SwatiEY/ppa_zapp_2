@@ -195,49 +195,49 @@ def main(\
 
 
         // We need to hard-code each stateVarId into the circuit:
-        field latestShortfallSequenceNumber_stateVarId_field = 22
+        field latestShortfallSequenceNumber_stateVarId_field = 19
 
 
         field latestShortfallSequenceNumber = latestShortfallSequenceNumber_oldCommitment_value
 
 
         // We need to hard-code each stateVarId into the circuit:
-        field latestSurplusSequenceNumber_stateVarId_field = 29
+        field latestSurplusSequenceNumber_stateVarId_field = 23
 
 
         field latestSurplusSequenceNumber = latestSurplusSequenceNumber_oldCommitment_value
 
 
         // We need to hard-code each stateVarId into the circuit:
-        field sequenceNumberInterval_stateVarId_field = 31
+        field sequenceNumberInterval_stateVarId_field = 25
 
 
         field sequenceNumberInterval = sequenceNumberInterval_oldCommitment_value
 
 
         // We need to hard-code each stateVarId into the circuit:
-        field numberOfConsecutivePeriodsForShortfall_stateVarId_field = 60
+        field numberOfConsecutivePeriodsForShortfall_stateVarId_field = 39
 
 
         field numberOfConsecutivePeriodsForShortfall = numberOfConsecutivePeriodsForShortfall_oldCommitment_value
 
 
         // We need to hard-code each stateVarId into the circuit:
-        field shortfallThreshold_stateVarId_field = 62
+        field shortfallThreshold_stateVarId_field = 41
 
 
         field shortfallThreshold = shortfallThreshold_oldCommitment_value
 
 
         // We need to hard-code each stateVarId into the circuit:
-        field numberOfConsecutivePeriodsForSurplus_stateVarId_field = 72
+        field numberOfConsecutivePeriodsForSurplus_stateVarId_field = 53
 
 
         field numberOfConsecutivePeriodsForSurplus = numberOfConsecutivePeriodsForSurplus_oldCommitment_value
 
 
         // We need to hard-code each stateVarId into the circuit:
-        field surplusThreshold_stateVarId_field = 74
+        field surplusThreshold_stateVarId_field = 55
 
 
         field surplusThreshold = surplusThreshold_oldCommitment_value

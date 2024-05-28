@@ -32,7 +32,7 @@ def main(\
 
         
          // We need to hard-code each stateVarId into the circuit:
-        field latestShortfallSequenceNumber_stateVarId_field = 22
+        field latestShortfallSequenceNumber_stateVarId_field = 19
 
 
         field latestShortfallSequenceNumber = latestShortfallSequenceNumber_oldCommitment_value

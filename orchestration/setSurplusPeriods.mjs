@@ -67,7 +67,7 @@ export default async function setSurplusPeriods(
 
 	// Initialise commitment preimage of whole state:
 
-	const numberOfConsecutivePeriodsForSurplus_stateVarId = generalise(72).hex(
+	const numberOfConsecutivePeriodsForSurplus_stateVarId = generalise(53).hex(
 		32
 	);
 

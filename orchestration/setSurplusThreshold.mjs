@@ -67,7 +67,7 @@ export default async function setSurplusThreshold(
 
 	// Initialise commitment preimage of whole state:
 
-	const surplusThreshold_stateVarId = generalise(74).hex(32);
+	const surplusThreshold_stateVarId = generalise(55).hex(32);
 
 	let surplusThreshold_commitmentExists = true;
 	let surplusThreshold_witnessRequired = true;

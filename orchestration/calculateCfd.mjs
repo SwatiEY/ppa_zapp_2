@@ -48,7 +48,6 @@ export default async function calculateCfd(
 	_offtakerDelayDays,
 	_negativePriceOccurredParam,
 	_referenceDate,
-	_strikePrice_newOwnerPublicKey = 0,
 	_shortfalls_index_newOwnerPublicKey = 0,
 	_latestShortfallSequenceNumber_newOwnerPublicKey = 0,
 	_surpluses_index_1_newOwnerPublicKey = 0,
@@ -59,12 +58,16 @@ export default async function calculateCfd(
 	_offtakerInterest_billNumber_newOwnerPublicKey = 0,
 	_offtakerNegativePriceCharges_billNumber_newOwnerPublicKey = 0,
 	_generatorNegativePriceCharges_billNumber_newOwnerPublicKey = 0,
-	_shortfallChargeSum_newOwnerPublicKey = 0,
+	_shortfallPositiveChargeSum_newOwnerPublicKey = 0,
+	_shortfallNegativeChargeSum_newOwnerPublicKey = 0,
 	_shortfallIndex_newOwnerPublicKey = 0,
-	_shortfallCharges_billNumber_newOwnerPublicKey = 0,
-	_surplusChargeSum_newOwnerPublicKey = 0,
+	_shortfallPositiveCharges_billNumber_newOwnerPublicKey = 0,
+	_shortfallNegativeCharges_billNumber_newOwnerPublicKey = 0,
+	_surplusPositiveChargeSum_newOwnerPublicKey = 0,
+	_surplusNegativeChargeSum_newOwnerPublicKey = 0,
 	_surplusIndex_newOwnerPublicKey = 0,
-	_surplusCharges_billNumber_newOwnerPublicKey = 0
+	_surplusPositiveCharges_billNumber_newOwnerPublicKey = 0,
+	_surplusNegativeCharges_billNumber_newOwnerPublicKey = 0
 ) {
 	// Initialisation of variables:
 
@@ -119,26 +122,36 @@ export default async function calculateCfd(
 	let generatorNegativePriceCharges_billNumber_newOwnerPublicKey = generalise(
 		_generatorNegativePriceCharges_billNumber_newOwnerPublicKey
 	);
-	let shortfallChargeSum_newOwnerPublicKey = generalise(
-		_shortfallChargeSum_newOwnerPublicKey
+	let shortfallPositiveChargeSum_newOwnerPublicKey = generalise(
+		_shortfallPositiveChargeSum_newOwnerPublicKey
+	);
+	let shortfallNegativeChargeSum_newOwnerPublicKey = generalise(
+		_shortfallNegativeChargeSum_newOwnerPublicKey
 	);
 	let shortfallIndex_newOwnerPublicKey = generalise(
 		_shortfallIndex_newOwnerPublicKey
 	);
-	let shortfallCharges_billNumber_newOwnerPublicKey = generalise(
-		_shortfallCharges_billNumber_newOwnerPublicKey
+	let shortfallPositiveCharges_billNumber_newOwnerPublicKey = generalise(
+		_shortfallPositiveCharges_billNumber_newOwnerPublicKey
 	);
-	
-	let surplusChargeSum_newOwnerPublicKey = generalise(
-		_surplusChargeSum_newOwnerPublicKey
+	let shortfallNegativeCharges_billNumber_newOwnerPublicKey = generalise(
+		_shortfallNegativeCharges_billNumber_newOwnerPublicKey
+	);
+	let surplusPositiveChargeSum_newOwnerPublicKey = generalise(
+		_surplusPositiveChargeSum_newOwnerPublicKey
+	);
+	let surplusNegativeChargeSum_newOwnerPublicKey = generalise(
+		_surplusNegativeChargeSum_newOwnerPublicKey
 	);
 	let surplusIndex_newOwnerPublicKey = generalise(
 		_surplusIndex_newOwnerPublicKey
 	);
-	let surplusCharges_billNumber_newOwnerPublicKey = generalise(
-		_surplusCharges_billNumber_newOwnerPublicKey
+	let surplusPositiveCharges_billNumber_newOwnerPublicKey = generalise(
+		_surplusPositiveCharges_billNumber_newOwnerPublicKey
 	);
-
+	let surplusNegativeCharges_billNumber_newOwnerPublicKey = generalise(
+		_surplusNegativeCharges_billNumber_newOwnerPublicKey
+	);
 	// Read dbs for keys and previous commitment values:
 
 	if (!fs.existsSync(keyDb))
@@ -243,7 +256,7 @@ export default async function calculateCfd(
 
 	// Initialise commitment preimage of whole state:
 
-	const shortfallIndex_stateVarId = generalise(66).hex(32);
+	const shortfallIndex_stateVarId = generalise(47).hex(32);
 
 	let shortfallIndex_commitmentExists = true;
 	let shortfallIndex_witnessRequired = true;
@@ -271,7 +284,7 @@ export default async function calculateCfd(
 
 	// Initialise commitment preimage of whole state:
 
-	let shortfalls_index_stateVarId = 20;
+	let shortfalls_index_stateVarId = 17;
 
 	const shortfalls_index_stateVarId_key = index;
 
@@ -306,7 +319,7 @@ export default async function calculateCfd(
 
 	// Initialise commitment preimage of whole state:
 
-	const latestShortfallSequenceNumber_stateVarId = generalise(22).hex(32);
+	const latestShortfallSequenceNumber_stateVarId = generalise(19).hex(32);
 
 	let latestShortfallSequenceNumber_commitmentExists = true;
 	let latestShortfallSequenceNumber_witnessRequired = true;
@@ -329,7 +342,7 @@ export default async function calculateCfd(
 	}
 // Initialise commitment preimage of whole state:
 
-const surplusIndex_stateVarId = generalise(78).hex(32);
+const surplusIndex_stateVarId = generalise(61).hex(32);
 
 let surplusIndex_commitmentExists = true;
 let surplusIndex_witnessRequired = true;
@@ -355,7 +368,7 @@ let surplusIndex = generalise(surplusIndex_preimage.value);
 let index_1 = generalise(parseInt(surplusIndex.integer, 10) + 0);
 	// Initialise commitment preimage of whole state:
 
-	let surpluses_index_1_stateVarId = 27;
+	let surpluses_index_1_stateVarId = 21;
 
 	const surpluses_index_1_stateVarId_key = index_1;
 
@@ -390,7 +403,7 @@ let index_1 = generalise(parseInt(surplusIndex.integer, 10) + 0);
 
 	// Initialise commitment preimage of whole state:
 
-	const latestSurplusSequenceNumber_stateVarId = generalise(29).hex(32);
+	const latestSurplusSequenceNumber_stateVarId = generalise(23).hex(32);
 
 	let latestSurplusSequenceNumber_commitmentExists = true;
 	let latestSurplusSequenceNumber_witnessRequired = true;
@@ -414,7 +427,7 @@ let index_1 = generalise(parseInt(surplusIndex.integer, 10) + 0);
 
 	// Initialise commitment preimage of whole accessed state:
 
-	const sequenceNumberInterval_stateVarId = generalise(31).hex(32);
+	const sequenceNumberInterval_stateVarId = generalise(25).hex(32);
 
 	let sequenceNumberInterval_commitmentExists = true;
 
@@ -432,7 +445,7 @@ let index_1 = generalise(parseInt(surplusIndex.integer, 10) + 0);
 	
 	// Initialise commitment preimage of whole state:
 
-	let generatorCfdNetPosition_billNumber_stateVarId = 52;
+	let generatorCfdNetPosition_billNumber_stateVarId = 27;
 
 	const generatorCfdNetPosition_billNumber_stateVarId_key = billNumber;
 
@@ -468,7 +481,7 @@ let index_1 = generalise(parseInt(surplusIndex.integer, 10) + 0);
 
 	// Initialise commitment preimage of whole state:
 
-	let offtakerCfdNetPosition_billNumber_stateVarId = 56;
+	let offtakerCfdNetPosition_billNumber_stateVarId = 29;
 
 	const offtakerCfdNetPosition_billNumber_stateVarId_key = billNumber;
 
@@ -506,7 +519,7 @@ let index_1 = generalise(parseInt(surplusIndex.integer, 10) + 0);
 
 	// Initialise commitment preimage of whole state:
 
-	let generatorInterest_billNumber_stateVarId = 50;
+	let generatorInterest_billNumber_stateVarId = 31;
 
 	const generatorInterest_billNumber_stateVarId_key = billNumber;
 
@@ -542,7 +555,7 @@ let index_1 = generalise(parseInt(surplusIndex.integer, 10) + 0);
 
 	// Initialise commitment preimage of whole state:
 
-	let offtakerInterest_billNumber_stateVarId = 54;
+	let offtakerInterest_billNumber_stateVarId = 33;
 
 	const offtakerInterest_billNumber_stateVarId_key = billNumber;
 
@@ -578,7 +591,7 @@ let index_1 = generalise(parseInt(surplusIndex.integer, 10) + 0);
 
 	// Initialise commitment preimage of whole state:
 
-	let offtakerNegativePriceCharges_billNumber_stateVarId = 68;
+	let offtakerNegativePriceCharges_billNumber_stateVarId = 35;
 
 	const offtakerNegativePriceCharges_billNumber_stateVarId_key = billNumber;
 
@@ -614,7 +627,7 @@ let index_1 = generalise(parseInt(surplusIndex.integer, 10) + 0);
 
 	// Initialise commitment preimage of whole state:
 
-	let generatorNegativePriceCharges_billNumber_stateVarId = 72;
+	let generatorNegativePriceCharges_billNumber_stateVarId = 37;
 
 	const generatorNegativePriceCharges_billNumber_stateVarId_key = billNumber;
 
@@ -652,7 +665,7 @@ let index_1 = generalise(parseInt(surplusIndex.integer, 10) + 0);
 
 	// Initialise commitment preimage of whole accessed state:
 
-	const numberOfConsecutivePeriodsForShortfall_stateVarId = generalise(60).hex(
+	const numberOfConsecutivePeriodsForShortfall_stateVarId = generalise(39).hex(
 		32
 	);
 
@@ -671,7 +684,7 @@ let index_1 = generalise(parseInt(surplusIndex.integer, 10) + 0);
 
 	// Initialise commitment preimage of whole state:
 
-	const shortfallThreshold_stateVarId = generalise(62).hex(32);
+	const shortfallThreshold_stateVarId = generalise(41).hex(32);
 
 	let shortfallThreshold_commitmentExists = true;
 
@@ -683,67 +696,127 @@ let index_1 = generalise(parseInt(surplusIndex.integer, 10) + 0);
 	const shortfallThreshold = generalise(shortfallThreshold_commitment.preimage.value);
 	// Initialise commitment preimage of whole state:
 
-	const shortfallChargeSum_stateVarId = generalise(64).hex(32);
+	const shortfallPositiveChargeSum_stateVarId = generalise(43).hex(32);
 
-	let shortfallChargeSum_commitmentExists = true;
-	let shortfallChargeSum_witnessRequired = true;
+	let shortfallPositiveChargeSum_commitmentExists = true;
+	let shortfallPositiveChargeSum_witnessRequired = true;
 
-	const shortfallChargeSum_commitment = await getCurrentWholeCommitment(
-		shortfallChargeSum_stateVarId
+	const shortfallPositiveChargeSum_commitment = await getCurrentWholeCommitment(
+		shortfallPositiveChargeSum_stateVarId
 	);
 
-	let shortfallChargeSum_preimage = {
+	let shortfallPositiveChargeSum_preimage = {
 		value: 0,
 		salt: 0,
 		commitment: 0,
 	};
-	if (!shortfallChargeSum_commitment) {
-		shortfallChargeSum_commitmentExists = false;
-		shortfallChargeSum_witnessRequired = false;
+	if (!shortfallPositiveChargeSum_commitment) {
+		shortfallPositiveChargeSum_commitmentExists = false;
+		shortfallPositiveChargeSum_witnessRequired = false;
 	} else {
-		shortfallChargeSum_preimage = shortfallChargeSum_commitment.preimage;
+		shortfallPositiveChargeSum_preimage =
+			shortfallPositiveChargeSum_commitment.preimage;
+	}
+
+	// Initialise commitment preimage of whole state:
+
+	const shortfallNegativeChargeSum_stateVarId = generalise(45).hex(32);
+
+	let shortfallNegativeChargeSum_commitmentExists = true;
+	let shortfallNegativeChargeSum_witnessRequired = true;
+
+	const shortfallNegativeChargeSum_commitment = await getCurrentWholeCommitment(
+		shortfallNegativeChargeSum_stateVarId
+	);
+
+	let shortfallNegativeChargeSum_preimage = {
+		value: 0,
+		salt: 0,
+		commitment: 0,
+	};
+	if (!shortfallNegativeChargeSum_commitment) {
+		shortfallNegativeChargeSum_commitmentExists = false;
+		shortfallNegativeChargeSum_witnessRequired = false;
+	} else {
+		shortfallNegativeChargeSum_preimage =
+			shortfallNegativeChargeSum_commitment.preimage;
 	}
 
 	
 	// Initialise commitment preimage of whole state:
 
-	let shortfallCharges_billNumber_stateVarId = 70;
+	let shortfallPositiveCharges_billNumber_stateVarId = 49;
 
-	const shortfallCharges_billNumber_stateVarId_key = billNumber;
+	const shortfallPositiveCharges_billNumber_stateVarId_key = billNumber;
 
-	shortfallCharges_billNumber_stateVarId = generalise(
+	shortfallPositiveCharges_billNumber_stateVarId = generalise(
 		utils.mimcHash(
 			[
-				generalise(shortfallCharges_billNumber_stateVarId).bigInt,
-				shortfallCharges_billNumber_stateVarId_key.bigInt,
+				generalise(shortfallPositiveCharges_billNumber_stateVarId).bigInt,
+				shortfallPositiveCharges_billNumber_stateVarId_key.bigInt,
 			],
 			"ALT_BN_254"
 		)
 	).hex(32);
 
-	let shortfallCharges_billNumber_commitmentExists = true;
-	let shortfallCharges_billNumber_witnessRequired = true;
+	let shortfallPositiveCharges_billNumber_commitmentExists = true;
+	let shortfallPositiveCharges_billNumber_witnessRequired = true;
 
-	const shortfallCharges_billNumber_commitment = await getCurrentWholeCommitment(
-		shortfallCharges_billNumber_stateVarId
+	const shortfallPositiveCharges_billNumber_commitment = await getCurrentWholeCommitment(
+		shortfallPositiveCharges_billNumber_stateVarId
 	);
 
-	let shortfallCharges_billNumber_preimage = {
+	let shortfallPositiveCharges_billNumber_preimage = {
 		value: 0,
 		salt: 0,
 		commitment: 0,
 	};
-	if (!shortfallCharges_billNumber_commitment) {
-		shortfallCharges_billNumber_commitmentExists = false;
-		shortfallCharges_billNumber_witnessRequired = false;
+	if (!shortfallPositiveCharges_billNumber_commitment) {
+		shortfallPositiveCharges_billNumber_commitmentExists = false;
+		shortfallPositiveCharges_billNumber_witnessRequired = false;
 	} else {
-		shortfallCharges_billNumber_preimage =
-			shortfallCharges_billNumber_commitment.preimage;
+		shortfallPositiveCharges_billNumber_preimage =
+			shortfallPositiveCharges_billNumber_commitment.preimage;
 	}
 
+	// Initialise commitment preimage of whole state:
+
+	let shortfallNegativeCharges_billNumber_stateVarId = 51;
+
+	const shortfallNegativeCharges_billNumber_stateVarId_key = billNumber;
+
+	shortfallNegativeCharges_billNumber_stateVarId = generalise(
+		utils.mimcHash(
+			[
+				generalise(shortfallNegativeCharges_billNumber_stateVarId).bigInt,
+				shortfallNegativeCharges_billNumber_stateVarId_key.bigInt,
+			],
+			"ALT_BN_254"
+		)
+	).hex(32);
+
+	let shortfallNegativeCharges_billNumber_commitmentExists = true;
+	let shortfallNegativeCharges_billNumber_witnessRequired = true;
+
+	const shortfallNegativeCharges_billNumber_commitment = await getCurrentWholeCommitment(
+		shortfallNegativeCharges_billNumber_stateVarId
+	);
+
+	let shortfallNegativeCharges_billNumber_preimage = {
+		value: 0,
+		salt: 0,
+		commitment: 0,
+	};
+	if (!shortfallNegativeCharges_billNumber_commitment) {
+		shortfallNegativeCharges_billNumber_commitmentExists = false;
+		shortfallNegativeCharges_billNumber_witnessRequired = false;
+	} else {
+		shortfallNegativeCharges_billNumber_preimage =
+			shortfallNegativeCharges_billNumber_commitment.preimage;
+	}
 	// Initialise commitment preimage of whole accessed state:
 
-	const numberOfConsecutivePeriodsForSurplus_stateVarId = generalise(72).hex(
+	const numberOfConsecutivePeriodsForSurplus_stateVarId = generalise(53).hex(
 		32
 	);
 
@@ -764,7 +837,7 @@ let index_1 = generalise(parseInt(surplusIndex.integer, 10) + 0);
 
 	// Initialise commitment preimage of whole state:
 
-	const surplusThreshold_stateVarId = generalise(74).hex(32);
+	const surplusThreshold_stateVarId = generalise(55).hex(32);
 
 	let surplusThreshold_commitmentExists = true;
 	const surplusThreshold_commitment = await getCurrentWholeCommitment(
@@ -777,62 +850,123 @@ let index_1 = generalise(parseInt(surplusIndex.integer, 10) + 0);
 
 	// Initialise commitment preimage of whole state:
 
-	const surplusChargeSum_stateVarId = generalise(76).hex(32);
+	const surplusPositiveChargeSum_stateVarId = generalise(57).hex(32);
 
-	let surplusChargeSum_commitmentExists = true;
-	let surplusChargeSum_witnessRequired = true;
+	let surplusPositiveChargeSum_commitmentExists = true;
+	let surplusPositiveChargeSum_witnessRequired = true;
 
-	const surplusChargeSum_commitment = await getCurrentWholeCommitment(
-		surplusChargeSum_stateVarId
+	const surplusPositiveChargeSum_commitment = await getCurrentWholeCommitment(
+		surplusPositiveChargeSum_stateVarId
 	);
 
-	let surplusChargeSum_preimage = {
+	let surplusPositiveChargeSum_preimage = {
 		value: 0,
 		salt: 0,
 		commitment: 0,
 	};
-	if (!surplusChargeSum_commitment) {
-		surplusChargeSum_commitmentExists = false;
-		surplusChargeSum_witnessRequired = false;
+	if (!surplusPositiveChargeSum_commitment) {
+		surplusPositiveChargeSum_commitmentExists = false;
+		surplusPositiveChargeSum_witnessRequired = false;
 	} else {
-		surplusChargeSum_preimage = surplusChargeSum_commitment.preimage;
+		surplusPositiveChargeSum_preimage =
+			surplusPositiveChargeSum_commitment.preimage;
+	}
+
+	// Initialise commitment preimage of whole state:
+
+	const surplusNegativeChargeSum_stateVarId = generalise(59).hex(32);
+
+	let surplusNegativeChargeSum_commitmentExists = true;
+	let surplusNegativeChargeSum_witnessRequired = true;
+
+	const surplusNegativeChargeSum_commitment = await getCurrentWholeCommitment(
+		surplusNegativeChargeSum_stateVarId
+	);
+
+	let surplusNegativeChargeSum_preimage = {
+		value: 0,
+		salt: 0,
+		commitment: 0,
+	};
+	if (!surplusNegativeChargeSum_commitment) {
+		surplusNegativeChargeSum_commitmentExists = false;
+		surplusNegativeChargeSum_witnessRequired = false;
+	} else {
+		surplusNegativeChargeSum_preimage =
+			surplusNegativeChargeSum_commitment.preimage;
 	}
 
 	
 	// Initialise commitment preimage of whole state:
 
-	let surplusCharges_billNumber_stateVarId = 82;
+	let surplusPositiveCharges_billNumber_stateVarId = 63;
 
-	const surplusCharges_billNumber_stateVarId_key = billNumber;
+	const surplusPositiveCharges_billNumber_stateVarId_key = billNumber;
 
-	surplusCharges_billNumber_stateVarId = generalise(
+	surplusPositiveCharges_billNumber_stateVarId = generalise(
 		utils.mimcHash(
 			[
-				generalise(surplusCharges_billNumber_stateVarId).bigInt,
-				surplusCharges_billNumber_stateVarId_key.bigInt,
+				generalise(surplusPositiveCharges_billNumber_stateVarId).bigInt,
+				surplusPositiveCharges_billNumber_stateVarId_key.bigInt,
 			],
 			"ALT_BN_254"
 		)
 	).hex(32);
 
-	let surplusCharges_billNumber_commitmentExists = true;
-	let surplusCharges_billNumber_witnessRequired = true;
+	let surplusPositiveCharges_billNumber_commitmentExists = true;
+	let surplusPositiveCharges_billNumber_witnessRequired = true;
 
-	const surplusCharges_billNumber_commitment = await getCurrentWholeCommitment(
-		surplusCharges_billNumber_stateVarId
+	const surplusPositiveCharges_billNumber_commitment = await getCurrentWholeCommitment(
+		surplusPositiveCharges_billNumber_stateVarId
 	);
 
-	let surplusCharges_billNumber_preimage = {
+	let surplusPositiveCharges_billNumber_preimage = {
 		value: 0,
 		salt: 0,
 		commitment: 0,
 	};
-	if (!surplusCharges_billNumber_commitment) {
-		surplusCharges_billNumber_commitmentExists = false;
-		surplusCharges_billNumber_witnessRequired = false;
+	if (!surplusPositiveCharges_billNumber_commitment) {
+		surplusPositiveCharges_billNumber_commitmentExists = false;
+		surplusPositiveCharges_billNumber_witnessRequired = false;
 	} else {
-		surplusCharges_billNumber_preimage =
-			surplusCharges_billNumber_commitment.preimage;
+		surplusPositiveCharges_billNumber_preimage =
+			surplusPositiveCharges_billNumber_commitment.preimage;
+	}
+
+	// Initialise commitment preimage of whole state:
+
+	let surplusNegativeCharges_billNumber_stateVarId = 65;
+
+	const surplusNegativeCharges_billNumber_stateVarId_key = billNumber;
+
+	surplusNegativeCharges_billNumber_stateVarId = generalise(
+		utils.mimcHash(
+			[
+				generalise(surplusNegativeCharges_billNumber_stateVarId).bigInt,
+				surplusNegativeCharges_billNumber_stateVarId_key.bigInt,
+			],
+			"ALT_BN_254"
+		)
+	).hex(32);
+
+	let surplusNegativeCharges_billNumber_commitmentExists = true;
+	let surplusNegativeCharges_billNumber_witnessRequired = true;
+
+	const surplusNegativeCharges_billNumber_commitment = await getCurrentWholeCommitment(
+		surplusNegativeCharges_billNumber_stateVarId
+	);
+
+	let surplusNegativeCharges_billNumber_preimage = {
+		value: 0,
+		salt: 0,
+		commitment: 0,
+	};
+	if (!surplusNegativeCharges_billNumber_commitment) {
+		surplusNegativeCharges_billNumber_commitmentExists = false;
+		surplusNegativeCharges_billNumber_witnessRequired = false;
+	} else {
+		surplusNegativeCharges_billNumber_preimage =
+			surplusNegativeCharges_billNumber_commitment.preimage;
 	}
 
 	// read preimage for whole state
@@ -1082,18 +1216,37 @@ let index_1 = generalise(parseInt(surplusIndex.integer, 10) + 0);
 	);
 
 	// read preimage for whole state
-	shortfallChargeSum_newOwnerPublicKey =
-		_shortfallChargeSum_newOwnerPublicKey === 0
+	shortfallPositiveChargeSum_newOwnerPublicKey =
+		_shortfallPositiveChargeSum_newOwnerPublicKey === 0
 			? publicKey
-			: shortfallChargeSum_newOwnerPublicKey;
+			: shortfallPositiveChargeSum_newOwnerPublicKey;
 
-	const shortfallChargeSum_currentCommitment = shortfallChargeSum_commitmentExists
-		? generalise(shortfallChargeSum_commitment._id)
+	const shortfallPositiveChargeSum_currentCommitment = shortfallPositiveChargeSum_commitmentExists
+		? generalise(shortfallPositiveChargeSum_commitment._id)
 		: generalise(0);
-	const shortfallChargeSum_prev = generalise(shortfallChargeSum_preimage.value);
-	const shortfallChargeSum_prevSalt = generalise(
-		shortfallChargeSum_preimage.salt
+	const shortfallPositiveChargeSum_prev = generalise(
+		shortfallPositiveChargeSum_preimage.value
 	);
+	const shortfallPositiveChargeSum_prevSalt = generalise(
+		shortfallPositiveChargeSum_preimage.salt
+	);
+
+	// read preimage for whole state
+	shortfallNegativeChargeSum_newOwnerPublicKey =
+		_shortfallNegativeChargeSum_newOwnerPublicKey === 0
+			? publicKey
+			: shortfallNegativeChargeSum_newOwnerPublicKey;
+
+	const shortfallNegativeChargeSum_currentCommitment = shortfallNegativeChargeSum_commitmentExists
+		? generalise(shortfallNegativeChargeSum_commitment._id)
+		: generalise(0);
+	const shortfallNegativeChargeSum_prev = generalise(
+		shortfallNegativeChargeSum_preimage.value
+	);
+	const shortfallNegativeChargeSum_prevSalt = generalise(
+		shortfallNegativeChargeSum_preimage.salt
+	);
+
 
 	// read preimage for whole state
 	shortfallIndex_newOwnerPublicKey =
@@ -1108,21 +1261,36 @@ let index_1 = generalise(parseInt(surplusIndex.integer, 10) + 0);
 	const shortfallIndex_prevSalt = generalise(shortfallIndex_preimage.salt);
 
 	// read preimage for whole state
-	shortfallCharges_billNumber_newOwnerPublicKey =
-		_shortfallCharges_billNumber_newOwnerPublicKey === 0
+	shortfallPositiveCharges_billNumber_newOwnerPublicKey =
+		_shortfallPositiveCharges_billNumber_newOwnerPublicKey === 0
 			? publicKey
-			: shortfallCharges_billNumber_newOwnerPublicKey;
+			: shortfallPositiveCharges_billNumber_newOwnerPublicKey;
 
-	const shortfallCharges_billNumber_currentCommitment = shortfallCharges_billNumber_commitmentExists
-		? generalise(shortfallCharges_billNumber_commitment._id)
+	const shortfallPositiveCharges_billNumber_currentCommitment = shortfallPositiveCharges_billNumber_commitmentExists
+		? generalise(shortfallPositiveCharges_billNumber_commitment._id)
 		: generalise(0);
-	const shortfallCharges_billNumber_prev = generalise(
-		shortfallCharges_billNumber_preimage.value
+	const shortfallPositiveCharges_billNumber_prev = generalise(
+		shortfallPositiveCharges_billNumber_preimage.value
 	);
-	const shortfallCharges_billNumber_prevSalt = generalise(
-		shortfallCharges_billNumber_preimage.salt
+	const shortfallPositiveCharges_billNumber_prevSalt = generalise(
+		shortfallPositiveCharges_billNumber_preimage.salt
 	);
 
+	// read preimage for whole state
+	shortfallNegativeCharges_billNumber_newOwnerPublicKey =
+		_shortfallNegativeCharges_billNumber_newOwnerPublicKey === 0
+			? publicKey
+			: shortfallNegativeCharges_billNumber_newOwnerPublicKey;
+
+	const shortfallNegativeCharges_billNumber_currentCommitment = shortfallNegativeCharges_billNumber_commitmentExists
+		? generalise(shortfallNegativeCharges_billNumber_commitment._id)
+		: generalise(0);
+	const shortfallNegativeCharges_billNumber_prev = generalise(
+		shortfallNegativeCharges_billNumber_preimage.value
+	);
+	const shortfallNegativeCharges_billNumber_prevSalt = generalise(
+		shortfallNegativeCharges_billNumber_preimage.salt
+	);
 	// read preimage for accessed state
 
 	const numberOfConsecutivePeriodsForSurplus_currentCommitment = generalise(
@@ -1141,17 +1309,36 @@ let index_1 = generalise(parseInt(surplusIndex.integer, 10) + 0);
 	const surplusThreshold_prevSalt = generalise(surplusThreshold_preimage.salt);
 
 	// read preimage for whole state
-	surplusChargeSum_newOwnerPublicKey =
-		_surplusChargeSum_newOwnerPublicKey === 0
+	surplusPositiveChargeSum_newOwnerPublicKey =
+		_surplusPositiveChargeSum_newOwnerPublicKey === 0
 			? publicKey
-			: surplusChargeSum_newOwnerPublicKey;
+			: surplusPositiveChargeSum_newOwnerPublicKey;
 
-	const surplusChargeSum_currentCommitment = surplusChargeSum_commitmentExists
-		? generalise(surplusChargeSum_commitment._id)
+	const surplusPositiveChargeSum_currentCommitment = surplusPositiveChargeSum_commitmentExists
+		? generalise(surplusPositiveChargeSum_commitment._id)
 		: generalise(0);
-	const surplusChargeSum_prev = generalise(surplusChargeSum_preimage.value);
-	const surplusChargeSum_prevSalt = generalise(surplusChargeSum_preimage.salt);
+	const surplusPositiveChargeSum_prev = generalise(
+		surplusPositiveChargeSum_preimage.value
+	);
+	const surplusPositiveChargeSum_prevSalt = generalise(
+		surplusPositiveChargeSum_preimage.salt
+	);
 
+	// read preimage for whole state
+	surplusNegativeChargeSum_newOwnerPublicKey =
+		_surplusNegativeChargeSum_newOwnerPublicKey === 0
+			? publicKey
+			: surplusNegativeChargeSum_newOwnerPublicKey;
+
+	const surplusNegativeChargeSum_currentCommitment = surplusNegativeChargeSum_commitmentExists
+		? generalise(surplusNegativeChargeSum_commitment._id)
+		: generalise(0);
+	const surplusNegativeChargeSum_prev = generalise(
+		surplusNegativeChargeSum_preimage.value
+	);
+	const surplusNegativeChargeSum_prevSalt = generalise(
+		surplusNegativeChargeSum_preimage.salt
+	);
 	// read preimage for whole state
 	surplusIndex_newOwnerPublicKey =
 		_surplusIndex_newOwnerPublicKey === 0
@@ -1165,20 +1352,37 @@ let index_1 = generalise(parseInt(surplusIndex.integer, 10) + 0);
 	const surplusIndex_prevSalt = generalise(surplusIndex_preimage.salt);
 
 	// read preimage for whole state
-	surplusCharges_billNumber_newOwnerPublicKey =
-		_surplusCharges_billNumber_newOwnerPublicKey === 0
+	surplusPositiveCharges_billNumber_newOwnerPublicKey =
+		_surplusPositiveCharges_billNumber_newOwnerPublicKey === 0
 			? publicKey
-			: surplusCharges_billNumber_newOwnerPublicKey;
+			: surplusPositiveCharges_billNumber_newOwnerPublicKey;
 
-	const surplusCharges_billNumber_currentCommitment = surplusCharges_billNumber_commitmentExists
-		? generalise(surplusCharges_billNumber_commitment._id)
+	const surplusPositiveCharges_billNumber_currentCommitment = surplusPositiveCharges_billNumber_commitmentExists
+		? generalise(surplusPositiveCharges_billNumber_commitment._id)
 		: generalise(0);
-	const surplusCharges_billNumber_prev = generalise(
-		surplusCharges_billNumber_preimage.value
+	const surplusPositiveCharges_billNumber_prev = generalise(
+		surplusPositiveCharges_billNumber_preimage.value
 	);
-	const surplusCharges_billNumber_prevSalt = generalise(
-		surplusCharges_billNumber_preimage.salt
+	const surplusPositiveCharges_billNumber_prevSalt = generalise(
+		surplusPositiveCharges_billNumber_preimage.salt
 	);
+
+	// read preimage for whole state
+	surplusNegativeCharges_billNumber_newOwnerPublicKey =
+		_surplusNegativeCharges_billNumber_newOwnerPublicKey === 0
+			? publicKey
+			: surplusNegativeCharges_billNumber_newOwnerPublicKey;
+
+	const surplusNegativeCharges_billNumber_currentCommitment = surplusNegativeCharges_billNumber_commitmentExists
+		? generalise(surplusNegativeCharges_billNumber_commitment._id)
+		: generalise(0);
+	const surplusNegativeCharges_billNumber_prev = generalise(
+		surplusNegativeCharges_billNumber_preimage.value
+	);
+	const surplusNegativeCharges_billNumber_prevSalt = generalise(
+		surplusNegativeCharges_billNumber_preimage.salt
+	);
+
 
 	// Extract set membership witness:
 
@@ -1503,22 +1707,48 @@ let index_1 = generalise(parseInt(surplusIndex.integer, 10) + 0);
 		.all;
 
 	// generate witness for whole state
-	const shortfallChargeSum_emptyPath = new Array(32).fill(0);
-	const shortfallChargeSum_witness = shortfallChargeSum_witnessRequired
+	const shortfallPositiveChargeSum_emptyPath = new Array(32).fill(0);
+	const shortfallPositiveChargeSum_witness = shortfallPositiveChargeSum_witnessRequired
 		? await getMembershipWitness(
 				"SyntheticPpaShield",
-				shortfallChargeSum_currentCommitment.integer
+				shortfallPositiveChargeSum_currentCommitment.integer
 		  )
 		: {
 				index: 0,
-				path: shortfallChargeSum_emptyPath,
+				path: shortfallPositiveChargeSum_emptyPath,
 				root: (await getRoot("SyntheticPpaShield")) || 0,
 		  };
-	const shortfallChargeSum_index = generalise(shortfallChargeSum_witness.index);
-	const shortfallChargeSum_root = generalise(shortfallChargeSum_witness.root);
-	const shortfallChargeSum_path = generalise(shortfallChargeSum_witness.path)
-		.all;
+	const shortfallPositiveChargeSum_index = generalise(
+		shortfallPositiveChargeSum_witness.index
+	);
+	const shortfallPositiveChargeSum_root = generalise(
+		shortfallPositiveChargeSum_witness.root
+	);
+	const shortfallPositiveChargeSum_path = generalise(
+		shortfallPositiveChargeSum_witness.path
+	).all;
 
+	// generate witness for whole state
+	const shortfallNegativeChargeSum_emptyPath = new Array(32).fill(0);
+	const shortfallNegativeChargeSum_witness = shortfallNegativeChargeSum_witnessRequired
+		? await getMembershipWitness(
+				"SyntheticPpaShield",
+				shortfallNegativeChargeSum_currentCommitment.integer
+		  )
+		: {
+				index: 0,
+				path: shortfallNegativeChargeSum_emptyPath,
+				root: (await getRoot("SyntheticPpaShield")) || 0,
+		  };
+	const shortfallNegativeChargeSum_index = generalise(
+		shortfallNegativeChargeSum_witness.index
+	);
+	const shortfallNegativeChargeSum_root = generalise(
+		shortfallNegativeChargeSum_witness.root
+	);
+	const shortfallNegativeChargeSum_path = generalise(
+		shortfallNegativeChargeSum_witness.path
+	).all;
 	// generate witness for whole state
 	const shortfallIndex_emptyPath = new Array(32).fill(0);
 	const shortfallIndex_witness = shortfallIndex_witnessRequired
@@ -1536,26 +1766,49 @@ let index_1 = generalise(parseInt(surplusIndex.integer, 10) + 0);
 	const shortfallIndex_path = generalise(shortfallIndex_witness.path).all;
 
 	// generate witness for whole state
-	const shortfallCharges_billNumber_emptyPath = new Array(32).fill(0);
-	const shortfallCharges_billNumber_witness = shortfallCharges_billNumber_witnessRequired
+	const shortfallPositiveCharges_billNumber_emptyPath = new Array(32).fill(0);
+	const shortfallPositiveCharges_billNumber_witness = shortfallPositiveCharges_billNumber_witnessRequired
 		? await getMembershipWitness(
 				"SyntheticPpaShield",
-				shortfallCharges_billNumber_currentCommitment.integer
+				shortfallPositiveCharges_billNumber_currentCommitment.integer
 		  )
 		: {
 				index: 0,
-				path: shortfallCharges_billNumber_emptyPath,
+				path: shortfallPositiveCharges_billNumber_emptyPath,
 				root: (await getRoot("SyntheticPpaShield")) || 0,
 		  };
-	const shortfallCharges_billNumber_index = generalise(
-		shortfallCharges_billNumber_witness.index
+	const shortfallPositiveCharges_billNumber_index = generalise(
+		shortfallPositiveCharges_billNumber_witness.index
 	);
-	const shortfallCharges_billNumber_root = generalise(
-		shortfallCharges_billNumber_witness.root
+	const shortfallPositiveCharges_billNumber_root = generalise(
+		shortfallPositiveCharges_billNumber_witness.root
 	);
-	const shortfallCharges_billNumber_path = generalise(
-		shortfallCharges_billNumber_witness.path
+	const shortfallPositiveCharges_billNumber_path = generalise(
+		shortfallPositiveCharges_billNumber_witness.path
 	).all;
+
+	// generate witness for whole state
+	const shortfallNegativeCharges_billNumber_emptyPath = new Array(32).fill(0);
+	const shortfallNegativeCharges_billNumber_witness = shortfallNegativeCharges_billNumber_witnessRequired
+		? await getMembershipWitness(
+				"SyntheticPpaShield",
+				shortfallNegativeCharges_billNumber_currentCommitment.integer
+		  )
+		: {
+				index: 0,
+				path: shortfallNegativeCharges_billNumber_emptyPath,
+				root: (await getRoot("SyntheticPpaShield")) || 0,
+		  };
+	const shortfallNegativeCharges_billNumber_index = generalise(
+		shortfallNegativeCharges_billNumber_witness.index
+	);
+	const shortfallNegativeCharges_billNumber_root = generalise(
+		shortfallNegativeCharges_billNumber_witness.root
+	);
+	const shortfallNegativeCharges_billNumber_path = generalise(
+		shortfallNegativeCharges_billNumber_witness.path
+	).all;
+
 
 	// generate witness for whole accessed state
 	const numberOfConsecutivePeriodsForSurplus_witness = await getMembershipWitness(
@@ -1583,21 +1836,48 @@ let index_1 = generalise(parseInt(surplusIndex.integer, 10) + 0);
 	const surplusThreshold_path = generalise(surplusThreshold_witness.path).all;
 
 	// generate witness for whole state
-	const surplusChargeSum_emptyPath = new Array(32).fill(0);
-	const surplusChargeSum_witness = surplusChargeSum_witnessRequired
+	const surplusPositiveChargeSum_emptyPath = new Array(32).fill(0);
+	const surplusPositiveChargeSum_witness = surplusPositiveChargeSum_witnessRequired
 		? await getMembershipWitness(
 				"SyntheticPpaShield",
-				surplusChargeSum_currentCommitment.integer
+				surplusPositiveChargeSum_currentCommitment.integer
 		  )
 		: {
 				index: 0,
-				path: surplusChargeSum_emptyPath,
+				path: surplusPositiveChargeSum_emptyPath,
 				root: (await getRoot("SyntheticPpaShield")) || 0,
 		  };
-	const surplusChargeSum_index = generalise(surplusChargeSum_witness.index);
-	const surplusChargeSum_root = generalise(surplusChargeSum_witness.root);
-	const surplusChargeSum_path = generalise(surplusChargeSum_witness.path).all;
+	const surplusPositiveChargeSum_index = generalise(
+		surplusPositiveChargeSum_witness.index
+	);
+	const surplusPositiveChargeSum_root = generalise(
+		surplusPositiveChargeSum_witness.root
+	);
+	const surplusPositiveChargeSum_path = generalise(
+		surplusPositiveChargeSum_witness.path
+	).all;
 
+	// generate witness for whole state
+	const surplusNegativeChargeSum_emptyPath = new Array(32).fill(0);
+	const surplusNegativeChargeSum_witness = surplusNegativeChargeSum_witnessRequired
+		? await getMembershipWitness(
+				"SyntheticPpaShield",
+				surplusNegativeChargeSum_currentCommitment.integer
+		  )
+		: {
+				index: 0,
+				path: surplusNegativeChargeSum_emptyPath,
+				root: (await getRoot("SyntheticPpaShield")) || 0,
+		  };
+	const surplusNegativeChargeSum_index = generalise(
+		surplusNegativeChargeSum_witness.index
+	);
+	const surplusNegativeChargeSum_root = generalise(
+		surplusNegativeChargeSum_witness.root
+	);
+	const surplusNegativeChargeSum_path = generalise(
+		surplusNegativeChargeSum_witness.path
+	).all;
 	// generate witness for whole state
 	const surplusIndex_emptyPath = new Array(32).fill(0);
 	const surplusIndex_witness = surplusIndex_witnessRequired
@@ -1615,25 +1895,47 @@ let index_1 = generalise(parseInt(surplusIndex.integer, 10) + 0);
 	const surplusIndex_path = generalise(surplusIndex_witness.path).all;
 
 	// generate witness for whole state
-	const surplusCharges_billNumber_emptyPath = new Array(32).fill(0);
-	const surplusCharges_billNumber_witness = surplusCharges_billNumber_witnessRequired
+	const surplusPositiveCharges_billNumber_emptyPath = new Array(32).fill(0);
+	const surplusPositiveCharges_billNumber_witness = surplusPositiveCharges_billNumber_witnessRequired
 		? await getMembershipWitness(
 				"SyntheticPpaShield",
-				surplusCharges_billNumber_currentCommitment.integer
+				surplusPositiveCharges_billNumber_currentCommitment.integer
 		  )
 		: {
 				index: 0,
-				path: surplusCharges_billNumber_emptyPath,
+				path: surplusPositiveCharges_billNumber_emptyPath,
 				root: (await getRoot("SyntheticPpaShield")) || 0,
 		  };
-	const surplusCharges_billNumber_index = generalise(
-		surplusCharges_billNumber_witness.index
+	const surplusPositiveCharges_billNumber_index = generalise(
+		surplusPositiveCharges_billNumber_witness.index
 	);
-	const surplusCharges_billNumber_root = generalise(
-		surplusCharges_billNumber_witness.root
+	const surplusPositiveCharges_billNumber_root = generalise(
+		surplusPositiveCharges_billNumber_witness.root
 	);
-	const surplusCharges_billNumber_path = generalise(
-		surplusCharges_billNumber_witness.path
+	const surplusPositiveCharges_billNumber_path = generalise(
+		surplusPositiveCharges_billNumber_witness.path
+	).all;
+
+	// generate witness for whole state
+	const surplusNegativeCharges_billNumber_emptyPath = new Array(32).fill(0);
+	const surplusNegativeCharges_billNumber_witness = surplusNegativeCharges_billNumber_witnessRequired
+		? await getMembershipWitness(
+				"SyntheticPpaShield",
+				surplusNegativeCharges_billNumber_currentCommitment.integer
+		  )
+		: {
+				index: 0,
+				path: surplusNegativeCharges_billNumber_emptyPath,
+				root: (await getRoot("SyntheticPpaShield")) || 0,
+		  };
+	const surplusNegativeCharges_billNumber_index = generalise(
+		surplusNegativeCharges_billNumber_witness.index
+	);
+	const surplusNegativeCharges_billNumber_root = generalise(
+		surplusNegativeCharges_billNumber_witness.root
+	);
+	const surplusNegativeCharges_billNumber_path = generalise(
+		surplusNegativeCharges_billNumber_witness.path
 	).all;
 
 	let generatorNegativePriceCharges_billNumber = generalise(
@@ -1659,8 +1961,12 @@ let index_1 = generalise(parseInt(surplusIndex.integer, 10) + 0);
 		generatorInterest_billNumber_preimage.value
 	);
 
-	let surplusCharges_billNumber = generalise(
-		surplusCharges_billNumber_preimage.value
+	let surplusNegativeCharges_billNumber = generalise(
+		surplusNegativeCharges_billNumber_preimage.value
+	);
+
+	let surplusPositiveCharges_billNumber = generalise(
+		surplusPositiveCharges_billNumber_preimage.value
 	);
 
 	let latestSurplusSequenceNumber = generalise(
@@ -1669,14 +1975,23 @@ let index_1 = generalise(parseInt(surplusIndex.integer, 10) + 0);
 
 	surplusIndex = generalise(surplusIndex_preimage.value);
 
-	let surplusChargeSum = generalise(surplusChargeSum_preimage.value);
+	let surplusNegativeChargeSum = generalise(
+		surplusNegativeChargeSum_preimage.value
+	);
 
+	let surplusPositiveChargeSum = generalise(
+		surplusPositiveChargeSum_preimage.value
+	);
 	let surpluses_index_1 = generalise(
 		surpluses_index_1_preimage.value
 	);
 
-	let shortfallCharges_billNumber = generalise(
-		shortfallCharges_billNumber_preimage.value
+	let shortfallNegativeCharges_billNumber = generalise(
+		shortfallNegativeCharges_billNumber_preimage.value
+	);
+
+	let shortfallPositiveCharges_billNumber = generalise(
+		shortfallPositiveCharges_billNumber_preimage.value
 	);
 
 	let latestShortfallSequenceNumber = generalise(
@@ -1684,7 +1999,13 @@ let index_1 = generalise(parseInt(surplusIndex.integer, 10) + 0);
 	);
 
 
-	let shortfallChargeSum = generalise(shortfallChargeSum_preimage.value);
+	let shortfallNegativeChargeSum = generalise(
+		shortfallNegativeChargeSum_preimage.value
+	);
+
+	let shortfallPositiveChargeSum = generalise(
+		shortfallPositiveChargeSum_preimage.value
+	);
 
 	let shortfalls_index = generalise(shortfalls_index_preimage.value);
 
@@ -1693,10 +2014,17 @@ let index_1 = generalise(parseInt(surplusIndex.integer, 10) + 0);
 			parseInt(volumeShare.integer, 10) *
 			parseInt(marginalLossFactor.integer, 10)
 	);
+	let fixedAmount = generalise(0);
 
-	let fixedAmount = generalise(
-		parseInt(offtakerVolume.integer, 10) * parseInt(bundlePrice.integer, 10)
-	);
+	if (parseInt(bundlePrice.integer, 10) <= 0) {
+		fixedAmount = generalise(
+			parseInt(offtakerVolume.integer, 10) * parseInt(strikePrice.integer, 10)
+		);
+	} else {
+		fixedAmount = generalise(
+			parseInt(offtakerVolume.integer, 10) * parseInt(bundlePrice.integer, 10)
+		);
+	}
 
 	let netPositiveAdjustment = generalise(0);
 
@@ -1706,18 +2034,16 @@ let index_1 = generalise(parseInt(surplusIndex.integer, 10) + 0);
 		parseInt(negativeAdjustment.integer, 10) >
 		parseInt(positiveAdjustment.integer, 10)
 	) {
-		netNegativeAdjustment =
+		netNegativeAdjustment = generalise(
 			parseInt(negativeAdjustment.integer, 10) -
-			parseInt(positiveAdjustment.integer, 10);
+				parseInt(positiveAdjustment.integer, 10)
+		);
 	} else {
-		netPositiveAdjustment =
+		netPositiveAdjustment = generalise(
 			parseInt(positiveAdjustment.integer, 10) -
-			parseInt(negativeAdjustment.integer, 10);
+				parseInt(negativeAdjustment.integer, 10)
+		);
 	}
-
-	netPositiveAdjustment = generalise(netPositiveAdjustment);
-	netNegativeAdjustment = generalise(netNegativeAdjustment);
-
 
 	
 	if (
@@ -1726,18 +2052,20 @@ let index_1 = generalise(parseInt(surplusIndex.integer, 10) + 0);
 		(parseInt(fixedAmount.integer, 10) +
 			parseInt(netPositiveAdjustment.integer, 10))
 	) {
-		generatorCfdNetPosition_billNumber =
+		generatorCfdNetPosition_billNumber = 
 			parseInt(floatingAmount.integer, 10) +
-			parseInt(netNegativeAdjustment.integer, 10) -
-			parseInt(fixedAmount.integer, 10) -
-			parseInt(netPositiveAdjustment.integer, 10);
+				parseInt(netNegativeAdjustment.integer, 10) -
+				parseInt(fixedAmount.integer, 10) -
+				parseInt(netPositiveAdjustment.integer, 10)
 	} else {
-		offtakerCfdNetPosition_billNumber =
+		offtakerCfdNetPosition_billNumber = 
 			parseInt(fixedAmount.integer, 10) +
-			parseInt(netPositiveAdjustment.integer, 10) -
-			parseInt(floatingAmount.integer, 10) -
-			parseInt(netNegativeAdjustment.integer, 10);
+				parseInt(netPositiveAdjustment.integer, 10) -
+				parseInt(floatingAmount.integer, 10) -
+				parseInt(netNegativeAdjustment.integer, 10)
+
 	}
+
 
 	generatorCfdNetPosition_billNumber = generalise(
 		generatorCfdNetPosition_billNumber
@@ -1746,7 +2074,6 @@ let index_1 = generalise(parseInt(surplusIndex.integer, 10) + 0);
 	offtakerCfdNetPosition_billNumber = generalise(
 		offtakerCfdNetPosition_billNumber
 	);
-console.log("offtakerCfdNetPosition_billNumber -------->",offtakerCfdNetPosition_billNumber );
 
 	let shortfallSequence = generalise(0);
 
@@ -1757,7 +2084,7 @@ console.log("offtakerCfdNetPosition_billNumber -------->",offtakerCfdNetPosition
 		parseInt(latestShortfallSequenceNumber.integer, 10) == 0 ||
 		parseInt(sequenceNumber.integer, 10) == 0
 	) {
-		shortfallSequence = 1;
+		shortfallSequence = generalise(1);
 	}
 
 	let surplusSequence = generalise(0);
@@ -1769,62 +2096,57 @@ console.log("offtakerCfdNetPosition_billNumber -------->",offtakerCfdNetPosition
 		parseInt(latestSurplusSequenceNumber.integer, 10) == 0 ||
 		parseInt(sequenceNumber.integer, 10) == 0
 	) {
-		surplusSequence = 1;
+		surplusSequence = generalise(1);
 	}
 
 	let priceDifference = generalise(0);
 
+	let positivePriceDifference = generalise(0);
+
+	let negativePriceDifference = generalise(0);
+
 	if (parseInt(averagePrice.integer, 10) > parseInt(strikePrice.integer, 10)) {
-		priceDifference =
-			parseInt(averagePrice.integer, 10) - parseInt(strikePrice.integer, 10);
+		positivePriceDifference = generalise(
+			parseInt(averagePrice.integer, 10) - parseInt(strikePrice.integer, 10)
+		);
 	} else {
-		priceDifference =
-			parseInt(strikePrice.integer, 10) - parseInt(averagePrice.integer, 10);
+		negativePriceDifference = generalise(
+			parseInt(strikePrice.integer, 10) - parseInt(averagePrice.integer, 10)
+		);
 	}
-
-	priceDifference = generalise(priceDifference);
-
 	let volumeDifference = generalise(0);
 
 	if (
 		parseInt(expectedVolume.integer, 10) > parseInt(offtakerVolume.integer, 10)
 	) {
-		volumeDifference =
+		volumeDifference = generalise(
 			parseInt(expectedVolume.integer, 10) -
-			parseInt(offtakerVolume.integer, 10);
+				parseInt(offtakerVolume.integer, 10)
+		);
 	} else {
-		volumeDifference =
+		volumeDifference = generalise(
 			parseInt(offtakerVolume.integer, 10) -
-			parseInt(expectedVolume.integer, 10);
+				parseInt(expectedVolume.integer, 10)
+		);
 	}
-	volumeDifference = generalise(volumeDifference);
-
-	if (
-		!(parseInt(negativePriceOccurredParam.integer, 10) === 0) &&
-		parseInt(expectedVolume.integer, 10) > parseInt(offtakerVolume.integer, 10)
-	) {
-		offtakerNegativePriceCharges_billNumber =
-			parseInt(volumeDifference.integer, 10) *
-			parseInt(strikePrice.integer, 10);
-	}
-	offtakerNegativePriceCharges_billNumber = generalise(
-		offtakerNegativePriceCharges_billNumber
-	);
 
 	if (
 		!(parseInt(negativePriceOccurredParam.integer, 10) === 0) &&
 		parseInt(expectedVolume.integer, 10) <= parseInt(offtakerVolume.integer, 10)
 	) {
-		generatorNegativePriceCharges_billNumber =
-			parseInt(volumeDifference.integer, 10) *
-			parseInt(strikePrice.integer, 10);
+		offtakerNegativePriceCharges_billNumber = generalise(
+			parseInt(volumeDifference.integer, 10) * parseInt(strikePrice.integer, 10)
+		);
 	}
 
-	generatorNegativePriceCharges_billNumber = generalise(
-		generatorNegativePriceCharges_billNumber
-	);
-
-
+	if (
+		!(parseInt(negativePriceOccurredParam.integer, 10) === 0) &&
+		parseInt(expectedVolume.integer, 10) > parseInt(offtakerVolume.integer, 10)
+	) {
+		generatorNegativePriceCharges_billNumber = generalise(
+			parseInt(volumeDifference.integer, 10) * parseInt(strikePrice.integer, 10)
+		);
+	}
 	if (
 		parseInt(shortfallSequence.integer, 10) != 0 &&
 		parseInt(expectedVolume.integer, 10) >
@@ -1837,26 +2159,34 @@ console.log("offtakerCfdNetPosition_billNumber -------->",offtakerCfdNetPosition
 
 		shortfalls_index.price = parseInt(averagePrice.integer, 10);
 
-		shortfalls_index.volume = parseInt(volumeDifference.integer, 10);
-		shortfalls_index = generalise(shortfalls_index);
-		shortfallChargeSum =
-			parseInt(shortfallChargeSum.integer, 10) +
-			parseInt(shortfalls_index.volume.integer, 10) *
-				parseInt(priceDifference.integer, 10);
+		shortfalls_index.volume = 
+			parseInt(volumeDifference.integer, 10);
 
-		shortfallIndex = parseInt(shortfallIndex.integer, 10) + 1;
+		shortfalls_index = generalise(shortfalls_index);	
+	
 
-		latestShortfallSequenceNumber = parseInt(sequenceNumber.integer, 10);
+		shortfallPositiveChargeSum = generalise(
+			parseInt(shortfallPositiveChargeSum.integer, 10) +
+				parseInt(shortfalls_index.volume.integer, 10) *
+					parseInt(positivePriceDifference.integer, 10)
+		);
+
+		shortfallNegativeChargeSum = generalise(
+			parseInt(shortfallNegativeChargeSum.integer, 10) +
+				parseInt(shortfalls_index.volume.integer, 10) *
+					parseInt(negativePriceDifference.integer, 10)
+		);
+
+		shortfallIndex = generalise(parseInt(shortfallIndex.integer, 10) + 1);
+
+		latestShortfallSequenceNumber = generalise(
+			parseInt(sequenceNumber.integer, 10)
+		);
 	}
 
 
 	shortfalls_index = generalise(shortfalls_index);
 
-	shortfallChargeSum = generalise(shortfallChargeSum);
-
-	shortfallIndex = generalise(shortfallIndex);
-
-	latestShortfallSequenceNumber = generalise(latestShortfallSequenceNumber);
 
 	if (
 		parseInt(shortfallSequence.integer, 10) != 0 &&
@@ -1865,41 +2195,38 @@ console.log("offtakerCfdNetPosition_billNumber -------->",offtakerCfdNetPosition
 			parseInt(volumeDifference.integer, 10) <
 				parseInt(shortfallThreshold.integer, 10))
 	) {
-		shortfallChargeSum = 0;
+		shortfallPositiveChargeSum = generalise(0);
 
-		shortfallIndex = 0;
+		shortfallNegativeChargeSum = generalise(0);
 
-		latestShortfallSequenceNumber = 0;
+		shortfallIndex = generalise(0);
+
+		latestShortfallSequenceNumber = generalise(0);
 	}
 
-	shortfallChargeSum = generalise(shortfallChargeSum);
-
-	shortfallIndex = generalise(shortfallIndex);
-
-	latestShortfallSequenceNumber = generalise(latestShortfallSequenceNumber);
-
+	
 	if (
 		parseInt(shortfallIndex.integer, 10) >=
 			parseInt(numberOfConsecutivePeriodsForShortfall.integer, 10) &&
 		parseInt(numberOfConsecutivePeriodsForShortfall.integer, 10) > 0
 	) {
-		shortfallCharges_billNumber = parseInt(shortfallChargeSum.integer, 10);
+		shortfallPositiveCharges_billNumber = generalise(
+			parseInt(shortfallPositiveChargeSum.integer, 10)
+		);
 
-		shortfallChargeSum = 0;
+		shortfallNegativeCharges_billNumber = generalise(
+			parseInt(shortfallNegativeChargeSum.integer, 10)
+		);
 
-		shortfallIndex = 0;
+		shortfallPositiveChargeSum = generalise(0);
 
-		latestShortfallSequenceNumber = 0;
+		shortfallNegativeChargeSum = generalise(0);
+
+		shortfallIndex = generalise(0);
+
+		latestShortfallSequenceNumber = generalise(0);
 	}
 
-
-	shortfallCharges_billNumber = generalise(shortfallCharges_billNumber);
-
-	shortfallChargeSum = generalise(shortfallChargeSum);
-
-	shortfallIndex = generalise(shortfallIndex);
-
-	latestShortfallSequenceNumber = generalise(latestShortfallSequenceNumber);
 
 	if (
 		parseInt(surplusSequence.integer, 10) != 0 &&
@@ -1909,24 +2236,32 @@ console.log("offtakerCfdNetPosition_billNumber -------->",offtakerCfdNetPosition
 			parseInt(surplusThreshold.integer, 10) &&
 		parseInt(numberOfConsecutivePeriodsForSurplus.integer, 10) > 0
 	) {
-		surpluses_index_1.billNumber = parseInt(billNumber.integer, 10);
+		surpluses_index_1.billNumber = generalise(parseInt(billNumber.integer, 10));
 
-		surpluses_index_1.price = parseInt(averagePrice.integer, 10);
+		surpluses_index_1.price = generalise(parseInt(averagePrice.integer, 10));
 
-		surpluses_index_1.volume = parseInt(volumeDifference.integer, 10);
+		surpluses_index_1.volume = generalise(
+			parseInt(volumeDifference.integer, 10)
+		);
 
-		surpluses_index_1 = generalise(surpluses_index_1);
-		surplusChargeSum =
-			parseInt(surplusChargeSum.integer, 10) +
-			parseInt(surpluses_index_1.volume.integer, 10) *
-				parseInt(priceDifference.integer, 10);
+		surplusPositiveChargeSum = generalise(
+			parseInt(surplusPositiveChargeSum.integer, 10) +
+				parseInt(surpluses_index_1.volume.integer, 10) *
+					parseInt(positivePriceDifference.integer, 10)
+		);
 
-		surplusIndex = parseInt(surplusIndex.integer, 10) + 1;
+		surplusNegativeChargeSum = generalise(
+			parseInt(surplusNegativeChargeSum.integer, 10) +
+				parseInt(surpluses_index_1.volume.integer, 10) *
+					parseInt(negativePriceDifference.integer, 10)
+		);
 
-		latestSurplusSequenceNumber = parseInt(sequenceNumber.integer, 10);
+		surplusIndex = generalise(parseInt(surplusIndex.integer, 10) + 1);
+
+		latestSurplusSequenceNumber = generalise(
+			parseInt(sequenceNumber.integer, 10)
+		);
 	}
-
-	surplusChargeSum = generalise(surplusChargeSum);
 
 	surplusIndex = generalise(surplusIndex);
 
@@ -1939,65 +2274,61 @@ console.log("offtakerCfdNetPosition_billNumber -------->",offtakerCfdNetPosition
 			parseInt(volumeDifference.integer, 10) <
 				parseInt(surplusThreshold.integer, 10))
 	) {
-		surplusChargeSum = 0;
+		surplusPositiveChargeSum = generalise(0);
 
-		surplusIndex = 0;
+		surplusNegativeChargeSum = generalise(0);
 
-		latestSurplusSequenceNumber = 0;
+		surplusIndex = generalise(0);
+
+		latestSurplusSequenceNumber = generalise(0);
 	}
 
-	surplusChargeSum = generalise(surplusChargeSum);
-
-	surplusIndex = generalise(surplusIndex);
-
-	latestSurplusSequenceNumber = generalise(latestSurplusSequenceNumber);
+	
 
 	if (
 		parseInt(surplusIndex.integer, 10) >=
 			parseInt(numberOfConsecutivePeriodsForSurplus.integer, 10) &&
 		parseInt(numberOfConsecutivePeriodsForSurplus.integer, 10) > 0
 	) {
-		surplusCharges_billNumber = parseInt(surplusChargeSum.integer, 10);
+		surplusPositiveCharges_billNumber = generalise(
+			parseInt(surplusPositiveChargeSum.integer, 10)
+		);
 
-		surplusChargeSum = 0;
+		surplusNegativeCharges_billNumber = generalise(
+			parseInt(surplusNegativeChargeSum.integer, 10)
+		);
 
-		surplusIndex = 0;
+		surplusPositiveChargeSum = generalise(0);
 
-		latestSurplusSequenceNumber = 0;
+		surplusNegativeChargeSum = generalise(0);
+
+		surplusIndex = generalise(0);
+
+		latestSurplusSequenceNumber = generalise(0);
 	}
 
-	surplusCharges_billNumber = generalise(surplusCharges_billNumber);
-
-	surplusChargeSum = generalise(surplusChargeSum);
-
-	surplusIndex = generalise(surplusIndex);
-
-	latestSurplusSequenceNumber = generalise(latestSurplusSequenceNumber);
 
 	for (let i = 0; i < 5; i++) {
 		if (parseInt(outstandingGeneratorAmount[i].integer, 10) > 0) {
-			generatorInterest_billNumber =
+			generatorInterest_billNumber = 
 				parseInt(generatorInterest_billNumber.integer, 10) +
-				parseInt(outstandingGeneratorAmount[i].integer, 10) *
-					parseInt(generatorDelayDays[i].integer, 10) *
-					parseInt(dailyInterestRate.integer, 10);
+					parseInt(outstandingGeneratorAmount[i].integer, 10) *
+						parseInt(generatorDelayDays[i].integer, 10) *
+						parseInt(dailyInterestRate.integer, 10);
+
 			generatorInterest_billNumber = generalise(generatorInterest_billNumber);
 		}
 
 		if (parseInt(outstandingOfftakerAmount[i].integer, 10) > 0) {
-			offtakerInterest_billNumber =
+			offtakerInterest_billNumber = 
 				parseInt(offtakerInterest_billNumber.integer, 10) +
-				parseInt(outstandingOfftakerAmount[i].integer, 10) *
-					parseInt(offtakerDelayDays[i].integer, 10) *
-					parseInt(dailyInterestRate.integer, 10);
+					parseInt(outstandingOfftakerAmount[i].integer, 10) *
+						parseInt(offtakerDelayDays[i].integer, 10) *
+						parseInt(dailyInterestRate.integer, 10);
+
 			offtakerInterest_billNumber = generalise(offtakerInterest_billNumber);
 		}
 	}
-
-
-	generatorInterest_billNumber = generalise(generatorInterest_billNumber);
-
-	offtakerInterest_billNumber = generalise(offtakerInterest_billNumber);
 
 
 
@@ -2305,20 +2636,36 @@ console.log("offtakerCfdNetPosition_billNumber -------->",offtakerCfdNetPosition
 	); // truncate
 
 
-	let shortfallChargeSum_nullifier = shortfallChargeSum_commitmentExists
+	let shortfallPositiveChargeSum_nullifier = shortfallPositiveChargeSum_commitmentExists
 		? poseidonHash([
-				BigInt(shortfallChargeSum_stateVarId),
+				BigInt(shortfallPositiveChargeSum_stateVarId),
 				BigInt(secretKey.hex(32)),
-				BigInt(shortfallChargeSum_prevSalt.hex(32)),
+				BigInt(shortfallPositiveChargeSum_prevSalt.hex(32)),
 		  ])
 		: poseidonHash([
-				BigInt(shortfallChargeSum_stateVarId),
+				BigInt(shortfallPositiveChargeSum_stateVarId),
 				BigInt(generalise(0).hex(32)),
-				BigInt(shortfallChargeSum_prevSalt.hex(32)),
+				BigInt(shortfallPositiveChargeSum_prevSalt.hex(32)),
 		  ]);
 
-	shortfallChargeSum_nullifier = generalise(
-		shortfallChargeSum_nullifier.hex(32)
+	shortfallPositiveChargeSum_nullifier = generalise(
+		shortfallPositiveChargeSum_nullifier.hex(32)
+	); // truncate
+
+	let shortfallNegativeChargeSum_nullifier = shortfallNegativeChargeSum_commitmentExists
+		? poseidonHash([
+				BigInt(shortfallNegativeChargeSum_stateVarId),
+				BigInt(secretKey.hex(32)),
+				BigInt(shortfallNegativeChargeSum_prevSalt.hex(32)),
+		  ])
+		: poseidonHash([
+				BigInt(shortfallNegativeChargeSum_stateVarId),
+				BigInt(generalise(0).hex(32)),
+				BigInt(shortfallNegativeChargeSum_prevSalt.hex(32)),
+		  ]);
+
+	shortfallNegativeChargeSum_nullifier = generalise(
+		shortfallNegativeChargeSum_nullifier.hex(32)
 	); // truncate
 
 	
@@ -2338,22 +2685,37 @@ console.log("offtakerCfdNetPosition_billNumber -------->",offtakerCfdNetPosition
 
 	
 
-	let shortfallCharges_billNumber_nullifier = shortfallCharges_billNumber_commitmentExists
+	let shortfallPositiveCharges_billNumber_nullifier = shortfallPositiveCharges_billNumber_commitmentExists
 		? poseidonHash([
-				BigInt(shortfallCharges_billNumber_stateVarId),
+				BigInt(shortfallPositiveCharges_billNumber_stateVarId),
 				BigInt(secretKey.hex(32)),
-				BigInt(shortfallCharges_billNumber_prevSalt.hex(32)),
+				BigInt(shortfallPositiveCharges_billNumber_prevSalt.hex(32)),
 		  ])
 		: poseidonHash([
-				BigInt(shortfallCharges_billNumber_stateVarId),
+				BigInt(shortfallPositiveCharges_billNumber_stateVarId),
 				BigInt(generalise(0).hex(32)),
-				BigInt(shortfallCharges_billNumber_prevSalt.hex(32)),
+				BigInt(shortfallPositiveCharges_billNumber_prevSalt.hex(32)),
 		  ]);
 
-	shortfallCharges_billNumber_nullifier = generalise(
-		shortfallCharges_billNumber_nullifier.hex(32)
+	shortfallPositiveCharges_billNumber_nullifier = generalise(
+		shortfallPositiveCharges_billNumber_nullifier.hex(32)
 	); // truncate
 
+	let shortfallNegativeCharges_billNumber_nullifier = shortfallNegativeCharges_billNumber_commitmentExists
+		? poseidonHash([
+				BigInt(shortfallNegativeCharges_billNumber_stateVarId),
+				BigInt(secretKey.hex(32)),
+				BigInt(shortfallNegativeCharges_billNumber_prevSalt.hex(32)),
+		  ])
+		: poseidonHash([
+				BigInt(shortfallNegativeCharges_billNumber_stateVarId),
+				BigInt(generalise(0).hex(32)),
+				BigInt(shortfallNegativeCharges_billNumber_prevSalt.hex(32)),
+		  ]);
+
+	shortfallNegativeCharges_billNumber_nullifier = generalise(
+		shortfallNegativeCharges_billNumber_nullifier.hex(32)
+	); // truncate
 
 	let numberOfConsecutivePeriodsForSurplus_nullifier = numberOfConsecutivePeriodsForSurplus_commitmentExists
 		? poseidonHash([
@@ -2386,19 +2748,37 @@ console.log("offtakerCfdNetPosition_billNumber -------->",offtakerCfdNetPosition
 
 	surplusThreshold_nullifier = generalise(surplusThreshold_nullifier.hex(32)); // truncate
 
-	let surplusChargeSum_nullifier = surplusChargeSum_commitmentExists
+	let surplusPositiveChargeSum_nullifier = surplusPositiveChargeSum_commitmentExists
 		? poseidonHash([
-				BigInt(surplusChargeSum_stateVarId),
+				BigInt(surplusPositiveChargeSum_stateVarId),
 				BigInt(secretKey.hex(32)),
-				BigInt(surplusChargeSum_prevSalt.hex(32)),
+				BigInt(surplusPositiveChargeSum_prevSalt.hex(32)),
 		  ])
 		: poseidonHash([
-				BigInt(surplusChargeSum_stateVarId),
+				BigInt(surplusPositiveChargeSum_stateVarId),
 				BigInt(generalise(0).hex(32)),
-				BigInt(surplusChargeSum_prevSalt.hex(32)),
+				BigInt(surplusPositiveChargeSum_prevSalt.hex(32)),
 		  ]);
 
-	surplusChargeSum_nullifier = generalise(surplusChargeSum_nullifier.hex(32)); // truncate
+	surplusPositiveChargeSum_nullifier = generalise(
+		surplusPositiveChargeSum_nullifier.hex(32)
+	); // truncate
+
+	let surplusNegativeChargeSum_nullifier = surplusNegativeChargeSum_commitmentExists
+		? poseidonHash([
+				BigInt(surplusNegativeChargeSum_stateVarId),
+				BigInt(secretKey.hex(32)),
+				BigInt(surplusNegativeChargeSum_prevSalt.hex(32)),
+		  ])
+		: poseidonHash([
+				BigInt(surplusNegativeChargeSum_stateVarId),
+				BigInt(generalise(0).hex(32)),
+				BigInt(surplusNegativeChargeSum_prevSalt.hex(32)),
+		  ]);
+
+	surplusNegativeChargeSum_nullifier = generalise(
+		surplusNegativeChargeSum_nullifier.hex(32)
+	); // truncate
 
 	let surplusIndex_nullifier = surplusIndex_commitmentExists
 		? poseidonHash([
@@ -2415,23 +2795,37 @@ console.log("offtakerCfdNetPosition_billNumber -------->",offtakerCfdNetPosition
 	surplusIndex_nullifier = generalise(surplusIndex_nullifier.hex(32)); // truncate
 
 
-	let surplusCharges_billNumber_nullifier = surplusCharges_billNumber_commitmentExists
+	let surplusPositiveCharges_billNumber_nullifier = surplusPositiveCharges_billNumber_commitmentExists
 		? poseidonHash([
-				BigInt(surplusCharges_billNumber_stateVarId),
+				BigInt(surplusPositiveCharges_billNumber_stateVarId),
 				BigInt(secretKey.hex(32)),
-				BigInt(surplusCharges_billNumber_prevSalt.hex(32)),
+				BigInt(surplusPositiveCharges_billNumber_prevSalt.hex(32)),
 		  ])
 		: poseidonHash([
-				BigInt(surplusCharges_billNumber_stateVarId),
+				BigInt(surplusPositiveCharges_billNumber_stateVarId),
 				BigInt(generalise(0).hex(32)),
-				BigInt(surplusCharges_billNumber_prevSalt.hex(32)),
+				BigInt(surplusPositiveCharges_billNumber_prevSalt.hex(32)),
 		  ]);
 
-	surplusCharges_billNumber_nullifier = generalise(
-		surplusCharges_billNumber_nullifier.hex(32)
+	surplusPositiveCharges_billNumber_nullifier = generalise(
+		surplusPositiveCharges_billNumber_nullifier.hex(32)
 	); // truncate
-
 	
+	let surplusNegativeCharges_billNumber_nullifier = surplusNegativeCharges_billNumber_commitmentExists
+		? poseidonHash([
+				BigInt(surplusNegativeCharges_billNumber_stateVarId),
+				BigInt(secretKey.hex(32)),
+				BigInt(surplusNegativeCharges_billNumber_prevSalt.hex(32)),
+		  ])
+		: poseidonHash([
+				BigInt(surplusNegativeCharges_billNumber_stateVarId),
+				BigInt(generalise(0).hex(32)),
+				BigInt(surplusNegativeCharges_billNumber_prevSalt.hex(32)),
+		  ]);
+
+	surplusNegativeCharges_billNumber_nullifier = generalise(
+		surplusNegativeCharges_billNumber_nullifier.hex(32)
+	); // truncate
 
 	
 
@@ -2601,18 +2995,32 @@ console.log("offtakerCfdNetPosition_billNumber -------->",offtakerCfdNetPosition
 		generatorNegativePriceCharges_billNumber_newCommitment.hex(32)
 	); // truncate
 
-	const shortfallChargeSum_newSalt = generalise(utils.randomHex(31));
+	const shortfallPositiveChargeSum_newSalt = generalise(utils.randomHex(31));
 
-	let shortfallChargeSum_newCommitment = poseidonHash([
-		BigInt(shortfallChargeSum_stateVarId),
-		BigInt(shortfallChargeSum.hex(32)),
-		BigInt(shortfallChargeSum_newOwnerPublicKey.hex(32)),
-		BigInt(shortfallChargeSum_newSalt.hex(32)),
+	let shortfallPositiveChargeSum_newCommitment = poseidonHash([
+		BigInt(shortfallPositiveChargeSum_stateVarId),
+		BigInt(shortfallPositiveChargeSum.hex(32)),
+		BigInt(shortfallPositiveChargeSum_newOwnerPublicKey.hex(32)),
+		BigInt(shortfallPositiveChargeSum_newSalt.hex(32)),
 	]);
 
-	shortfallChargeSum_newCommitment = generalise(
-		shortfallChargeSum_newCommitment.hex(32)
+	shortfallPositiveChargeSum_newCommitment = generalise(
+		shortfallPositiveChargeSum_newCommitment.hex(32)
 	); // truncate
+
+	const shortfallNegativeChargeSum_newSalt = generalise(utils.randomHex(31));
+
+	let shortfallNegativeChargeSum_newCommitment = poseidonHash([
+		BigInt(shortfallNegativeChargeSum_stateVarId),
+		BigInt(shortfallNegativeChargeSum.hex(32)),
+		BigInt(shortfallNegativeChargeSum_newOwnerPublicKey.hex(32)),
+		BigInt(shortfallNegativeChargeSum_newSalt.hex(32)),
+	]);
+
+	shortfallNegativeChargeSum_newCommitment = generalise(
+		shortfallNegativeChargeSum_newCommitment.hex(32)
+	); // truncate
+
 
 	const shortfallIndex_newSalt = generalise(utils.randomHex(31));
 
@@ -2627,31 +3035,62 @@ console.log("offtakerCfdNetPosition_billNumber -------->",offtakerCfdNetPosition
 		shortfallIndex_newCommitment.hex(32)
 	); // truncate
 
-	const shortfallCharges_billNumber_newSalt = generalise(utils.randomHex(31));
+	const shortfallPositiveCharges_billNumber_newSalt = generalise(
+		utils.randomHex(31)
+	);
 
-	let shortfallCharges_billNumber_newCommitment = poseidonHash([
-		BigInt(shortfallCharges_billNumber_stateVarId),
-		BigInt(shortfallCharges_billNumber.hex(32)),
-		BigInt(shortfallCharges_billNumber_newOwnerPublicKey.hex(32)),
-		BigInt(shortfallCharges_billNumber_newSalt.hex(32)),
+	let shortfallPositiveCharges_billNumber_newCommitment = poseidonHash([
+		BigInt(shortfallPositiveCharges_billNumber_stateVarId),
+		BigInt(shortfallPositiveCharges_billNumber.hex(32)),
+		BigInt(shortfallPositiveCharges_billNumber_newOwnerPublicKey.hex(32)),
+		BigInt(shortfallPositiveCharges_billNumber_newSalt.hex(32)),
 	]);
 
-	shortfallCharges_billNumber_newCommitment = generalise(
-		shortfallCharges_billNumber_newCommitment.hex(32)
+	shortfallPositiveCharges_billNumber_newCommitment = generalise(
+		shortfallPositiveCharges_billNumber_newCommitment.hex(32)
 	); // truncate
 
-	const surplusChargeSum_newSalt = generalise(utils.randomHex(31));
+	const shortfallNegativeCharges_billNumber_newSalt = generalise(
+		utils.randomHex(31)
+	);
 
-	let surplusChargeSum_newCommitment = poseidonHash([
-		BigInt(surplusChargeSum_stateVarId),
-		BigInt(surplusChargeSum.hex(32)),
-		BigInt(surplusChargeSum_newOwnerPublicKey.hex(32)),
-		BigInt(surplusChargeSum_newSalt.hex(32)),
+	let shortfallNegativeCharges_billNumber_newCommitment = poseidonHash([
+		BigInt(shortfallNegativeCharges_billNumber_stateVarId),
+		BigInt(shortfallNegativeCharges_billNumber.hex(32)),
+		BigInt(shortfallNegativeCharges_billNumber_newOwnerPublicKey.hex(32)),
+		BigInt(shortfallNegativeCharges_billNumber_newSalt.hex(32)),
 	]);
 
-	surplusChargeSum_newCommitment = generalise(
-		surplusChargeSum_newCommitment.hex(32)
+	shortfallNegativeCharges_billNumber_newCommitment = generalise(
+		shortfallNegativeCharges_billNumber_newCommitment.hex(32)
 	); // truncate
+
+	const surplusPositiveChargeSum_newSalt = generalise(utils.randomHex(31));
+
+	let surplusPositiveChargeSum_newCommitment = poseidonHash([
+		BigInt(surplusPositiveChargeSum_stateVarId),
+		BigInt(surplusPositiveChargeSum.hex(32)),
+		BigInt(surplusPositiveChargeSum_newOwnerPublicKey.hex(32)),
+		BigInt(surplusPositiveChargeSum_newSalt.hex(32)),
+	]);
+
+	surplusPositiveChargeSum_newCommitment = generalise(
+		surplusPositiveChargeSum_newCommitment.hex(32)
+	); // truncate
+
+	const surplusNegativeChargeSum_newSalt = generalise(utils.randomHex(31));
+
+	let surplusNegativeChargeSum_newCommitment = poseidonHash([
+		BigInt(surplusNegativeChargeSum_stateVarId),
+		BigInt(surplusNegativeChargeSum.hex(32)),
+		BigInt(surplusNegativeChargeSum_newOwnerPublicKey.hex(32)),
+		BigInt(surplusNegativeChargeSum_newSalt.hex(32)),
+	]);
+
+	surplusNegativeChargeSum_newCommitment = generalise(
+		surplusNegativeChargeSum_newCommitment.hex(32)
+	); // truncate
+
 
 	const surplusIndex_newSalt = generalise(utils.randomHex(31));
 
@@ -2664,17 +3103,34 @@ console.log("offtakerCfdNetPosition_billNumber -------->",offtakerCfdNetPosition
 
 	surplusIndex_newCommitment = generalise(surplusIndex_newCommitment.hex(32)); // truncate
 
-	const surplusCharges_billNumber_newSalt = generalise(utils.randomHex(31));
+	const surplusPositiveCharges_billNumber_newSalt = generalise(
+		utils.randomHex(31)
+	);
 
-	let surplusCharges_billNumber_newCommitment = poseidonHash([
-		BigInt(surplusCharges_billNumber_stateVarId),
-		BigInt(surplusCharges_billNumber.hex(32)),
-		BigInt(surplusCharges_billNumber_newOwnerPublicKey.hex(32)),
-		BigInt(surplusCharges_billNumber_newSalt.hex(32)),
+	let surplusPositiveCharges_billNumber_newCommitment = poseidonHash([
+		BigInt(surplusPositiveCharges_billNumber_stateVarId),
+		BigInt(surplusPositiveCharges_billNumber.hex(32)),
+		BigInt(surplusPositiveCharges_billNumber_newOwnerPublicKey.hex(32)),
+		BigInt(surplusPositiveCharges_billNumber_newSalt.hex(32)),
 	]);
 
-	surplusCharges_billNumber_newCommitment = generalise(
-		surplusCharges_billNumber_newCommitment.hex(32)
+	surplusPositiveCharges_billNumber_newCommitment = generalise(
+		surplusPositiveCharges_billNumber_newCommitment.hex(32)
+	); // truncate
+
+	const surplusNegativeCharges_billNumber_newSalt = generalise(
+		utils.randomHex(31)
+	);
+
+	let surplusNegativeCharges_billNumber_newCommitment = poseidonHash([
+		BigInt(surplusNegativeCharges_billNumber_stateVarId),
+		BigInt(surplusNegativeCharges_billNumber.hex(32)),
+		BigInt(surplusNegativeCharges_billNumber_newOwnerPublicKey.hex(32)),
+		BigInt(surplusNegativeCharges_billNumber_newSalt.hex(32)),
+	]);
+
+	surplusNegativeCharges_billNumber_newCommitment = generalise(
+		surplusNegativeCharges_billNumber_newCommitment.hex(32)
 	); // truncate
 
 	// Call Zokrates to generate the proof:
@@ -2910,20 +3366,35 @@ console.log("offtakerCfdNetPosition_billNumber -------->",offtakerCfdNetPosition
 
 		shortfallThreshold_index.integer,
 		shortfallThreshold_path.integer,
-		shortfallChargeSum_commitmentExists
+		shortfallPositiveChargeSum_commitmentExists
 			? secretKey.integer
 			: generalise(0).integer,
 
-		shortfallChargeSum_nullifier.integer,
-		shortfallChargeSum_prev.integer,
-		shortfallChargeSum_prevSalt.integer,
-		shortfallChargeSum_commitmentExists ? 0 : 1,
+		shortfallPositiveChargeSum_nullifier.integer,
+		shortfallPositiveChargeSum_prev.integer,
+		shortfallPositiveChargeSum_prevSalt.integer,
+		shortfallPositiveChargeSum_commitmentExists ? 0 : 1,
 
-		shortfallChargeSum_index.integer,
-		shortfallChargeSum_path.integer,
-		shortfallChargeSum_newOwnerPublicKey.integer,
-		shortfallChargeSum_newSalt.integer,
-		shortfallChargeSum_newCommitment.integer,
+		shortfallPositiveChargeSum_index.integer,
+		shortfallPositiveChargeSum_path.integer,
+		shortfallPositiveChargeSum_newOwnerPublicKey.integer,
+		shortfallPositiveChargeSum_newSalt.integer,
+		shortfallPositiveChargeSum_newCommitment.integer,
+		shortfallNegativeChargeSum_commitmentExists
+			? secretKey.integer
+			: generalise(0).integer,
+
+		shortfallNegativeChargeSum_nullifier.integer,
+		shortfallNegativeChargeSum_prev.integer,
+		shortfallNegativeChargeSum_prevSalt.integer,
+		shortfallNegativeChargeSum_commitmentExists ? 0 : 1,
+
+		shortfallNegativeChargeSum_index.integer,
+		shortfallNegativeChargeSum_path.integer,
+		shortfallNegativeChargeSum_newOwnerPublicKey.integer,
+		shortfallNegativeChargeSum_newSalt.integer,
+		shortfallNegativeChargeSum_newCommitment.integer,
+
 		shortfallIndex_commitmentExists ? secretKey.integer : generalise(0).integer,
 
 		shortfallIndex_nullifier.integer,
@@ -2936,20 +3407,34 @@ console.log("offtakerCfdNetPosition_billNumber -------->",offtakerCfdNetPosition
 		shortfallIndex_newOwnerPublicKey.integer,
 		shortfallIndex_newSalt.integer,
 		shortfallIndex_newCommitment.integer,
-		shortfallCharges_billNumber_commitmentExists
+		shortfallPositiveCharges_billNumber_commitmentExists
+		? secretKey.integer
+		: generalise(0).integer,
+
+		shortfallPositiveCharges_billNumber_nullifier.integer,
+		shortfallPositiveCharges_billNumber_prev.integer,
+		shortfallPositiveCharges_billNumber_prevSalt.integer,
+		shortfallPositiveCharges_billNumber_commitmentExists ? 0 : 1,
+
+		shortfallPositiveCharges_billNumber_index.integer,
+		shortfallPositiveCharges_billNumber_path.integer,
+		shortfallPositiveCharges_billNumber_newOwnerPublicKey.integer,
+		shortfallPositiveCharges_billNumber_newSalt.integer,
+		shortfallPositiveCharges_billNumber_newCommitment.integer,
+		shortfallNegativeCharges_billNumber_commitmentExists
 			? secretKey.integer
 			: generalise(0).integer,
 
-		shortfallCharges_billNumber_nullifier.integer,
-		shortfallCharges_billNumber_prev.integer,
-		shortfallCharges_billNumber_prevSalt.integer,
-		shortfallCharges_billNumber_commitmentExists ? 0 : 1,
+		shortfallNegativeCharges_billNumber_nullifier.integer,
+		shortfallNegativeCharges_billNumber_prev.integer,
+		shortfallNegativeCharges_billNumber_prevSalt.integer,
+		shortfallNegativeCharges_billNumber_commitmentExists ? 0 : 1,
 
-		shortfallCharges_billNumber_index.integer,
-		shortfallCharges_billNumber_path.integer,
-		shortfallCharges_billNumber_newOwnerPublicKey.integer,
-		shortfallCharges_billNumber_newSalt.integer,
-		shortfallCharges_billNumber_newCommitment.integer,
+		shortfallNegativeCharges_billNumber_index.integer,
+		shortfallNegativeCharges_billNumber_path.integer,
+		shortfallNegativeCharges_billNumber_newOwnerPublicKey.integer,
+		shortfallNegativeCharges_billNumber_newSalt.integer,
+		shortfallNegativeCharges_billNumber_newCommitment.integer,
 		secretKey.integer,
 
 		numberOfConsecutivePeriodsForSurplus_nullifier.integer,
@@ -2967,20 +3452,34 @@ console.log("offtakerCfdNetPosition_billNumber -------->",offtakerCfdNetPosition
 
 		surplusThreshold_index.integer,
 		surplusThreshold_path.integer,
-		surplusChargeSum_commitmentExists
+		surplusPositiveChargeSum_commitmentExists
 			? secretKey.integer
 			: generalise(0).integer,
 
-		surplusChargeSum_nullifier.integer,
-		surplusChargeSum_prev.integer,
-		surplusChargeSum_prevSalt.integer,
-		surplusChargeSum_commitmentExists ? 0 : 1,
+		surplusPositiveChargeSum_nullifier.integer,
+		surplusPositiveChargeSum_prev.integer,
+		surplusPositiveChargeSum_prevSalt.integer,
+		surplusPositiveChargeSum_commitmentExists ? 0 : 1,
 
-		surplusChargeSum_index.integer,
-		surplusChargeSum_path.integer,
-		surplusChargeSum_newOwnerPublicKey.integer,
-		surplusChargeSum_newSalt.integer,
-		surplusChargeSum_newCommitment.integer,
+		surplusPositiveChargeSum_index.integer,
+		surplusPositiveChargeSum_path.integer,
+		surplusPositiveChargeSum_newOwnerPublicKey.integer,
+		surplusPositiveChargeSum_newSalt.integer,
+		surplusPositiveChargeSum_newCommitment.integer,
+		surplusNegativeChargeSum_commitmentExists
+			? secretKey.integer
+			: generalise(0).integer,
+
+		surplusNegativeChargeSum_nullifier.integer,
+		surplusNegativeChargeSum_prev.integer,
+		surplusNegativeChargeSum_prevSalt.integer,
+		surplusNegativeChargeSum_commitmentExists ? 0 : 1,
+
+		surplusNegativeChargeSum_index.integer,
+		surplusNegativeChargeSum_path.integer,
+		surplusNegativeChargeSum_newOwnerPublicKey.integer,
+		surplusNegativeChargeSum_newSalt.integer,
+		surplusNegativeChargeSum_newCommitment.integer,
 		surplusIndex_commitmentExists ? secretKey.integer : generalise(0).integer,
 
 		surplusIndex_nullifier.integer,
@@ -2993,20 +3492,34 @@ console.log("offtakerCfdNetPosition_billNumber -------->",offtakerCfdNetPosition
 		surplusIndex_newOwnerPublicKey.integer,
 		surplusIndex_newSalt.integer,
 		surplusIndex_newCommitment.integer,
-		surplusCharges_billNumber_commitmentExists
+		surplusPositiveCharges_billNumber_commitmentExists
 			? secretKey.integer
 			: generalise(0).integer,
 
-		surplusCharges_billNumber_nullifier.integer,
-		surplusCharges_billNumber_prev.integer,
-		surplusCharges_billNumber_prevSalt.integer,
-		surplusCharges_billNumber_commitmentExists ? 0 : 1,
+		surplusPositiveCharges_billNumber_nullifier.integer,
+		surplusPositiveCharges_billNumber_prev.integer,
+		surplusPositiveCharges_billNumber_prevSalt.integer,
+		surplusPositiveCharges_billNumber_commitmentExists ? 0 : 1,
 
-		surplusCharges_billNumber_index.integer,
-		surplusCharges_billNumber_path.integer,
-		surplusCharges_billNumber_newOwnerPublicKey.integer,
-		surplusCharges_billNumber_newSalt.integer,
-		surplusCharges_billNumber_newCommitment.integer,
+		surplusPositiveCharges_billNumber_index.integer,
+		surplusPositiveCharges_billNumber_path.integer,
+		surplusPositiveCharges_billNumber_newOwnerPublicKey.integer,
+		surplusPositiveCharges_billNumber_newSalt.integer,
+		surplusPositiveCharges_billNumber_newCommitment.integer,
+		surplusNegativeCharges_billNumber_commitmentExists
+			? secretKey.integer
+			: generalise(0).integer,
+
+		surplusNegativeCharges_billNumber_nullifier.integer,
+		surplusNegativeCharges_billNumber_prev.integer,
+		surplusNegativeCharges_billNumber_prevSalt.integer,
+		surplusNegativeCharges_billNumber_commitmentExists ? 0 : 1,
+
+		surplusNegativeCharges_billNumber_index.integer,
+		surplusNegativeCharges_billNumber_path.integer,
+		surplusNegativeCharges_billNumber_newOwnerPublicKey.integer,
+		surplusNegativeCharges_billNumber_newSalt.integer,
+		surplusNegativeCharges_billNumber_newCommitment.integer,
 	].flat(Infinity);
 
 	console.log(allInputs.join(' '));
@@ -3020,7 +3533,8 @@ console.log("offtakerCfdNetPosition_billNumber -------->",offtakerCfdNetPosition
 
 	const txData = await instance.methods
 		.calculateCfd(
-			[
+			{
+				newNullifiers: [
 				shortfalls_index_nullifier.integer,
 				latestShortfallSequenceNumber_nullifier.integer,
 				surpluses_index_1_nullifier.integer,
@@ -3031,15 +3545,19 @@ console.log("offtakerCfdNetPosition_billNumber -------->",offtakerCfdNetPosition
 				offtakerInterest_billNumber_nullifier.integer,
 				offtakerNegativePriceCharges_billNumber_nullifier.integer,
 				generatorNegativePriceCharges_billNumber_nullifier.integer,
-				shortfallChargeSum_nullifier.integer,
+				shortfallPositiveChargeSum_nullifier.integer,
+				shortfallNegativeChargeSum_nullifier.integer,
 				shortfallIndex_nullifier.integer,
-				shortfallCharges_billNumber_nullifier.integer,
-				surplusChargeSum_nullifier.integer,
+				shortfallPositiveCharges_billNumber_nullifier.integer,
+				shortfallNegativeCharges_billNumber_nullifier.integer,
+				surplusPositiveChargeSum_nullifier.integer,
+				surplusNegativeChargeSum_nullifier.integer,
 				surplusIndex_nullifier.integer,
-				surplusCharges_billNumber_nullifier.integer,
+				surplusPositiveCharges_billNumber_nullifier.integer,
+				surplusNegativeCharges_billNumber_nullifier.integer,
 			],
-			strikePrice_root.integer,
-			[
+			commitmentRoot: strikePrice_root.integer,
+			newCommitments: [
 				shortfalls_index_newCommitment.integer,
 				latestShortfallSequenceNumber_newCommitment.integer,
 				surpluses_index_1_newCommitment.integer,
@@ -3050,14 +3568,18 @@ console.log("offtakerCfdNetPosition_billNumber -------->",offtakerCfdNetPosition
 				offtakerInterest_billNumber_newCommitment.integer,
 				offtakerNegativePriceCharges_billNumber_newCommitment.integer,
 				generatorNegativePriceCharges_billNumber_newCommitment.integer,
-				shortfallChargeSum_newCommitment.integer,
+				shortfallPositiveChargeSum_newCommitment.integer,
+				shortfallNegativeChargeSum_newCommitment.integer,
 				shortfallIndex_newCommitment.integer,
-				shortfallCharges_billNumber_newCommitment.integer,
-				surplusChargeSum_newCommitment.integer,
+				shortfallPositiveCharges_billNumber_newCommitment.integer,
+				shortfallNegativeCharges_billNumber_newCommitment.integer,
+				surplusPositiveChargeSum_newCommitment.integer,
+				surplusNegativeChargeSum_newCommitment.integer,
 				surplusIndex_newCommitment.integer,
-				surplusCharges_billNumber_newCommitment.integer,
+				surplusPositiveCharges_billNumber_newCommitment.integer,
+				surplusNegativeCharges_billNumber_newCommitment.integer,
 			],
-			[   strikePrice_nullifier.integer,
+			checkNullifiers: [   strikePrice_nullifier.integer,
 				bundlePrice_nullifier.integer,
 				volumeShare_nullifier.integer,
 				dailyInterestRate_nullifier.integer,
@@ -3069,6 +3591,8 @@ console.log("offtakerCfdNetPosition_billNumber -------->",offtakerCfdNetPosition
 				numberOfConsecutivePeriodsForSurplus_nullifier.integer,
 				surplusThreshold_nullifier.integer,
 			],
+			customInputs: [],
+			},
 			proof
 		)
 		.encodeABI();
@@ -3362,29 +3886,54 @@ await storeCommitment({
 				: null,
 		isNullified: false,
 	});
-	if (shortfallChargeSum_commitmentExists)
+	if (shortfallPositiveChargeSum_commitmentExists)
 		await markNullified(
-			shortfallChargeSum_currentCommitment,
+			shortfallPositiveChargeSum_currentCommitment,
 			secretKey.hex(32)
 		);
 	
 
 	await storeCommitment({
-		hash: shortfallChargeSum_newCommitment,
-		name: "shortfallChargeSum",
+		hash: shortfallPositiveChargeSum_newCommitment,
+		name: "shortfallPositiveChargeSum",
 		mappingKey: null,
 		preimage: {
-			stateVarId: generalise(shortfallChargeSum_stateVarId),
-			value: shortfallChargeSum,
-			salt: shortfallChargeSum_newSalt,
-			publicKey: shortfallChargeSum_newOwnerPublicKey,
+			stateVarId: generalise(shortfallPositiveChargeSum_stateVarId),
+			value: shortfallPositiveChargeSum,
+			salt: shortfallPositiveChargeSum_newSalt,
+			publicKey: shortfallPositiveChargeSum_newOwnerPublicKey,
 		},
 		secretKey:
-			shortfallChargeSum_newOwnerPublicKey.integer === publicKey.integer
+			shortfallPositiveChargeSum_newOwnerPublicKey.integer === publicKey.integer
 				? secretKey
 				: null,
 		isNullified: false,
 	});
+
+	if (shortfallNegativeChargeSum_commitmentExists)
+		await markNullified(
+			shortfallNegativeChargeSum_currentCommitment,
+			secretKey.hex(32)
+		);
+	
+
+	await storeCommitment({
+		hash: shortfallNegativeChargeSum_newCommitment,
+		name: "shortfallNegativeChargeSum",
+		mappingKey: null,
+		preimage: {
+			stateVarId: generalise(shortfallNegativeChargeSum_stateVarId),
+			value: shortfallNegativeChargeSum,
+			salt: shortfallNegativeChargeSum_newSalt,
+			publicKey: shortfallNegativeChargeSum_newOwnerPublicKey,
+		},
+		secretKey:
+			shortfallNegativeChargeSum_newOwnerPublicKey.integer === publicKey.integer
+				? secretKey
+				: null,
+		isNullified: false,
+	});
+
 
 	if (shortfallIndex_commitmentExists)
 		await markNullified(shortfallIndex_currentCommitment, secretKey.hex(32));
@@ -3407,48 +3956,98 @@ await storeCommitment({
 		isNullified: false,
 	});
 
-	if (shortfallCharges_billNumber_commitmentExists)
+	if (shortfallPositiveCharges_billNumber_commitmentExists)
 		await markNullified(
-			shortfallCharges_billNumber_currentCommitment,
+			shortfallPositiveCharges_billNumber_currentCommitment,
 			secretKey.hex(32)
 		);
 	
 
 	await storeCommitment({
-		hash: shortfallCharges_billNumber_newCommitment,
-		name: "shortfallCharges",
-		mappingKey: shortfallCharges_billNumber_stateVarId_key.integer,
+		hash: shortfallPositiveCharges_billNumber_newCommitment,
+		name: "shortfallPositiveCharges",
+		mappingKey: shortfallPositiveCharges_billNumber_stateVarId_key.integer,
 		preimage: {
-			stateVarId: generalise(shortfallCharges_billNumber_stateVarId),
-			value: shortfallCharges_billNumber,
-			salt: shortfallCharges_billNumber_newSalt,
-			publicKey: shortfallCharges_billNumber_newOwnerPublicKey,
+			stateVarId: generalise(shortfallPositiveCharges_billNumber_stateVarId),
+			value: shortfallPositiveCharges_billNumber,
+			salt: shortfallPositiveCharges_billNumber_newSalt,
+			publicKey: shortfallPositiveCharges_billNumber_newOwnerPublicKey,
 		},
 		secretKey:
-			shortfallCharges_billNumber_newOwnerPublicKey.integer ===
+			shortfallPositiveCharges_billNumber_newOwnerPublicKey.integer ===
 			publicKey.integer
 				? secretKey
 				: null,
 		isNullified: false,
 	});
 
-
-	if (surplusChargeSum_commitmentExists)
-		await markNullified(surplusChargeSum_currentCommitment, secretKey.hex(32));
+	if (shortfallNegativeCharges_billNumber_commitmentExists)
+		await markNullified(
+			shortfallNegativeCharges_billNumber_currentCommitment,
+			secretKey.hex(32)
+		);
 	
 
 	await storeCommitment({
-		hash: surplusChargeSum_newCommitment,
-		name: "surplusChargeSum",
-		mappingKey: null,
+		hash: shortfallNegativeCharges_billNumber_newCommitment,
+		name: "shortfallNegativeCharges",
+		mappingKey: shortfallNegativeCharges_billNumber_stateVarId_key.integer,
 		preimage: {
-			stateVarId: generalise(surplusChargeSum_stateVarId),
-			value: surplusChargeSum,
-			salt: surplusChargeSum_newSalt,
-			publicKey: surplusChargeSum_newOwnerPublicKey,
+			stateVarId: generalise(shortfallNegativeCharges_billNumber_stateVarId),
+			value: shortfallNegativeCharges_billNumber,
+			salt: shortfallNegativeCharges_billNumber_newSalt,
+			publicKey: shortfallNegativeCharges_billNumber_newOwnerPublicKey,
 		},
 		secretKey:
-			surplusChargeSum_newOwnerPublicKey.integer === publicKey.integer
+			shortfallNegativeCharges_billNumber_newOwnerPublicKey.integer ===
+			publicKey.integer
+				? secretKey
+				: null,
+		isNullified: false,
+	});
+
+	if (surplusPositiveChargeSum_commitmentExists)
+		await markNullified(
+			surplusPositiveChargeSum_currentCommitment,
+			secretKey.hex(32)
+		);
+	
+	await storeCommitment({
+		hash: surplusPositiveChargeSum_newCommitment,
+		name: "surplusPositiveChargeSum",
+		mappingKey: null,
+		preimage: {
+			stateVarId: generalise(surplusPositiveChargeSum_stateVarId),
+			value: surplusPositiveChargeSum,
+			salt: surplusPositiveChargeSum_newSalt,
+			publicKey: surplusPositiveChargeSum_newOwnerPublicKey,
+		},
+		secretKey:
+			surplusPositiveChargeSum_newOwnerPublicKey.integer === publicKey.integer
+				? secretKey
+				: null,
+		isNullified: false,
+	});
+
+	if (surplusNegativeChargeSum_commitmentExists)
+		await markNullified(
+			surplusNegativeChargeSum_currentCommitment,
+			secretKey.hex(32)
+		);
+	
+
+	await storeCommitment({
+		hash: surplusNegativeChargeSum_newCommitment,
+		name: "surplusNegativeChargeSum",
+		mappingKey: null,
+		preimage: {
+			stateVarId: generalise(surplusNegativeChargeSum_stateVarId),
+			value: surplusNegativeChargeSum,
+			salt: surplusNegativeChargeSum_newSalt,
+			publicKey: surplusNegativeChargeSum_newOwnerPublicKey,
+		},
+		secretKey:
+			surplusNegativeChargeSum_newOwnerPublicKey.integer === publicKey.integer
 				? secretKey
 				: null,
 		isNullified: false,
@@ -3475,30 +4074,53 @@ await storeCommitment({
 		isNullified: false,
 	});
 
-	if (surplusCharges_billNumber_commitmentExists)
+	if (surplusPositiveCharges_billNumber_commitmentExists)
 		await markNullified(
-			surplusCharges_billNumber_currentCommitment,
+			surplusPositiveCharges_billNumber_currentCommitment,
 			secretKey.hex(32)
 		);
 	
-
 	await storeCommitment({
-		hash: surplusCharges_billNumber_newCommitment,
-		name: "surplusCharges",
-		mappingKey: surplusCharges_billNumber_stateVarId_key.integer,
+		hash: surplusPositiveCharges_billNumber_newCommitment,
+		name: "surplusPositiveCharges",
+		mappingKey: surplusPositiveCharges_billNumber_stateVarId_key.integer,
 		preimage: {
-			stateVarId: generalise(surplusCharges_billNumber_stateVarId),
-			value: surplusCharges_billNumber,
-			salt: surplusCharges_billNumber_newSalt,
-			publicKey: surplusCharges_billNumber_newOwnerPublicKey,
+			stateVarId: generalise(surplusPositiveCharges_billNumber_stateVarId),
+			value: surplusPositiveCharges_billNumber,
+			salt: surplusPositiveCharges_billNumber_newSalt,
+			publicKey: surplusPositiveCharges_billNumber_newOwnerPublicKey,
 		},
 		secretKey:
-			surplusCharges_billNumber_newOwnerPublicKey.integer === publicKey.integer
+			surplusPositiveCharges_billNumber_newOwnerPublicKey.integer ===
+			publicKey.integer
 				? secretKey
 				: null,
 		isNullified: false,
 	});
 
+	if (surplusNegativeCharges_billNumber_commitmentExists)
+		await markNullified(
+			surplusNegativeCharges_billNumber_currentCommitment,
+			secretKey.hex(32)
+		);
+	
+	await storeCommitment({
+		hash: surplusNegativeCharges_billNumber_newCommitment,
+		name: "surplusNegativeCharges",
+		mappingKey: surplusNegativeCharges_billNumber_stateVarId_key.integer,
+		preimage: {
+			stateVarId: generalise(surplusNegativeCharges_billNumber_stateVarId),
+			value: surplusNegativeCharges_billNumber,
+			salt: surplusNegativeCharges_billNumber_newSalt,
+			publicKey: surplusNegativeCharges_billNumber_newOwnerPublicKey,
+		},
+		secretKey:
+			surplusNegativeCharges_billNumber_newOwnerPublicKey.integer ===
+			publicKey.integer
+				? secretKey
+				: null,
+		isNullified: false,
+	});
 
 	return {
 		tx,
@@ -3511,13 +4133,17 @@ await storeCommitment({
 			generatorInterest_billNumber.integer,
 		offtakerInterest_billNumber_newCommitmentValue:
 			offtakerInterest_billNumber.integer,
-		shortfallCharges_billNumber_newCommitmentValue:
-			shortfallCharges_billNumber.integer,
-		surplusCharges_billNumber_newCommitmentValue:
-			surplusCharges_billNumber.integer,
+		shortfallPositiveCharges_billNumber_newCommitmentValue:
+			shortfallPositiveCharges_billNumber.integer,
+		shortfallNegativeCharges_billNumber_newCommitmentValue:
+			shortfallNegativeCharges_billNumber.integer,
+		surplusPositiveCharges_billNumber_newCommitmentValue:
+			surplusPositiveCharges_billNumber.integer,
+		surplusNegativeCharges_billNumber_newCommitmentValue:
+			surplusNegativeCharges_billNumber.integer,
 		generatorNegativePriceCharges_billNumber_newCommitmentValue:
 			generatorNegativePriceCharges_billNumber.integer,
 		offtakerNegativePriceCharges_billNumber_newCommitmentValue:
 			offtakerNegativePriceCharges_billNumber.integer,
 	};
-}
+}	

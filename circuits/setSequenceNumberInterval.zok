@@ -23,7 +23,7 @@ def main(\
 
         
         // We need to hard-code each stateVarId into the circuit:
-        field sequenceNumberInterval_stateVarId_field = 31
+        field sequenceNumberInterval_stateVarId_field = 25
 
 
         field sequenceNumberInterval = sequenceNumberInterval_oldCommitment_value
