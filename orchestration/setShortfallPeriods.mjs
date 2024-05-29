@@ -67,7 +67,7 @@ export default async function setShortfallPeriods(
 
 	// Initialise commitment preimage of whole state:
 
-	const numberOfConsecutivePeriodsForShortfall_stateVarId = generalise(60).hex(
+	const numberOfConsecutivePeriodsForShortfall_stateVarId = generalise(39).hex(
 		32
 	);
 

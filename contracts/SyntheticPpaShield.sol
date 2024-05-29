@@ -8,7 +8,8 @@ import "./merkle-tree/MerkleTree.sol";
 contract SyntheticPpaShield is MerkleTree {
 
 
-          enum FunctionNames { setStrikePrice, setBundlePrice, setShortfallThreshold, setShortfallPeriods, setSurplusThreshold, setSurplusPeriods, setDailyInterestRate, setExpiryDateOfContract, setVolumeShare, setSequenceNumberInterval, initSequenceNumber, initSurplusSequenceNumber, setInitialContractParams, calculateCfd }
+          enum FunctionNames { setStrikePrice, setBundlePrice, setShortfallThreshold, setShortfallPeriods, setSurplusThreshold, setSurplusPeriods, setDailyInterestRate, setStartDateOfContract, setExpiryDateOfContract, setVolumeShare, setSequenceNumberInterval, initSequenceNumber, setInitialContractParams, calculateCfd }
+
 
           IVerifier private verifier;
 
@@ -137,6 +138,16 @@ uint256[] memory inputs = new uint256[](customInputs.length + newNullifiers.leng
             
           }
 
+          if (functionId == uint(FunctionNames.setStartDateOfContract)) {
+            uint k = 0;
+
+            inputs[k++] = newNullifiers[0];
+            inputs[k++] = _inputs.commitmentRoot;
+            inputs[k++] = newCommitments[0];
+            inputs[k++] = 1;
+            
+          }
+
           if (functionId == uint(FunctionNames.setExpiryDateOfContract)) {
             uint k = 0;
 
@@ -173,16 +184,8 @@ uint256[] memory inputs = new uint256[](customInputs.length + newNullifiers.leng
             inputs[k++] = newNullifiers[0];
             inputs[k++] = _inputs.commitmentRoot;
             inputs[k++] = newCommitments[0];
-            inputs[k++] = 1;
-            
-          }
-
-          if (functionId == uint(FunctionNames.initSurplusSequenceNumber)) {
-            uint k = 0;
- 
-            inputs[k++] = newNullifiers[0];
-            inputs[k++] = _inputs.commitmentRoot;
-            inputs[k++] = newCommitments[0];
+            inputs[k++] = newNullifiers[1];
+            inputs[k++] = newCommitments[1];
             inputs[k++] = 1;
             
           }
@@ -214,6 +217,8 @@ uint256[] memory inputs = new uint256[](customInputs.length + newNullifiers.leng
             inputs[k++] = newCommitments[10];
             inputs[k++] = newNullifiers[11];
             inputs[k++] = newCommitments[11];
+            inputs[k++] = newNullifiers[12];
+            inputs[k++] = newCommitments[12];
             inputs[k++] = 1;
             
           }
@@ -227,7 +232,7 @@ uint256[] memory inputs = new uint256[](customInputs.length + newNullifiers.leng
             inputs[k++] = checkNullifiers[2];
             inputs[k++] = checkNullifiers[3];
             inputs[k++] = checkNullifiers[4];
-
+            inputs[k++] = checkNullifiers[5];
 
             inputs[k++] = newNullifiers[0];
             inputs[k++] = newCommitments[0];
@@ -238,7 +243,7 @@ uint256[] memory inputs = new uint256[](customInputs.length + newNullifiers.leng
             inputs[k++] = newNullifiers[3];
             inputs[k++] = newCommitments[3];
 
-            inputs[k++] = checkNullifiers[5];
+            inputs[k++] = checkNullifiers[6];
             inputs[k++] = newNullifiers[4];
             inputs[k++] = newCommitments[4];
             inputs[k++] = newNullifiers[5];
@@ -249,32 +254,45 @@ uint256[] memory inputs = new uint256[](customInputs.length + newNullifiers.leng
             inputs[k++] = newCommitments[7];
             inputs[k++] = newNullifiers[8];
             inputs[k++] = newCommitments[8];
-
-            inputs[k++] = checkNullifiers[6];
-           inputs[k++] = checkNullifiers[7];
             inputs[k++] = newNullifiers[9];
             inputs[k++] = newCommitments[9];
+
+            inputs[k++] = checkNullifiers[7];
+            inputs[k++] = checkNullifiers[8];
             inputs[k++] = newNullifiers[10];
             inputs[k++] = newCommitments[10];
             inputs[k++] = newNullifiers[11];
             inputs[k++] = newCommitments[11];
-          inputs[k++] = checkNullifiers[8];
-          inputs[k++] = checkNullifiers[9];
-          inputs[k++] = newNullifiers[12];
+            inputs[k++] = newNullifiers[12];
             inputs[k++] = newCommitments[12];
             inputs[k++] = newNullifiers[13];
             inputs[k++] = newCommitments[13];
             inputs[k++] = newNullifiers[14];
             inputs[k++] = newCommitments[14];
 
+          inputs[k++] = checkNullifiers[9];
+          inputs[k++] = checkNullifiers[10];
+          inputs[k++] = newNullifiers[15];
+            inputs[k++] = newCommitments[15];
+            inputs[k++] = newNullifiers[16];
+            inputs[k++] = newCommitments[16];
+            inputs[k++] = newNullifiers[17];
+            inputs[k++] = newCommitments[17];
+            inputs[k++] = newNullifiers[18];
+            inputs[k++] = newCommitments[18];
+            inputs[k++] = newNullifiers[19];
+            inputs[k++] = newCommitments[19];
+
              inputs[k++] = newCommitments[4];
               inputs[k++] = newCommitments[5];
               inputs[k++] = newCommitments[6];
               inputs[k++] = newCommitments[7];
-              inputs[k++] = newCommitments[11];
+              inputs[k++] = newCommitments[13];
               inputs[k++] = newCommitments[14];
+              inputs[k++] = newCommitments[18];
+               inputs[k++] = newCommitments[19];
+              inputs[k++] = newCommitments[9];
               inputs[k++] = newCommitments[8];
-
             
           }
           
@@ -315,7 +333,7 @@ uint256[] memory inputs = new uint256[](customInputs.length + newNullifiers.leng
 
 
 
-struct Shortfall {
+struct VolumeGap {
         
         uint256 billNumber;
 
@@ -522,6 +540,28 @@ owner = msg.sender;
            verify(proof, uint(FunctionNames.setDailyInterestRate), inputs);
       }
 
+      function setStartDateOfContract (uint256[] calldata newNullifiers, uint256 commitmentRoot, uint256[] calldata newCommitments, uint256[] calldata proof) public  {
+
+        require(msg.sender == owner, "Caller is unauthorised, it must be the owner");
+
+
+          Inputs memory inputs;
+
+          inputs.customInputs = new uint[](1);
+        	inputs.customInputs[0] = 1;
+
+
+
+          inputs.newNullifiers = newNullifiers;
+           
+
+          inputs.commitmentRoot = commitmentRoot;
+
+          inputs.newCommitments = newCommitments;
+
+           verify(proof, uint(FunctionNames.setStartDateOfContract), inputs);
+      }
+
 
       function setExpiryDateOfContract (uint256[] calldata newNullifiers, uint256 commitmentRoot, uint256[] calldata newCommitments, uint256[] calldata proof) public  {
 
@@ -613,28 +653,6 @@ owner = msg.sender;
       }
 
 
-      function initSurplusSequenceNumber (uint256[] calldata newNullifiers, uint256 commitmentRoot, uint256[] calldata newCommitments, uint256[] calldata proof) public  {
-
-        require(msg.sender == owner, "Caller is unauthorised, it must be the owner");
-
-
-          Inputs memory inputs;
-
-          inputs.customInputs = new uint[](1);
-        	inputs.customInputs[0] = 1;
-
-
-          inputs.newNullifiers = newNullifiers;
-           
-
-          inputs.commitmentRoot = commitmentRoot;
-
-          inputs.newCommitments = newCommitments;
-
-           verify(proof, uint(FunctionNames.initSurplusSequenceNumber), inputs);
-      }
-
-
       function setInitialContractParams (uint256[] calldata newNullifiers, uint256 commitmentRoot, uint256[] calldata newCommitments, uint256[] calldata proof) public  {
 
         
@@ -658,42 +676,18 @@ require(isContractTerminated == false, "The contract is terminated!");
       }
 
 
-      function calculateCfd (uint256[] calldata newNullifiers, uint256 commitmentRoot, uint256[] calldata newCommitments, uint256[] calldata checkNullifiers, uint256[] calldata proof) public  {
+      function calculateCfd (Inputs calldata inputs, uint256[] calldata proof) public  {
 
         
-require(isContractTerminated == false, "The contract is terminated!");
+         require(isContractTerminated == false, "The contract is terminated!");
 
- 
-
-          Inputs memory inputs;
-
-          inputs.customInputs = new uint[](7);
-          inputs.customInputs[0] = newCommitments[4];
-            inputs.customInputs[1] = newCommitments[5];
-            inputs.customInputs[2] = newCommitments[6];
-            inputs.customInputs[3] = newCommitments[7];
-            inputs.customInputs[4] = newCommitments[11];
-            inputs.customInputs[5] = newCommitments[14];
-            inputs.customInputs[6] = newCommitments[8];
-      
-              
-
-          inputs.newNullifiers = newNullifiers;
-           
-
-        inputs.checkNullifiers = checkNullifiers;
-
-          inputs.commitmentRoot = commitmentRoot;
-
-          inputs.newCommitments = newCommitments;
-
-           verify(proof, uint(FunctionNames.calculateCfd), inputs);
+          verify(proof, uint(FunctionNames.calculateCfd), inputs);
       }
 
 
       function terminateContract () public  {
 
          require(msg.sender == owner, "Caller is unauthorised, it must be the owner");
-isContractTerminated = true;
+         isContractTerminated = true;
       }
 }

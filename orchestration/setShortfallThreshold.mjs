@@ -67,7 +67,7 @@ export default async function setShortfallThreshold(
 
 	// Initialise commitment preimage of whole state:
 
-	const shortfallThreshold_stateVarId = generalise(62).hex(32);
+	const shortfallThreshold_stateVarId = generalise(41).hex(32);
 
 	let shortfallThreshold_commitmentExists = true;
 	let shortfallThreshold_witnessRequired = true;

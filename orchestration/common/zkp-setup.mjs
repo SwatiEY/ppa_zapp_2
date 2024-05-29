@@ -16,11 +16,11 @@ const functionNames = [
 	"setSurplusThreshold",
 	"setSurplusPeriods",
 	"setDailyInterestRate",
+	"setStartDateOfContract",
 	"setExpiryDateOfContract",
 	"setVolumeShare",
 	"setSequenceNumberInterval",
 	"initSequenceNumber",
-	"initSurplusSequenceNumber",
 	"setInitialContractParams",
 	"calculateCfd",
 ];

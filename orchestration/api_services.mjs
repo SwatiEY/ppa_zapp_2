@@ -6,13 +6,14 @@ import calculateCfd from "./calculateCfd.mjs";
 
 import setInitialContractParams from "./setInitialContractParams.mjs";
 
-import initSurplusSequenceNumber from "./initSurplusSequenceNumber.mjs";
 
 import initSequenceNumber from "./initSequenceNumber.mjs";
 
 import setSequenceNumberInterval from "./setSequenceNumberInterval.mjs";
 
 import setVolumeShare from "./setVolumeShare.mjs";
+
+import setStartDateOfContract from "./setStartDateOfContract.mjs";
 
 import setExpiryDateOfContract from "./setExpiryDateOfContract.mjs";
 
@@ -338,6 +339,46 @@ export async function service_setDailyInterestRate(req, res, next) {
 }
 
 // eslint-disable-next-line func-names
+export async function service_setStartDateOfContract(req, res, next) {
+	try {
+		await web3.connect();
+		await new Promise((resolve) => setTimeout(() => resolve(), 3000));
+	} catch (err) {
+		throw new Error(err);
+	}
+	try {
+		await startEventFilter("SyntheticPpaShield");
+		const { startDateOfContractParam } = req.body;
+		const startDateOfContract_newOwnerPublicKey =
+			req.body.startDateOfContract_newOwnerPublicKey || 0;
+		const { tx, encEvent } = await setStartDateOfContract(
+			startDateOfContractParam,
+			startDateOfContract_newOwnerPublicKey
+		);
+		// prints the tx
+		console.log(tx);
+		res.send({ tx, encEvent });
+		// reassigns leafIndex to the index of the first commitment added by this function
+		if (tx.event) {
+			leafIndex = tx.returnValues[0];
+			// prints the new leaves (commitments) added by this function call
+			console.log(`Merkle tree event returnValues:`);
+			console.log(tx.returnValues);
+		}
+		if (encEvent.event) {
+			encryption.msgs = encEvent[0].returnValues[0];
+			encryption.key = encEvent[0].returnValues[1];
+			console.log("EncryptedMsgs:");
+			console.log(encEvent[0].returnValues[0]);
+		}
+		await sleep(10);
+	} catch (err) {
+		logger.error(err);
+		res.send({ errors: [err.message] });
+	}
+}
+
+// eslint-disable-next-line func-names
 export async function service_setExpiryDateOfContract(req, res, next) {
 	try {
 		await web3.connect();
@@ -469,45 +510,10 @@ export async function service_initSequenceNumber(req, res, next) {
 		await startEventFilter("SyntheticPpaShield");
 		const latestShortfallSequenceNumber_newOwnerPublicKey =
 			req.body.latestShortfallSequenceNumber_newOwnerPublicKey || 0;
-		const { tx, encEvent } = await initSequenceNumber(
-			latestShortfallSequenceNumber_newOwnerPublicKey
-		);
-		// prints the tx
-		console.log(tx);
-		res.send({ tx, encEvent });
-		// reassigns leafIndex to the index of the first commitment added by this function
-		if (tx.event) {
-			leafIndex = tx.returnValues[0];
-			// prints the new leaves (commitments) added by this function call
-			console.log(`Merkle tree event returnValues:`);
-			console.log(tx.returnValues);
-		}
-		if (encEvent.event) {
-			encryption.msgs = encEvent[0].returnValues[0];
-			encryption.key = encEvent[0].returnValues[1];
-			console.log("EncryptedMsgs:");
-			console.log(encEvent[0].returnValues[0]);
-		}
-		await sleep(10);
-	} catch (err) {
-		logger.error(err);
-		res.send({ errors: [err.message] });
-	}
-}
-
-// eslint-disable-next-line func-names
-export async function service_initSurplusSequenceNumber(req, res, next) {
-	try {
-		await web3.connect();
-		await new Promise((resolve) => setTimeout(() => resolve(), 3000));
-	} catch (err) {
-		throw new Error(err);
-	}
-	try {
-		await startEventFilter("SyntheticPpaShield");
 		const latestSurplusSequenceNumber_newOwnerPublicKey =
 			req.body.latestSurplusSequenceNumber_newOwnerPublicKey || 0;
-		const { tx, encEvent } = await initSurplusSequenceNumber(
+		const { tx, encEvent } = await initSequenceNumber(
+			latestShortfallSequenceNumber_newOwnerPublicKey,
 			latestSurplusSequenceNumber_newOwnerPublicKey
 		);
 		// prints the tx
@@ -533,6 +539,8 @@ export async function service_initSurplusSequenceNumber(req, res, next) {
 	}
 }
 
+
+
 // eslint-disable-next-line func-names
 export async function service_setInitialContractParams(req, res, next) {
 	try {
@@ -551,9 +559,9 @@ export async function service_setInitialContractParams(req, res, next) {
 		const { numberOfConsecutivePeriodsForSurplusParam } = req.body;
 		const { surplusThresholdParam } = req.body;
 		const { dailyInterestRateParam } = req.body;
+		const { startDateOfContractParam } = req.body;
 		const { expiryDateOfContractParam } = req.body;
 		const { sequenceNumberIntervalParam } = req.body;
-		const { referenceDate } = req.body;
 		const strikePrice_newOwnerPublicKey =
 			req.body.strikePrice_newOwnerPublicKey || 0;
 		const bundlePrice_newOwnerPublicKey =
@@ -562,6 +570,8 @@ export async function service_setInitialContractParams(req, res, next) {
 			req.body.volumeShare_newOwnerPublicKey || 0;
 		const dailyInterestRate_newOwnerPublicKey =
 			req.body.dailyInterestRate_newOwnerPublicKey || 0;
+		const startDateOfContract_newOwnerPublicKey =
+		req.body.startDateOfContract_newOwnerPublicKey || 0;	
 		const expiryDateOfContract_newOwnerPublicKey =
 			req.body.expiryDateOfContract_newOwnerPublicKey || 0;
 		const latestShortfallSequenceNumber_newOwnerPublicKey =
@@ -587,13 +597,14 @@ export async function service_setInitialContractParams(req, res, next) {
 			numberOfConsecutivePeriodsForSurplusParam,
 			surplusThresholdParam,
 			dailyInterestRateParam,
+			startDateOfContractParam,
 			expiryDateOfContractParam,
 			sequenceNumberIntervalParam,
-			referenceDate,
 			strikePrice_newOwnerPublicKey,
 			bundlePrice_newOwnerPublicKey,
 			volumeShare_newOwnerPublicKey,
 			dailyInterestRate_newOwnerPublicKey,
+			startDateOfContract_newOwnerPublicKey,
 			expiryDateOfContract_newOwnerPublicKey,
 			latestShortfallSequenceNumber_newOwnerPublicKey,
 			latestSurplusSequenceNumber_newOwnerPublicKey,
@@ -649,53 +660,61 @@ export async function service_calculateCfd(req, res, next) {
 		const { outstandingOfftakerAmount } = req.body;
 		const { generatorDelayDays } = req.body;
 		const { offtakerDelayDays } = req.body;
+		const { negativePriceOccurredParam } = req.body;
 		const { referenceDate } = req.body;
-		const strikePrice_newOwnerPublicKey =
-			req.body.strikePrice_newOwnerPublicKey || 0;
 		const shortfalls_index_newOwnerPublicKey =
 			req.body.shortfalls_index_newOwnerPublicKey || 0;
 		const latestShortfallSequenceNumber_newOwnerPublicKey =
 			req.body.latestShortfallSequenceNumber_newOwnerPublicKey || 0;
-		const surplus_tempSurplusIndex_newOwnerPublicKey =
-			req.body.surplus_tempSurplusIndex_newOwnerPublicKey || 0;
+		const surpluses_index_1_newOwnerPublicKey =
+			req.body.surpluses_index_1_newOwnerPublicKey || 0;
 		const latestSurplusSequenceNumber_newOwnerPublicKey =
 			req.body.latestSurplusSequenceNumber_newOwnerPublicKey || 0;
-		const generatorCharges_billNumber_newOwnerPublicKey =
-			req.body.generatorCharges_billNumber_newOwnerPublicKey || 0;
-		const offtakerCharges_billNumber_newOwnerPublicKey =
-			req.body.offtakerCharges_billNumber_newOwnerPublicKey || 0;
+		const generatorCfdNetPosition_billNumber_newOwnerPublicKey =
+			req.body.generatorCfdNetPosition_billNumber_newOwnerPublicKey || 0;
+		const offtakerCfdNetPosition_billNumber_newOwnerPublicKey =
+			req.body.offtakerCfdNetPosition_billNumber_newOwnerPublicKey || 0;
 		const generatorInterest_billNumber_newOwnerPublicKey =
 			req.body.generatorInterest_billNumber_newOwnerPublicKey || 0;
 		const offtakerInterest_billNumber_newOwnerPublicKey =
 			req.body.offtakerInterest_billNumber_newOwnerPublicKey || 0;
-		const negativePriceCharges_billNumber_newOwnerPublicKey =
-			req.body.negativePriceCharges_billNumber_newOwnerPublicKey || 0;
-		const shortfallThreshold_newOwnerPublicKey =
-			req.body.shortfallThreshold_newOwnerPublicKey || 0;
-		const shortfallChargeSum_newOwnerPublicKey =
-			req.body.shortfallChargeSum_newOwnerPublicKey || 0;
+		const offtakerNegativePriceCharges_billNumber_newOwnerPublicKey =
+			req.body.offtakerNegativePriceCharges_billNumber_newOwnerPublicKey || 0;
+		const generatorNegativePriceCharges_billNumber_newOwnerPublicKey =
+			req.body.generatorNegativePriceCharges_billNumber_newOwnerPublicKey || 0;
+		const shortfallPositiveChargeSum_newOwnerPublicKey =
+			req.body.shortfallPositiveChargeSum_newOwnerPublicKey || 0;
+		const shortfallNegativeChargeSum_newOwnerPublicKey =
+			req.body.shortfallNegativeChargeSum_newOwnerPublicKey || 0;
 		const shortfallIndex_newOwnerPublicKey =
 			req.body.shortfallIndex_newOwnerPublicKey || 0;
-		const shortfallCharges_billNumber_newOwnerPublicKey =
-			req.body.shortfallCharges_billNumber_newOwnerPublicKey || 0;
-		const surplusThreshold_newOwnerPublicKey =
-			req.body.surplusThreshold_newOwnerPublicKey || 0;
-		const surplusChargeSum_newOwnerPublicKey =
-			req.body.surplusChargeSum_newOwnerPublicKey || 0;
+		const shortfallPositiveCharges_billNumber_newOwnerPublicKey =
+			req.body.shortfallPositiveCharges_billNumber_newOwnerPublicKey || 0;
+		const shortfallNegativeCharges_billNumber_newOwnerPublicKey =
+			req.body.shortfallNegativeCharges_billNumber_newOwnerPublicKey || 0;
+		const surplusPositiveChargeSum_newOwnerPublicKey =
+			req.body.surplusPositiveChargeSum_newOwnerPublicKey || 0;
+		const surplusNegativeChargeSum_newOwnerPublicKey =
+			req.body.surplusNegativeChargeSum_newOwnerPublicKey || 0;
 		const surplusIndex_newOwnerPublicKey =
 			req.body.surplusIndex_newOwnerPublicKey || 0;
-		const surplusCharges_billNumber_newOwnerPublicKey =
-			req.body.surplusCharges_billNumber_newOwnerPublicKey || 0;
+		const surplusPositiveCharges_billNumber_newOwnerPublicKey =
+			req.body.surplusPositiveCharges_billNumber_newOwnerPublicKey || 0;
+		const surplusNegativeCharges_billNumber_newOwnerPublicKey =
+			req.body.surplusNegativeCharges_billNumber_newOwnerPublicKey || 0;
 		const {
 			tx,
 			encEvent,
-			generatorCharges_billNumber_newCommitment,
-			offtakerCharges_billNumber_newCommitment,
-			generatorInterest_billNumber_newCommitment,
-			offtakerInterest_billNumber_newCommitment,
-			shortfallCharges_billNumber_newCommitment,
-			surplusCharges_billNumber_newCommitment,
-			negativePriceCharges_billNumber_newCommitment,
+			generatorCfdNetPosition_billNumber_newCommitmentValue,
+			offtakerCfdNetPosition_billNumber_newCommitmentValue,
+			generatorInterest_billNumber_newCommitmentValue,
+			offtakerInterest_billNumber_newCommitmentValue,
+			shortfallPositiveCharges_billNumber_newCommitmentValue,
+			shortfallNegativeCharges_billNumber_newCommitmentValue,
+			surplusPositiveCharges_billNumber_newCommitmentValue,
+			surplusNegativeCharges_billNumber_newCommitmentValue,
+			generatorNegativePriceCharges_billNumber_newCommitmentValue,
+			offtakerNegativePriceCharges_billNumber_newCommitmentValue,
 		} = await calculateCfd(
 			billNumber,
 			sequenceNumber,
@@ -710,38 +729,44 @@ export async function service_calculateCfd(req, res, next) {
 			outstandingOfftakerAmount,
 			generatorDelayDays,
 			offtakerDelayDays,
+			negativePriceOccurredParam,
 			referenceDate,
-			strikePrice_newOwnerPublicKey,
 			shortfalls_index_newOwnerPublicKey,
 			latestShortfallSequenceNumber_newOwnerPublicKey,
-			surplus_tempSurplusIndex_newOwnerPublicKey,
+			surpluses_index_1_newOwnerPublicKey,
 			latestSurplusSequenceNumber_newOwnerPublicKey,
-			generatorCharges_billNumber_newOwnerPublicKey,
-			offtakerCharges_billNumber_newOwnerPublicKey,
+			generatorCfdNetPosition_billNumber_newOwnerPublicKey,
+			offtakerCfdNetPosition_billNumber_newOwnerPublicKey,
 			generatorInterest_billNumber_newOwnerPublicKey,
 			offtakerInterest_billNumber_newOwnerPublicKey,
-			negativePriceCharges_billNumber_newOwnerPublicKey,
-			shortfallThreshold_newOwnerPublicKey,
-			shortfallChargeSum_newOwnerPublicKey,
+			offtakerNegativePriceCharges_billNumber_newOwnerPublicKey,
+			generatorNegativePriceCharges_billNumber_newOwnerPublicKey,
+			shortfallPositiveChargeSum_newOwnerPublicKey,
+			shortfallNegativeChargeSum_newOwnerPublicKey,
 			shortfallIndex_newOwnerPublicKey,
-			shortfallCharges_billNumber_newOwnerPublicKey,
-			surplusThreshold_newOwnerPublicKey,
-			surplusChargeSum_newOwnerPublicKey,
+			shortfallPositiveCharges_billNumber_newOwnerPublicKey,
+			shortfallNegativeCharges_billNumber_newOwnerPublicKey,
+			surplusPositiveChargeSum_newOwnerPublicKey,
+			surplusNegativeChargeSum_newOwnerPublicKey,
 			surplusIndex_newOwnerPublicKey,
-			surplusCharges_billNumber_newOwnerPublicKey
+			surplusPositiveCharges_billNumber_newOwnerPublicKey,
+			surplusNegativeCharges_billNumber_newOwnerPublicKey
 		);
 		// prints the tx
 		console.log(tx);
 		res.send({
 			tx,
 			encEvent,
-			generatorCharges_billNumber_newCommitment,
-			offtakerCharges_billNumber_newCommitment,
-			generatorInterest_billNumber_newCommitment,
-			offtakerInterest_billNumber_newCommitment,
-			shortfallCharges_billNumber_newCommitment,
-			surplusCharges_billNumber_newCommitment,
-			negativePriceCharges_billNumber_newCommitment,
+			generatorCfdNetPosition_billNumber_newCommitmentValue,
+			offtakerCfdNetPosition_billNumber_newCommitmentValue,
+			generatorInterest_billNumber_newCommitmentValue,
+			offtakerInterest_billNumber_newCommitmentValue,
+			shortfallPositiveCharges_billNumber_newCommitmentValue,
+			shortfallNegativeCharges_billNumber_newCommitmentValue,
+			surplusPositiveCharges_billNumber_newCommitmentValue,
+			surplusNegativeCharges_billNumber_newCommitmentValue,
+			generatorNegativePriceCharges_billNumber_newCommitmentValue,
+			offtakerNegativePriceCharges_billNumber_newCommitmentValue,
 		});
 		// reassigns leafIndex to the index of the first commitment added by this function
 		if (tx.event) {

@@ -67,7 +67,7 @@ export default async function setSequenceNumberInterval(
 
 	// Initialise commitment preimage of whole state:
 
-	const sequenceNumberInterval_stateVarId = generalise(31).hex(32);
+	const sequenceNumberInterval_stateVarId = generalise(25).hex(32);
 
 	let sequenceNumberInterval_commitmentExists = true;
 	let sequenceNumberInterval_witnessRequired = true;
