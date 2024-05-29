@@ -3579,7 +3579,8 @@ let index_1 = generalise(parseInt(surplusIndex.integer, 10) + 0);
 				surplusPositiveCharges_billNumber_newCommitment.integer,
 				surplusNegativeCharges_billNumber_newCommitment.integer,
 			],
-			checkNullifiers: [   strikePrice_nullifier.integer,
+			checkNullifiers: [   
+				strikePrice_nullifier.integer,
 				bundlePrice_nullifier.integer,
 				volumeShare_nullifier.integer,
 				dailyInterestRate_nullifier.integer,
@@ -3591,7 +3592,18 @@ let index_1 = generalise(parseInt(surplusIndex.integer, 10) + 0);
 				numberOfConsecutivePeriodsForSurplus_nullifier.integer,
 				surplusThreshold_nullifier.integer,
 			],
-			customInputs: [],
+			customInputs: [
+				generatorCfdNetPosition_billNumber_newCommitment.integer,
+				offtakerCfdNetPosition_billNumber_newCommitment.integer,
+				generatorInterest_billNumber_newCommitment.integer,
+				offtakerInterest_billNumber_newCommitment.integer,
+				shortfallPositiveChargeSum_newCommitment.integer,
+				shortfallNegativeChargeSum_newCommitment.integer,
+				surplusPositiveChargeSum_newCommitment.integer,
+				surplusNegativeChargeSum_newCommitment.integer,
+				generatorNegativePriceCharges_billNumber_newCommitment.integer,
+				offtakerNegativePriceCharges_billNumber_newCommitment.integer,
+			],
 			},
 			proof
 		)
