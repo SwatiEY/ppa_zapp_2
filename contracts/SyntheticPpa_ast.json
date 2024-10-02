@@ -75,7 +75,6 @@
                             "circuitParams": {
                                 "setStrikePrice": {
                                     "parameters": [
-                                        "nullifierRoot",
                                         "nullifier",
                                         "oldCommitmentExistence",
                                         "newCommitment"
@@ -83,7 +82,6 @@
                                 },
                                 "setBundlePrice": {
                                     "parameters": [
-                                        "nullifierRoot",
                                         "nullifier",
                                         "oldCommitmentExistence",
                                         "newCommitment"
@@ -91,7 +89,6 @@
                                 },
                                 "setShortfallThreshold": {
                                     "parameters": [
-                                        "nullifierRoot",
                                         "nullifier",
                                         "oldCommitmentExistence",
                                         "newCommitment"
@@ -99,7 +96,6 @@
                                 },
                                 "setShortfallPeriods": {
                                     "parameters": [
-                                        "nullifierRoot",
                                         "nullifier",
                                         "oldCommitmentExistence",
                                         "newCommitment"
@@ -107,7 +103,6 @@
                                 },
                                 "setSurplusThreshold": {
                                     "parameters": [
-                                        "nullifierRoot",
                                         "nullifier",
                                         "oldCommitmentExistence",
                                         "newCommitment"
@@ -115,7 +110,6 @@
                                 },
                                 "setSurplusPeriods": {
                                     "parameters": [
-                                        "nullifierRoot",
                                         "nullifier",
                                         "oldCommitmentExistence",
                                         "newCommitment"
@@ -123,7 +117,6 @@
                                 },
                                 "setDailyInterestRate": {
                                     "parameters": [
-                                        "nullifierRoot",
                                         "nullifier",
                                         "oldCommitmentExistence",
                                         "newCommitment"
@@ -131,7 +124,6 @@
                                 },
                                 "setStartDateOfContract": {
                                     "parameters": [
-                                        "nullifierRoot",
                                         "nullifier",
                                         "oldCommitmentExistence",
                                         "newCommitment"
@@ -139,7 +131,6 @@
                                 },
                                 "setExpiryDateOfContract": {
                                     "parameters": [
-                                        "nullifierRoot",
                                         "nullifier",
                                         "oldCommitmentExistence",
                                         "newCommitment"
@@ -147,7 +138,6 @@
                                 },
                                 "setVolumeShare": {
                                     "parameters": [
-                                        "nullifierRoot",
                                         "nullifier",
                                         "oldCommitmentExistence",
                                         "newCommitment"
@@ -155,7 +145,6 @@
                                 },
                                 "setSequenceNumberInterval": {
                                     "parameters": [
-                                        "nullifierRoot",
                                         "nullifier",
                                         "oldCommitmentExistence",
                                         "newCommitment"
@@ -163,7 +152,6 @@
                                 },
                                 "initSequenceNumber": {
                                     "parameters": [
-                                        "nullifierRoot",
                                         "nullifier",
                                         "oldCommitmentExistence",
                                         "newCommitment",
@@ -173,7 +161,6 @@
                                 },
                                 "setInitialContractParams": {
                                     "parameters": [
-                                        "nullifierRoot",
                                         "nullifier",
                                         "oldCommitmentExistence",
                                         "newCommitment",
@@ -205,10 +192,22 @@
                                 },
                                 "calculateCfd": {
                                     "parameters": [
-                                        "nullifierRoot",
-                                        "nullifier",
+                                        "checkNullifier",
                                         "oldCommitmentExistence",
+                                        "checkNullifier",
+                                        "checkNullifier",
+                                        "checkNullifier",
+                                        "checkNullifier",
+                                        "checkNullifier",
+                                        "nullifier",
                                         "newCommitment",
+                                        "nullifier",
+                                        "newCommitment",
+                                        "nullifier",
+                                        "newCommitment",
+                                        "nullifier",
+                                        "newCommitment",
+                                        "checkNullifier",
                                         "nullifier",
                                         "newCommitment",
                                         "nullifier",
@@ -221,6 +220,8 @@
                                         "newCommitment",
                                         "nullifier",
                                         "newCommitment",
+                                        "checkNullifier",
+                                        "checkNullifier",
                                         "nullifier",
                                         "newCommitment",
                                         "nullifier",
@@ -231,8 +232,8 @@
                                         "newCommitment",
                                         "nullifier",
                                         "newCommitment",
-                                        "nullifier",
-                                        "newCommitment",
+                                        "checkNullifier",
+                                        "checkNullifier",
                                         "nullifier",
                                         "newCommitment",
                                         "nullifier",
@@ -249,13 +250,16 @@
                                         "newCommitments[14]",
                                         "newCommitments[15]",
                                         "newCommitments[16]",
-                                        "newCommitments[22]",
-                                        "newCommitments[27]",
+                                        "newCommitments[24]",
+                                        "newCommitments[25]",
+                                        "newCommitments[31]",
+                                        "newCommitments[32]",
+                                        "newCommitments[18]",
                                         "newCommitments[17]"
                                     ]
                                 }
                             },
-                            "isjoinCommitmentsFunction": []
+                            "isjoinSplitCommitmentsFunction": []
                         },
                         {
                             "nodeType": "VariableDeclaration",
@@ -556,7 +560,7 @@
                         },
                         {
                             "nodeType": "VariableDeclaration",
-                            "name": "generatorCharges",
+                            "name": "generatorCfdNetPosition",
                             "visibility": "private",
                             "storageLocation": "default",
                             "typeDescriptions": {
@@ -584,7 +588,7 @@
                         },
                         {
                             "nodeType": "VariableDeclaration",
-                            "name": "offtakerCharges",
+                            "name": "offtakerCfdNetPosition",
                             "visibility": "private",
                             "storageLocation": "default",
                             "typeDescriptions": {
@@ -668,7 +672,35 @@
                         },
                         {
                             "nodeType": "VariableDeclaration",
-                            "name": "negativePriceCharges",
+                            "name": "offtakerNegativePriceCharges",
+                            "visibility": "private",
+                            "storageLocation": "default",
+                            "typeDescriptions": {
+                                "typeString": "mapping(uint256 => uint256)"
+                            },
+                            "typeName": {
+                                "nodeType": "Mapping",
+                                "keyType": {
+                                    "nodeType": "ElementaryTypeName",
+                                    "typeDescriptions": {
+                                        "typeString": "uint256"
+                                    }
+                                },
+                                "valueType": {
+                                    "nodeType": "ElementaryTypeName",
+                                    "typeDescriptions": {
+                                        "typeString": "uint256"
+                                    }
+                                },
+                                "typeDescriptions": {}
+                            },
+                            "isSecret": true,
+                            "interactsWithSecret": true,
+                            "declarationType": "state"
+                        },
+                        {
+                            "nodeType": "VariableDeclaration",
+                            "name": "generatorNegativePriceCharges",
                             "visibility": "private",
                             "storageLocation": "default",
                             "typeDescriptions": {
@@ -732,7 +764,25 @@
                         },
                         {
                             "nodeType": "VariableDeclaration",
-                            "name": "shortfallChargeSum",
+                            "name": "shortfallPositiveChargeSum",
+                            "visibility": "private",
+                            "storageLocation": "default",
+                            "typeDescriptions": {
+                                "typeString": "uint256"
+                            },
+                            "typeName": {
+                                "nodeType": "ElementaryTypeName",
+                                "typeDescriptions": {
+                                    "typeString": "uint256"
+                                }
+                            },
+                            "isSecret": true,
+                            "interactsWithSecret": true,
+                            "declarationType": "state"
+                        },
+                        {
+                            "nodeType": "VariableDeclaration",
+                            "name": "shortfallNegativeChargeSum",
                             "visibility": "private",
                             "storageLocation": "default",
                             "typeDescriptions": {
@@ -768,7 +818,35 @@
                         },
                         {
                             "nodeType": "VariableDeclaration",
-                            "name": "shortfallCharges",
+                            "name": "shortfallPositiveCharges",
+                            "visibility": "private",
+                            "storageLocation": "default",
+                            "typeDescriptions": {
+                                "typeString": "mapping(uint256 => uint256)"
+                            },
+                            "typeName": {
+                                "nodeType": "Mapping",
+                                "keyType": {
+                                    "nodeType": "ElementaryTypeName",
+                                    "typeDescriptions": {
+                                        "typeString": "uint256"
+                                    }
+                                },
+                                "valueType": {
+                                    "nodeType": "ElementaryTypeName",
+                                    "typeDescriptions": {
+                                        "typeString": "uint256"
+                                    }
+                                },
+                                "typeDescriptions": {}
+                            },
+                            "isSecret": true,
+                            "interactsWithSecret": true,
+                            "declarationType": "state"
+                        },
+                        {
+                            "nodeType": "VariableDeclaration",
+                            "name": "shortfallNegativeCharges",
                             "visibility": "private",
                             "storageLocation": "default",
                             "typeDescriptions": {
@@ -832,7 +910,25 @@
                         },
                         {
                             "nodeType": "VariableDeclaration",
-                            "name": "surplusChargeSum",
+                            "name": "surplusPositiveChargeSum",
+                            "visibility": "private",
+                            "storageLocation": "default",
+                            "typeDescriptions": {
+                                "typeString": "uint256"
+                            },
+                            "typeName": {
+                                "nodeType": "ElementaryTypeName",
+                                "typeDescriptions": {
+                                    "typeString": "uint256"
+                                }
+                            },
+                            "isSecret": true,
+                            "interactsWithSecret": true,
+                            "declarationType": "state"
+                        },
+                        {
+                            "nodeType": "VariableDeclaration",
+                            "name": "surplusNegativeChargeSum",
                             "visibility": "private",
                             "storageLocation": "default",
                             "typeDescriptions": {
@@ -868,7 +964,35 @@
                         },
                         {
                             "nodeType": "VariableDeclaration",
-                            "name": "surplusCharges",
+                            "name": "surplusPositiveCharges",
+                            "visibility": "private",
+                            "storageLocation": "default",
+                            "typeDescriptions": {
+                                "typeString": "mapping(uint256 => uint256)"
+                            },
+                            "typeName": {
+                                "nodeType": "Mapping",
+                                "keyType": {
+                                    "nodeType": "ElementaryTypeName",
+                                    "typeDescriptions": {
+                                        "typeString": "uint256"
+                                    }
+                                },
+                                "valueType": {
+                                    "nodeType": "ElementaryTypeName",
+                                    "typeDescriptions": {
+                                        "typeString": "uint256"
+                                    }
+                                },
+                                "typeDescriptions": {}
+                            },
+                            "isSecret": true,
+                            "interactsWithSecret": true,
+                            "declarationType": "state"
+                        },
+                        {
+                            "nodeType": "VariableDeclaration",
+                            "name": "surplusNegativeCharges",
                             "visibility": "private",
                             "storageLocation": "default",
                             "typeDescriptions": {
@@ -2497,43 +2621,81 @@
                                                 "name": "newCommitments[13]",
                                                 "typeName": {
                                                     "name": "uint256"
-                                                }
+                                                },
+                                                "isReturn": true,
+                                                "isCommitment": true
                                             },
                                             {
                                                 "name": "newCommitments[14]",
                                                 "typeName": {
                                                     "name": "uint256"
-                                                }
+                                                },
+                                                "isReturn": true,
+                                                "isCommitment": true
                                             },
                                             {
                                                 "name": "newCommitments[15]",
                                                 "typeName": {
                                                     "name": "uint256"
-                                                }
+                                                },
+                                                "isReturn": true,
+                                                "isCommitment": true
                                             },
                                             {
                                                 "name": "newCommitments[16]",
                                                 "typeName": {
                                                     "name": "uint256"
-                                                }
+                                                },
+                                                "isReturn": true,
+                                                "isCommitment": true
                                             },
                                             {
-                                                "name": "newCommitments[22]",
+                                                "name": "newCommitments[24]",
                                                 "typeName": {
                                                     "name": "uint256"
-                                                }
+                                                },
+                                                "isReturn": true,
+                                                "isCommitment": true
                                             },
                                             {
-                                                "name": "newCommitments[27]",
+                                                "name": "newCommitments[25]",
                                                 "typeName": {
                                                     "name": "uint256"
-                                                }
+                                                },
+                                                "isReturn": true,
+                                                "isCommitment": true
+                                            },
+                                            {
+                                                "name": "newCommitments[31]",
+                                                "typeName": {
+                                                    "name": "uint256"
+                                                },
+                                                "isReturn": true,
+                                                "isCommitment": true
+                                            },
+                                            {
+                                                "name": "newCommitments[32]",
+                                                "typeName": {
+                                                    "name": "uint256"
+                                                },
+                                                "isReturn": true,
+                                                "isCommitment": true
+                                            },
+                                            {
+                                                "name": "newCommitments[18]",
+                                                "typeName": {
+                                                    "name": "uint256"
+                                                },
+                                                "isReturn": true,
+                                                "isCommitment": true
                                             },
                                             {
                                                 "name": "newCommitments[17]",
                                                 "typeName": {
                                                     "name": "uint256"
-                                                }
+                                                },
+                                                "isReturn": true,
+                                                "isCommitment": true
                                             }
                                         ],
                                         "functionName": "calculateCfd",
@@ -2849,6 +3011,54 @@
                             "returnParameters": {
                                 "nodeType": "ParameterList",
                                 "parameters": [
+                                    {
+                                        "nodeType": "VariableDeclaration",
+                                        "visibility": "internal",
+                                        "storageLocation": "default",
+                                        "typeDescriptions": {
+                                            "typeString": "uint256"
+                                        },
+                                        "typeName": {
+                                            "nodeType": "ElementaryTypeName",
+                                            "typeDescriptions": {
+                                                "typeString": "uint256"
+                                            }
+                                        },
+                                        "interactsWithSecret": false,
+                                        "declarationType": ""
+                                    },
+                                    {
+                                        "nodeType": "VariableDeclaration",
+                                        "visibility": "internal",
+                                        "storageLocation": "default",
+                                        "typeDescriptions": {
+                                            "typeString": "uint256"
+                                        },
+                                        "typeName": {
+                                            "nodeType": "ElementaryTypeName",
+                                            "typeDescriptions": {
+                                                "typeString": "uint256"
+                                            }
+                                        },
+                                        "interactsWithSecret": false,
+                                        "declarationType": ""
+                                    },
+                                    {
+                                        "nodeType": "VariableDeclaration",
+                                        "visibility": "internal",
+                                        "storageLocation": "default",
+                                        "typeDescriptions": {
+                                            "typeString": "uint256"
+                                        },
+                                        "typeName": {
+                                            "nodeType": "ElementaryTypeName",
+                                            "typeDescriptions": {
+                                                "typeString": "uint256"
+                                            }
+                                        },
+                                        "interactsWithSecret": false,
+                                        "declarationType": ""
+                                    },
                                     {
                                         "nodeType": "VariableDeclaration",
                                         "visibility": "internal",

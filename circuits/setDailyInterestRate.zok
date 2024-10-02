@@ -4,6 +4,8 @@ from "ecc/edwardsCompress" import main as edwardsCompress
 from "utils/pack/bool/pack256.zok" import main as bool_256_to_field
 from "utils/pack/bool/nonStrictUnpack256.zok" import main as field_to_bool_256
 from "hashes/poseidon/poseidon.zok" import main as poseidon
+from "./common/merkle-tree/sparse-merkle-tree/checkproof.zok" import main as checkproof
+from "./common/merkle-tree/sparse-merkle-tree/checkproof.zok" import checkUpdatedPath as checkUpdatedPath
 from "./common/merkle-tree/mimc/altbn254/verify-membership/height32.zok" import main as checkRoot
 
 def main(\
@@ -55,14 +57,22 @@ dailyInterestRate = dailyInterestRateParam
         assert(\
         field_to_bool_256(dailyInterestRate_oldCommitment_nullifier)[8..256] == field_to_bool_256(dailyInterestRate_oldCommitment_nullifier_check_field)[8..256]\
         )
+        // dailyInterestRate_oldCommitment_nullifier : non-existence check
+        
+        
 
 
+
+        // prepare secret state 'dailyInterestRate' for commitment
+
+          field dailyInterestRate_oldCommitment_value_field = dailyInterestRate_oldCommitment_value
+          
         // dailyInterestRate_oldCommitment_commitment: preimage check
 
 
         field dailyInterestRate_oldCommitment_commitment_field = poseidon([\
           dailyInterestRate_stateVarId_field,\
-          dailyInterestRate_oldCommitment_value,\
+          dailyInterestRate_oldCommitment_value_field,\
           dailyInterestRate_oldCommitment_owner_publicKey,\
           dailyInterestRate_oldCommitment_salt        ])
 

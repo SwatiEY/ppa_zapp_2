@@ -6,8 +6,6 @@ import calculateCfd from "./calculateCfd.mjs";
 
 import setInitialContractParams from "./setInitialContractParams.mjs";
 
-import initSurplusSequenceNumber from "./initSurplusSequenceNumber.mjs";
-
 import initSequenceNumber from "./initSequenceNumber.mjs";
 
 import setSequenceNumberInterval from "./setSequenceNumberInterval.mjs";
@@ -15,6 +13,8 @@ import setSequenceNumberInterval from "./setSequenceNumberInterval.mjs";
 import setVolumeShare from "./setVolumeShare.mjs";
 
 import setExpiryDateOfContract from "./setExpiryDateOfContract.mjs";
+
+import setStartDateOfContract from "./setStartDateOfContract.mjs";
 
 import setDailyInterestRate from "./setDailyInterestRate.mjs";
 
@@ -76,7 +76,7 @@ describe("SyntheticPpaShield", async function () {
 					await startEventFilter("SyntheticPpaShield");
 					// this calls your function! It returns the tx from the shield contract
 					// you can replace the values below - numbers are randomly generated
-					const { tx, encEvent } = await setStrikePrice(61);
+					const { tx, encEvent, encBackupEvent } = await setStrikePrice(47);
 					// prints the tx
 					console.log(tx);
 					// reassigns leafIndex to the index of the first commitment added by this function
@@ -116,7 +116,7 @@ describe("SyntheticPpaShield", async function () {
 			it("should call setStrikePrice again", async () => {
 				try {
 					// this calls your function a second time for incremental cases
-					const { tx } = await setStrikePrice(145);
+					const { tx } = await setStrikePrice(19);
 					if (tx.event) {
 						console.log(`Merkle tree event returnValues:`);
 						console.log(tx.returnValues[0]);
@@ -146,7 +146,7 @@ describe("SyntheticPpaShield", async function () {
 					await startEventFilter("SyntheticPpaShield");
 					// this calls your function! It returns the tx from the shield contract
 					// you can replace the values below - numbers are randomly generated
-					const { tx, encEvent } = await setBundlePrice(50);
+					const { tx, encEvent, encBackupEvent } = await setBundlePrice(115);
 					// prints the tx
 					console.log(tx);
 					// reassigns leafIndex to the index of the first commitment added by this function
@@ -186,7 +186,7 @@ describe("SyntheticPpaShield", async function () {
 			it("should call setBundlePrice again", async () => {
 				try {
 					// this calls your function a second time for incremental cases
-					const { tx } = await setBundlePrice(41);
+					const { tx } = await setBundlePrice(169);
 					if (tx.event) {
 						console.log(`Merkle tree event returnValues:`);
 						console.log(tx.returnValues[0]);
@@ -216,7 +216,9 @@ describe("SyntheticPpaShield", async function () {
 					await startEventFilter("SyntheticPpaShield");
 					// this calls your function! It returns the tx from the shield contract
 					// you can replace the values below - numbers are randomly generated
-					const { tx, encEvent } = await setShortfallThreshold(117);
+					const { tx, encEvent, encBackupEvent } = await setShortfallThreshold(
+						190
+					);
 					// prints the tx
 					console.log(tx);
 					// reassigns leafIndex to the index of the first commitment added by this function
@@ -256,7 +258,7 @@ describe("SyntheticPpaShield", async function () {
 			it("should call setShortfallThreshold again", async () => {
 				try {
 					// this calls your function a second time for incremental cases
-					const { tx } = await setShortfallThreshold(100);
+					const { tx } = await setShortfallThreshold(86);
 					if (tx.event) {
 						console.log(`Merkle tree event returnValues:`);
 						console.log(tx.returnValues[0]);
@@ -286,7 +288,9 @@ describe("SyntheticPpaShield", async function () {
 					await startEventFilter("SyntheticPpaShield");
 					// this calls your function! It returns the tx from the shield contract
 					// you can replace the values below - numbers are randomly generated
-					const { tx, encEvent } = await setShortfallPeriods(101);
+					const { tx, encEvent, encBackupEvent } = await setShortfallPeriods(
+						120
+					);
 					// prints the tx
 					console.log(tx);
 					// reassigns leafIndex to the index of the first commitment added by this function
@@ -326,7 +330,7 @@ describe("SyntheticPpaShield", async function () {
 			it("should call setShortfallPeriods again", async () => {
 				try {
 					// this calls your function a second time for incremental cases
-					const { tx } = await setShortfallPeriods(76);
+					const { tx } = await setShortfallPeriods(51);
 					if (tx.event) {
 						console.log(`Merkle tree event returnValues:`);
 						console.log(tx.returnValues[0]);
@@ -356,7 +360,9 @@ describe("SyntheticPpaShield", async function () {
 					await startEventFilter("SyntheticPpaShield");
 					// this calls your function! It returns the tx from the shield contract
 					// you can replace the values below - numbers are randomly generated
-					const { tx, encEvent } = await setSurplusThreshold(69);
+					const { tx, encEvent, encBackupEvent } = await setSurplusThreshold(
+						75
+					);
 					// prints the tx
 					console.log(tx);
 					// reassigns leafIndex to the index of the first commitment added by this function
@@ -396,7 +402,7 @@ describe("SyntheticPpaShield", async function () {
 			it("should call setSurplusThreshold again", async () => {
 				try {
 					// this calls your function a second time for incremental cases
-					const { tx } = await setSurplusThreshold(178);
+					const { tx } = await setSurplusThreshold(11);
 					if (tx.event) {
 						console.log(`Merkle tree event returnValues:`);
 						console.log(tx.returnValues[0]);
@@ -426,7 +432,7 @@ describe("SyntheticPpaShield", async function () {
 					await startEventFilter("SyntheticPpaShield");
 					// this calls your function! It returns the tx from the shield contract
 					// you can replace the values below - numbers are randomly generated
-					const { tx, encEvent } = await setSurplusPeriods(7);
+					const { tx, encEvent, encBackupEvent } = await setSurplusPeriods(81);
 					// prints the tx
 					console.log(tx);
 					// reassigns leafIndex to the index of the first commitment added by this function
@@ -466,7 +472,7 @@ describe("SyntheticPpaShield", async function () {
 			it("should call setSurplusPeriods again", async () => {
 				try {
 					// this calls your function a second time for incremental cases
-					const { tx } = await setSurplusPeriods(87);
+					const { tx } = await setSurplusPeriods(53);
 					if (tx.event) {
 						console.log(`Merkle tree event returnValues:`);
 						console.log(tx.returnValues[0]);
@@ -496,7 +502,9 @@ describe("SyntheticPpaShield", async function () {
 					await startEventFilter("SyntheticPpaShield");
 					// this calls your function! It returns the tx from the shield contract
 					// you can replace the values below - numbers are randomly generated
-					const { tx, encEvent } = await setDailyInterestRate(137);
+					const { tx, encEvent, encBackupEvent } = await setDailyInterestRate(
+						162
+					);
 					// prints the tx
 					console.log(tx);
 					// reassigns leafIndex to the index of the first commitment added by this function
@@ -536,7 +544,79 @@ describe("SyntheticPpaShield", async function () {
 			it("should call setDailyInterestRate again", async () => {
 				try {
 					// this calls your function a second time for incremental cases
-					const { tx } = await setDailyInterestRate(165);
+					const { tx } = await setDailyInterestRate(4);
+					if (tx.event) {
+						console.log(`Merkle tree event returnValues:`);
+						console.log(tx.returnValues[0]);
+					}
+				} catch (err) {
+					logger.error(err);
+					process.exit(1);
+				}
+			});
+		});
+	});
+
+	// eslint-disable-next-line func-names
+	describe("setStartDateOfContract", async function () {
+		this.timeout(3660000);
+		try {
+			await web3.connect();
+		} catch (err) {
+			throw new Error(err);
+		}
+		// eslint-disable-next-line func-names
+		describe("First call", async function () {
+			this.timeout(3660000);
+			it("should call setStartDateOfContract", async () => {
+				try {
+					// this starts up the merkle tree's event filter
+					await startEventFilter("SyntheticPpaShield");
+					// this calls your function! It returns the tx from the shield contract
+					// you can replace the values below - numbers are randomly generated
+					const { tx, encEvent, encBackupEvent } = await setStartDateOfContract(
+						132
+					);
+					// prints the tx
+					console.log(tx);
+					// reassigns leafIndex to the index of the first commitment added by this function
+					if (tx.event) {
+						leafIndex = tx.returnValues[0];
+						// prints the new leaves (commitments) added by this function call
+						console.log(`Merkle tree event returnValues:`);
+						console.log(tx.returnValues[0]);
+					}
+					if (encEvent[0].event) {
+						encryption.msgs = encEvent[0].returnValues[0];
+						encryption.key = encEvent[0].returnValues[1];
+						console.log("EncryptedMsgs:");
+						console.log(encEvent[0].returnValues[0]);
+					}
+					await sleep(10);
+				} catch (err) {
+					logger.error(err);
+					process.exit(1);
+				}
+			});
+			it("should update the merkle tree", async () => {
+				try {
+					// this is the path from your new commitment to the root of the tree - it's needed to show the commitment exists when you want to edit your secret state
+					const path = await getSiblingPath("SyntheticPpaShield", leafIndex);
+					console.log("Queried sibling path:");
+					console.table(path, ["value", "nodeIndex"]);
+				} catch (err) {
+					logger.error(err);
+					process.exit(1);
+				}
+			});
+		});
+		// eslint-disable-next-line func-names
+		describe("Second Call", async function () {
+			this.timeout(3660000);
+			it("should call setStartDateOfContract again", async () => {
+				try {
+					// this calls your function a second time for incremental cases
+					const { tx } = await setStartDateOfContract(37);
 					if (tx.event) {
 						console.log(`Merkle tree event returnValues:`);
 						console.log(tx.returnValues[0]);
@@ -566,7 +646,8 @@ describe("SyntheticPpaShield", async function () {
 					await startEventFilter("SyntheticPpaShield");
 					// this calls your function! It returns the tx from the shield contract
 					// you can replace the values below - numbers are randomly generated
-					const { tx, encEvent } = await setExpiryDateOfContract(82);
+					const { tx, encEvent, encBackupEvent } =
+						await setExpiryDateOfContract(44);
 					// prints the tx
 					console.log(tx);
 					// reassigns leafIndex to the index of the first commitment added by this function
@@ -606,7 +687,7 @@ describe("SyntheticPpaShield", async function () {
 			it("should call setExpiryDateOfContract again", async () => {
 				try {
 					// this calls your function a second time for incremental cases
-					const { tx } = await setExpiryDateOfContract(67);
+					const { tx } = await setExpiryDateOfContract(106);
 					if (tx.event) {
 						console.log(`Merkle tree event returnValues:`);
 						console.log(tx.returnValues[0]);
@@ -636,7 +717,7 @@ describe("SyntheticPpaShield", async function () {
 					await startEventFilter("SyntheticPpaShield");
 					// this calls your function! It returns the tx from the shield contract
 					// you can replace the values below - numbers are randomly generated
-					const { tx, encEvent } = await setVolumeShare(16);
+					const { tx, encEvent, encBackupEvent } = await setVolumeShare(24);
 					// prints the tx
 					console.log(tx);
 					// reassigns leafIndex to the index of the first commitment added by this function
@@ -676,7 +757,7 @@ describe("SyntheticPpaShield", async function () {
 			it("should call setVolumeShare again", async () => {
 				try {
 					// this calls your function a second time for incremental cases
-					const { tx } = await setVolumeShare(196);
+					const { tx } = await setVolumeShare(113);
 					if (tx.event) {
 						console.log(`Merkle tree event returnValues:`);
 						console.log(tx.returnValues[0]);
@@ -706,7 +787,8 @@ describe("SyntheticPpaShield", async function () {
 					await startEventFilter("SyntheticPpaShield");
 					// this calls your function! It returns the tx from the shield contract
 					// you can replace the values below - numbers are randomly generated
-					const { tx, encEvent } = await setSequenceNumberInterval(49);
+					const { tx, encEvent, encBackupEvent } =
+						await setSequenceNumberInterval(129);
 					// prints the tx
 					console.log(tx);
 					// reassigns leafIndex to the index of the first commitment added by this function
@@ -746,7 +828,7 @@ describe("SyntheticPpaShield", async function () {
 			it("should call setSequenceNumberInterval again", async () => {
 				try {
 					// this calls your function a second time for incremental cases
-					const { tx } = await setSequenceNumberInterval(33);
+					const { tx } = await setSequenceNumberInterval(18);
 					if (tx.event) {
 						console.log(`Merkle tree event returnValues:`);
 						console.log(tx.returnValues[0]);
@@ -776,7 +858,7 @@ describe("SyntheticPpaShield", async function () {
 					await startEventFilter("SyntheticPpaShield");
 					// this calls your function! It returns the tx from the shield contract
 					// you can replace the values below - numbers are randomly generated
-					const { tx, encEvent } = await initSequenceNumber();
+					const { tx, encEvent, encBackupEvent } = await initSequenceNumber();
 					// prints the tx
 					console.log(tx);
 					// reassigns leafIndex to the index of the first commitment added by this function
@@ -830,76 +912,6 @@ describe("SyntheticPpaShield", async function () {
 	});
 
 	// eslint-disable-next-line func-names
-	describe("initSurplusSequenceNumber", async function () {
-		this.timeout(3660000);
-		try {
-			await web3.connect();
-		} catch (err) {
-			throw new Error(err);
-		}
-		// eslint-disable-next-line func-names
-		describe("First call", async function () {
-			this.timeout(3660000);
-			it("should call initSurplusSequenceNumber", async () => {
-				try {
-					// this starts up the merkle tree's event filter
-					await startEventFilter("SyntheticPpaShield");
-					// this calls your function! It returns the tx from the shield contract
-					// you can replace the values below - numbers are randomly generated
-					const { tx, encEvent } = await initSurplusSequenceNumber();
-					// prints the tx
-					console.log(tx);
-					// reassigns leafIndex to the index of the first commitment added by this function
-					if (tx.event) {
-						leafIndex = tx.returnValues[0];
-						// prints the new leaves (commitments) added by this function call
-						console.log(`Merkle tree event returnValues:`);
-						console.log(tx.returnValues[0]);
-					}
-					if (encEvent[0].event) {
-						encryption.msgs = encEvent[0].returnValues[0];
-						encryption.key = encEvent[0].returnValues[1];
-						console.log("EncryptedMsgs:");
-						console.log(encEvent[0].returnValues[0]);
-					}
-					await sleep(10);
-				} catch (err) {
-					logger.error(err);
-					process.exit(1);
-				}
-			});
-			it("should update the merkle tree", async () => {
-				try {
-					// this is the path from your new commitment to the root of the tree - it's needed to show the commitment exists when you want to edit your secret state
-					const path = await getSiblingPath("SyntheticPpaShield", leafIndex);
-					console.log("Queried sibling path:");
-					console.table(path, ["value", "nodeIndex"]);
-				} catch (err) {
-					logger.error(err);
-					process.exit(1);
-				}
-			});
-		});
-		// eslint-disable-next-line func-names
-		describe("Second Call", async function () {
-			this.timeout(3660000);
-			it("should call initSurplusSequenceNumber again", async () => {
-				try {
-					// this calls your function a second time for incremental cases
-					const { tx } = await initSurplusSequenceNumber();
-					if (tx.event) {
-						console.log(`Merkle tree event returnValues:`);
-						console.log(tx.returnValues[0]);
-					}
-				} catch (err) {
-					logger.error(err);
-					process.exit(1);
-				}
-			});
-		});
-	});
-
-	// eslint-disable-next-line func-names
 	describe("setInitialContractParams", async function () {
 		this.timeout(3660000);
 		try {
@@ -916,19 +928,20 @@ describe("SyntheticPpaShield", async function () {
 					await startEventFilter("SyntheticPpaShield");
 					// this calls your function! It returns the tx from the shield contract
 					// you can replace the values below - numbers are randomly generated
-					const { tx, encEvent } = await setInitialContractParams(
-						121,
-						168,
-						43,
-						73,
-						76,
-						125,
-						166,
-						105,
-						59,
-						104,
-						49
-					);
+					const { tx, encEvent, encBackupEvent } =
+						await setInitialContractParams(
+							143,
+							124,
+							59,
+							159,
+							2,
+							152,
+							22,
+							7,
+							135,
+							124,
+							80
+						);
 					// prints the tx
 					console.log(tx);
 					// reassigns leafIndex to the index of the first commitment added by this function
@@ -969,17 +982,17 @@ describe("SyntheticPpaShield", async function () {
 				try {
 					// this calls your function a second time for incremental cases
 					const { tx } = await setInitialContractParams(
-						5,
-						153,
-						61,
-						160,
-						172,
-						44,
+						168,
+						120,
+						104,
+						28,
+						135,
+						171,
+						110,
+						80,
 						193,
-						119,
-						152,
-						102,
-						138
+						58,
+						113
 					);
 					if (tx.event) {
 						console.log(`Merkle tree event returnValues:`);
@@ -1010,21 +1023,22 @@ describe("SyntheticPpaShield", async function () {
 					await startEventFilter("SyntheticPpaShield");
 					// this calls your function! It returns the tx from the shield contract
 					// you can replace the values below - numbers are randomly generated
-					const { tx, encEvent } = await calculateCfd(
-						169,
-						188,
-						63,
-						61,
-						131,
-						78,
-						109,
-						17,
-						111,
+					const { tx, encEvent, encBackupEvent } = await calculateCfd(
+						114,
+						164,
+						100,
+						134,
+						48,
+						20,
+						138,
+						19,
+						190,
 						0,
 						0,
 						0,
 						0,
-						164
+						true,
+						68
 					);
 					// prints the tx
 					console.log(tx);
@@ -1066,20 +1080,21 @@ describe("SyntheticPpaShield", async function () {
 				try {
 					// this calls your function a second time for incremental cases
 					const { tx } = await calculateCfd(
+						181,
+						130,
+						140,
+						81,
 						32,
-						138,
-						186,
-						137,
-						50,
-						196,
-						87,
-						158,
-						107,
+						62,
+						98,
+						54,
+						104,
 						0,
 						0,
 						0,
 						0,
-						146
+						true,
+						152
 					);
 					if (tx.event) {
 						console.log(`Merkle tree event returnValues:`);

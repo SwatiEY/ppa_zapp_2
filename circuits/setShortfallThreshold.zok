@@ -25,7 +25,7 @@ def main(\
 
         
         // We need to hard-code each stateVarId into the circuit:
-        field shortfallThreshold_stateVarId_field = 41
+        field shortfallThreshold_stateVarId_field = 68
 
 
         field shortfallThreshold = shortfallThreshold_oldCommitment_value
@@ -59,13 +59,20 @@ shortfallThreshold = shortfallThresholdParam
         )
         // shortfallThreshold_oldCommitment_nullifier : non-existence check
         
+        
 
+
+
+        // prepare secret state 'shortfallThreshold' for commitment
+
+          field shortfallThreshold_oldCommitment_value_field = shortfallThreshold_oldCommitment_value
+          
         // shortfallThreshold_oldCommitment_commitment: preimage check
 
 
         field shortfallThreshold_oldCommitment_commitment_field = poseidon([\
           shortfallThreshold_stateVarId_field,\
-          shortfallThreshold_oldCommitment_value,\
+          shortfallThreshold_oldCommitment_value_field,\
           shortfallThreshold_oldCommitment_owner_publicKey,\
           shortfallThreshold_oldCommitment_salt        ])
 

@@ -4,6 +4,8 @@ from "ecc/edwardsCompress" import main as edwardsCompress
 from "utils/pack/bool/pack256.zok" import main as bool_256_to_field
 from "utils/pack/bool/nonStrictUnpack256.zok" import main as field_to_bool_256
 from "hashes/poseidon/poseidon.zok" import main as poseidon
+from "./common/merkle-tree/sparse-merkle-tree/checkproof.zok" import main as checkproof
+from "./common/merkle-tree/sparse-merkle-tree/checkproof.zok" import checkUpdatedPath as checkUpdatedPath
 from "./common/merkle-tree/mimc/altbn254/verify-membership/height32.zok" import main as checkRoot
 
 def main(\
@@ -15,7 +17,7 @@ def main(\
 	private field numberOfConsecutivePeriodsForSurplusParam,\
 	private field surplusThresholdParam,\
 	private field dailyInterestRateParam,\
-  private field startDateOfContractParam,\
+	private field startDateOfContractParam,\
 	private field expiryDateOfContractParam,\
 	private field sequenceNumberIntervalParam,\
 	private field strikePrice_oldCommitment_owner_secretKey,\
@@ -59,7 +61,7 @@ def main(\
 	private field dailyInterestRate_newCommitment_owner_publicKey,\
 	private field dailyInterestRate_newCommitment_salt,\
 	public field dailyInterestRate_newCommitment_commitment,\
-  private field startDateOfContract_oldCommitment_owner_secretKey,\
+	private field startDateOfContract_oldCommitment_owner_secretKey,\
 	public field startDateOfContract_oldCommitment_nullifier,\
 	private  field startDateOfContract_oldCommitment_value,\
 	private field startDateOfContract_oldCommitment_salt,\
@@ -179,12 +181,12 @@ def main(\
 
         field dailyInterestRate = dailyInterestRate_oldCommitment_value
 
+
         // We need to hard-code each stateVarId into the circuit:
         field startDateOfContract_stateVarId_field = 13
 
 
         field startDateOfContract = startDateOfContract_oldCommitment_value
-
 
 
         // We need to hard-code each stateVarId into the circuit:
@@ -195,55 +197,52 @@ def main(\
 
 
         // We need to hard-code each stateVarId into the circuit:
-        field latestShortfallSequenceNumber_stateVarId_field = 19
+        field latestShortfallSequenceNumber_stateVarId_field = 24
 
 
         field latestShortfallSequenceNumber = latestShortfallSequenceNumber_oldCommitment_value
 
 
         // We need to hard-code each stateVarId into the circuit:
-        field latestSurplusSequenceNumber_stateVarId_field = 23
+        field latestSurplusSequenceNumber_stateVarId_field = 31
 
 
         field latestSurplusSequenceNumber = latestSurplusSequenceNumber_oldCommitment_value
 
 
         // We need to hard-code each stateVarId into the circuit:
-        field sequenceNumberInterval_stateVarId_field = 25
+        field sequenceNumberInterval_stateVarId_field = 33
 
 
         field sequenceNumberInterval = sequenceNumberInterval_oldCommitment_value
 
 
         // We need to hard-code each stateVarId into the circuit:
-        field numberOfConsecutivePeriodsForShortfall_stateVarId_field = 39
+        field numberOfConsecutivePeriodsForShortfall_stateVarId_field = 66
 
 
         field numberOfConsecutivePeriodsForShortfall = numberOfConsecutivePeriodsForShortfall_oldCommitment_value
 
 
         // We need to hard-code each stateVarId into the circuit:
-        field shortfallThreshold_stateVarId_field = 41
+        field shortfallThreshold_stateVarId_field = 68
 
 
         field shortfallThreshold = shortfallThreshold_oldCommitment_value
 
 
         // We need to hard-code each stateVarId into the circuit:
-        field numberOfConsecutivePeriodsForSurplus_stateVarId_field = 53
+        field numberOfConsecutivePeriodsForSurplus_stateVarId_field = 84
 
 
         field numberOfConsecutivePeriodsForSurplus = numberOfConsecutivePeriodsForSurplus_oldCommitment_value
 
 
         // We need to hard-code each stateVarId into the circuit:
-        field surplusThreshold_stateVarId_field = 55
+        field surplusThreshold_stateVarId_field = 86
 
 
         field surplusThreshold = surplusThreshold_oldCommitment_value
-
-
-
 
 volumeShare = volumeShareParam
 
@@ -296,17 +295,22 @@ latestSurplusSequenceNumber = 0
         assert(\
         field_to_bool_256(strikePrice_oldCommitment_nullifier)[8..256] == field_to_bool_256(strikePrice_oldCommitment_nullifier_check_field)[8..256]\
         )
+        // strikePrice_oldCommitment_nullifier : non-existence check
+        
         
 
-        
 
 
+        // prepare secret state 'strikePrice' for commitment
+
+          field strikePrice_oldCommitment_value_field = strikePrice_oldCommitment_value
+          
         // strikePrice_oldCommitment_commitment: preimage check
 
 
         field strikePrice_oldCommitment_commitment_field = poseidon([\
           strikePrice_stateVarId_field,\
-          strikePrice_oldCommitment_value,\
+          strikePrice_oldCommitment_value_field,\
           strikePrice_oldCommitment_owner_publicKey,\
           strikePrice_oldCommitment_salt        ])
 
@@ -372,16 +376,22 @@ latestSurplusSequenceNumber = 0
         assert(\
         field_to_bool_256(bundlePrice_oldCommitment_nullifier)[8..256] == field_to_bool_256(bundlePrice_oldCommitment_nullifier_check_field)[8..256]\
         )
+        // bundlePrice_oldCommitment_nullifier : non-existence check
         
         
 
 
+
+        // prepare secret state 'bundlePrice' for commitment
+
+          field bundlePrice_oldCommitment_value_field = bundlePrice_oldCommitment_value
+          
         // bundlePrice_oldCommitment_commitment: preimage check
 
 
         field bundlePrice_oldCommitment_commitment_field = poseidon([\
           bundlePrice_stateVarId_field,\
-          bundlePrice_oldCommitment_value,\
+          bundlePrice_oldCommitment_value_field,\
           bundlePrice_oldCommitment_owner_publicKey,\
           bundlePrice_oldCommitment_salt        ])
 
@@ -447,15 +457,22 @@ latestSurplusSequenceNumber = 0
         assert(\
         field_to_bool_256(volumeShare_oldCommitment_nullifier)[8..256] == field_to_bool_256(volumeShare_oldCommitment_nullifier_check_field)[8..256]\
         )
+        // volumeShare_oldCommitment_nullifier : non-existence check
+        
         
 
 
+
+        // prepare secret state 'volumeShare' for commitment
+
+          field volumeShare_oldCommitment_value_field = volumeShare_oldCommitment_value
+          
         // volumeShare_oldCommitment_commitment: preimage check
 
 
         field volumeShare_oldCommitment_commitment_field = poseidon([\
           volumeShare_stateVarId_field,\
-          volumeShare_oldCommitment_value,\
+          volumeShare_oldCommitment_value_field,\
           volumeShare_oldCommitment_owner_publicKey,\
           volumeShare_oldCommitment_salt        ])
 
@@ -521,15 +538,22 @@ latestSurplusSequenceNumber = 0
         assert(\
         field_to_bool_256(dailyInterestRate_oldCommitment_nullifier)[8..256] == field_to_bool_256(dailyInterestRate_oldCommitment_nullifier_check_field)[8..256]\
         )
+        // dailyInterestRate_oldCommitment_nullifier : non-existence check
+        
         
 
 
+
+        // prepare secret state 'dailyInterestRate' for commitment
+
+          field dailyInterestRate_oldCommitment_value_field = dailyInterestRate_oldCommitment_value
+          
         // dailyInterestRate_oldCommitment_commitment: preimage check
 
 
         field dailyInterestRate_oldCommitment_commitment_field = poseidon([\
           dailyInterestRate_stateVarId_field,\
-          dailyInterestRate_oldCommitment_value,\
+          dailyInterestRate_oldCommitment_value_field,\
           dailyInterestRate_oldCommitment_owner_publicKey,\
           dailyInterestRate_oldCommitment_salt        ])
 
@@ -595,15 +619,22 @@ latestSurplusSequenceNumber = 0
         assert(\
         field_to_bool_256(startDateOfContract_oldCommitment_nullifier)[8..256] == field_to_bool_256(startDateOfContract_oldCommitment_nullifier_check_field)[8..256]\
         )
+        // startDateOfContract_oldCommitment_nullifier : non-existence check
+        
         
 
 
+
+        // prepare secret state 'startDateOfContract' for commitment
+
+          field startDateOfContract_oldCommitment_value_field = startDateOfContract_oldCommitment_value
+          
         // startDateOfContract_oldCommitment_commitment: preimage check
 
 
         field startDateOfContract_oldCommitment_commitment_field = poseidon([\
           startDateOfContract_stateVarId_field,\
-          startDateOfContract_oldCommitment_value,\
+          startDateOfContract_oldCommitment_value_field,\
           startDateOfContract_oldCommitment_owner_publicKey,\
           startDateOfContract_oldCommitment_salt        ])
 
@@ -645,7 +676,6 @@ latestSurplusSequenceNumber = 0
         )
 
 
-
         // expiryDateOfContract_oldCommitment - PoKoSK:
         // The correctness of this secret key will be constrained within the oldCommitment existence check.
 
@@ -670,16 +700,22 @@ latestSurplusSequenceNumber = 0
         assert(\
         field_to_bool_256(expiryDateOfContract_oldCommitment_nullifier)[8..256] == field_to_bool_256(expiryDateOfContract_oldCommitment_nullifier_check_field)[8..256]\
         )
+        // expiryDateOfContract_oldCommitment_nullifier : non-existence check
         
         
 
 
+
+        // prepare secret state 'expiryDateOfContract' for commitment
+
+          field expiryDateOfContract_oldCommitment_value_field = expiryDateOfContract_oldCommitment_value
+          
         // expiryDateOfContract_oldCommitment_commitment: preimage check
 
 
         field expiryDateOfContract_oldCommitment_commitment_field = poseidon([\
           expiryDateOfContract_stateVarId_field,\
-          expiryDateOfContract_oldCommitment_value,\
+          expiryDateOfContract_oldCommitment_value_field,\
           expiryDateOfContract_oldCommitment_owner_publicKey,\
           expiryDateOfContract_oldCommitment_salt        ])
 
@@ -745,16 +781,22 @@ latestSurplusSequenceNumber = 0
         assert(\
         field_to_bool_256(latestShortfallSequenceNumber_oldCommitment_nullifier)[8..256] == field_to_bool_256(latestShortfallSequenceNumber_oldCommitment_nullifier_check_field)[8..256]\
         )
+        // latestShortfallSequenceNumber_oldCommitment_nullifier : non-existence check
         
         
 
 
+
+        // prepare secret state 'latestShortfallSequenceNumber' for commitment
+
+          field latestShortfallSequenceNumber_oldCommitment_value_field = latestShortfallSequenceNumber_oldCommitment_value
+          
         // latestShortfallSequenceNumber_oldCommitment_commitment: preimage check
 
 
         field latestShortfallSequenceNumber_oldCommitment_commitment_field = poseidon([\
           latestShortfallSequenceNumber_stateVarId_field,\
-          latestShortfallSequenceNumber_oldCommitment_value,\
+          latestShortfallSequenceNumber_oldCommitment_value_field,\
           latestShortfallSequenceNumber_oldCommitment_owner_publicKey,\
           latestShortfallSequenceNumber_oldCommitment_salt        ])
 
@@ -820,16 +862,22 @@ latestSurplusSequenceNumber = 0
         assert(\
         field_to_bool_256(latestSurplusSequenceNumber_oldCommitment_nullifier)[8..256] == field_to_bool_256(latestSurplusSequenceNumber_oldCommitment_nullifier_check_field)[8..256]\
         )
-    
-      
+        // latestSurplusSequenceNumber_oldCommitment_nullifier : non-existence check
+        
+        
 
 
+
+        // prepare secret state 'latestSurplusSequenceNumber' for commitment
+
+          field latestSurplusSequenceNumber_oldCommitment_value_field = latestSurplusSequenceNumber_oldCommitment_value
+          
         // latestSurplusSequenceNumber_oldCommitment_commitment: preimage check
 
 
         field latestSurplusSequenceNumber_oldCommitment_commitment_field = poseidon([\
           latestSurplusSequenceNumber_stateVarId_field,\
-          latestSurplusSequenceNumber_oldCommitment_value,\
+          latestSurplusSequenceNumber_oldCommitment_value_field,\
           latestSurplusSequenceNumber_oldCommitment_owner_publicKey,\
           latestSurplusSequenceNumber_oldCommitment_salt        ])
 
@@ -895,15 +943,22 @@ latestSurplusSequenceNumber = 0
         assert(\
         field_to_bool_256(sequenceNumberInterval_oldCommitment_nullifier)[8..256] == field_to_bool_256(sequenceNumberInterval_oldCommitment_nullifier_check_field)[8..256]\
         )
+        // sequenceNumberInterval_oldCommitment_nullifier : non-existence check
+        
         
 
 
+
+        // prepare secret state 'sequenceNumberInterval' for commitment
+
+          field sequenceNumberInterval_oldCommitment_value_field = sequenceNumberInterval_oldCommitment_value
+          
         // sequenceNumberInterval_oldCommitment_commitment: preimage check
 
 
         field sequenceNumberInterval_oldCommitment_commitment_field = poseidon([\
           sequenceNumberInterval_stateVarId_field,\
-          sequenceNumberInterval_oldCommitment_value,\
+          sequenceNumberInterval_oldCommitment_value_field,\
           sequenceNumberInterval_oldCommitment_owner_publicKey,\
           sequenceNumberInterval_oldCommitment_salt        ])
 
@@ -969,16 +1024,22 @@ latestSurplusSequenceNumber = 0
         assert(\
         field_to_bool_256(numberOfConsecutivePeriodsForShortfall_oldCommitment_nullifier)[8..256] == field_to_bool_256(numberOfConsecutivePeriodsForShortfall_oldCommitment_nullifier_check_field)[8..256]\
         )
-       
+        // numberOfConsecutivePeriodsForShortfall_oldCommitment_nullifier : non-existence check
+        
         
 
 
+
+        // prepare secret state 'numberOfConsecutivePeriodsForShortfall' for commitment
+
+          field numberOfConsecutivePeriodsForShortfall_oldCommitment_value_field = numberOfConsecutivePeriodsForShortfall_oldCommitment_value
+          
         // numberOfConsecutivePeriodsForShortfall_oldCommitment_commitment: preimage check
 
 
         field numberOfConsecutivePeriodsForShortfall_oldCommitment_commitment_field = poseidon([\
           numberOfConsecutivePeriodsForShortfall_stateVarId_field,\
-          numberOfConsecutivePeriodsForShortfall_oldCommitment_value,\
+          numberOfConsecutivePeriodsForShortfall_oldCommitment_value_field,\
           numberOfConsecutivePeriodsForShortfall_oldCommitment_owner_publicKey,\
           numberOfConsecutivePeriodsForShortfall_oldCommitment_salt        ])
 
@@ -1044,15 +1105,22 @@ latestSurplusSequenceNumber = 0
         assert(\
         field_to_bool_256(shortfallThreshold_oldCommitment_nullifier)[8..256] == field_to_bool_256(shortfallThreshold_oldCommitment_nullifier_check_field)[8..256]\
         )
+        // shortfallThreshold_oldCommitment_nullifier : non-existence check
+        
         
 
 
+
+        // prepare secret state 'shortfallThreshold' for commitment
+
+          field shortfallThreshold_oldCommitment_value_field = shortfallThreshold_oldCommitment_value
+          
         // shortfallThreshold_oldCommitment_commitment: preimage check
 
 
         field shortfallThreshold_oldCommitment_commitment_field = poseidon([\
           shortfallThreshold_stateVarId_field,\
-          shortfallThreshold_oldCommitment_value,\
+          shortfallThreshold_oldCommitment_value_field,\
           shortfallThreshold_oldCommitment_owner_publicKey,\
           shortfallThreshold_oldCommitment_salt        ])
 
@@ -1118,16 +1186,22 @@ latestSurplusSequenceNumber = 0
         assert(\
         field_to_bool_256(numberOfConsecutivePeriodsForSurplus_oldCommitment_nullifier)[8..256] == field_to_bool_256(numberOfConsecutivePeriodsForSurplus_oldCommitment_nullifier_check_field)[8..256]\
         )
+        // numberOfConsecutivePeriodsForSurplus_oldCommitment_nullifier : non-existence check
         
         
 
 
+
+        // prepare secret state 'numberOfConsecutivePeriodsForSurplus' for commitment
+
+          field numberOfConsecutivePeriodsForSurplus_oldCommitment_value_field = numberOfConsecutivePeriodsForSurplus_oldCommitment_value
+          
         // numberOfConsecutivePeriodsForSurplus_oldCommitment_commitment: preimage check
 
 
         field numberOfConsecutivePeriodsForSurplus_oldCommitment_commitment_field = poseidon([\
           numberOfConsecutivePeriodsForSurplus_stateVarId_field,\
-          numberOfConsecutivePeriodsForSurplus_oldCommitment_value,\
+          numberOfConsecutivePeriodsForSurplus_oldCommitment_value_field,\
           numberOfConsecutivePeriodsForSurplus_oldCommitment_owner_publicKey,\
           numberOfConsecutivePeriodsForSurplus_oldCommitment_salt        ])
 
@@ -1193,16 +1267,22 @@ latestSurplusSequenceNumber = 0
         assert(\
         field_to_bool_256(surplusThreshold_oldCommitment_nullifier)[8..256] == field_to_bool_256(surplusThreshold_oldCommitment_nullifier_check_field)[8..256]\
         )
+        // surplusThreshold_oldCommitment_nullifier : non-existence check
         
         
 
 
+
+        // prepare secret state 'surplusThreshold' for commitment
+
+          field surplusThreshold_oldCommitment_value_field = surplusThreshold_oldCommitment_value
+          
         // surplusThreshold_oldCommitment_commitment: preimage check
 
 
         field surplusThreshold_oldCommitment_commitment_field = poseidon([\
           surplusThreshold_stateVarId_field,\
-          surplusThreshold_oldCommitment_value,\
+          surplusThreshold_oldCommitment_value_field,\
           surplusThreshold_oldCommitment_owner_publicKey,\
           surplusThreshold_oldCommitment_salt        ])
 

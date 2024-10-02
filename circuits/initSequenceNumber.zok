@@ -4,6 +4,8 @@ from "ecc/edwardsCompress" import main as edwardsCompress
 from "utils/pack/bool/pack256.zok" import main as bool_256_to_field
 from "utils/pack/bool/nonStrictUnpack256.zok" import main as field_to_bool_256
 from "hashes/poseidon/poseidon.zok" import main as poseidon
+from "./common/merkle-tree/sparse-merkle-tree/checkproof.zok" import main as checkproof
+from "./common/merkle-tree/sparse-merkle-tree/checkproof.zok" import checkUpdatedPath as checkUpdatedPath
 from "./common/merkle-tree/mimc/altbn254/verify-membership/height32.zok" import main as checkRoot
 
 def main(\
@@ -18,7 +20,7 @@ def main(\
 	private field latestShortfallSequenceNumber_newCommitment_owner_publicKey,\
 	private field latestShortfallSequenceNumber_newCommitment_salt,\
 	public field latestShortfallSequenceNumber_newCommitment_commitment,\
-  private field latestSurplusSequenceNumber_oldCommitment_owner_secretKey,\
+	private field latestSurplusSequenceNumber_oldCommitment_owner_secretKey,\
 	public field latestSurplusSequenceNumber_oldCommitment_nullifier,\
 	private  field latestSurplusSequenceNumber_oldCommitment_value,\
 	private field latestSurplusSequenceNumber_oldCommitment_salt,\
@@ -31,15 +33,15 @@ def main(\
 ) -> (bool):
 
         
-         // We need to hard-code each stateVarId into the circuit:
-        field latestShortfallSequenceNumber_stateVarId_field = 19
+        // We need to hard-code each stateVarId into the circuit:
+        field latestShortfallSequenceNumber_stateVarId_field = 24
 
 
         field latestShortfallSequenceNumber = latestShortfallSequenceNumber_oldCommitment_value
 
 
         // We need to hard-code each stateVarId into the circuit:
-        field latestSurplusSequenceNumber_stateVarId_field = 29
+        field latestSurplusSequenceNumber_stateVarId_field = 31
 
 
         field latestSurplusSequenceNumber = latestSurplusSequenceNumber_oldCommitment_value
@@ -73,14 +75,22 @@ latestSurplusSequenceNumber = 0
         assert(\
         field_to_bool_256(latestShortfallSequenceNumber_oldCommitment_nullifier)[8..256] == field_to_bool_256(latestShortfallSequenceNumber_oldCommitment_nullifier_check_field)[8..256]\
         )
+        // latestShortfallSequenceNumber_oldCommitment_nullifier : non-existence check
+        
         
 
+
+
+        // prepare secret state 'latestShortfallSequenceNumber' for commitment
+
+          field latestShortfallSequenceNumber_oldCommitment_value_field = latestShortfallSequenceNumber_oldCommitment_value
+          
         // latestShortfallSequenceNumber_oldCommitment_commitment: preimage check
 
 
         field latestShortfallSequenceNumber_oldCommitment_commitment_field = poseidon([\
           latestShortfallSequenceNumber_stateVarId_field,\
-          latestShortfallSequenceNumber_oldCommitment_value,\
+          latestShortfallSequenceNumber_oldCommitment_value_field,\
           latestShortfallSequenceNumber_oldCommitment_owner_publicKey,\
           latestShortfallSequenceNumber_oldCommitment_salt        ])
 
@@ -146,16 +156,22 @@ latestSurplusSequenceNumber = 0
         assert(\
         field_to_bool_256(latestSurplusSequenceNumber_oldCommitment_nullifier)[8..256] == field_to_bool_256(latestSurplusSequenceNumber_oldCommitment_nullifier_check_field)[8..256]\
         )
+        // latestSurplusSequenceNumber_oldCommitment_nullifier : non-existence check
+        
+        
 
-    
 
 
+        // prepare secret state 'latestSurplusSequenceNumber' for commitment
+
+          field latestSurplusSequenceNumber_oldCommitment_value_field = latestSurplusSequenceNumber_oldCommitment_value
+          
         // latestSurplusSequenceNumber_oldCommitment_commitment: preimage check
 
 
         field latestSurplusSequenceNumber_oldCommitment_commitment_field = poseidon([\
           latestSurplusSequenceNumber_stateVarId_field,\
-          latestSurplusSequenceNumber_oldCommitment_value,\
+          latestSurplusSequenceNumber_oldCommitment_value_field,\
           latestSurplusSequenceNumber_oldCommitment_owner_publicKey,\
           latestSurplusSequenceNumber_oldCommitment_salt        ])
 

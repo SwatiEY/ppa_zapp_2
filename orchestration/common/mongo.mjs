@@ -31,7 +31,6 @@ export default {
 			});
 			connection[url] = await client.connect();
 		}
-		console.log(`connected to mongo: ${connection[url]}`);
 		return connection[url];
 	},
 	async disconnect(url) {

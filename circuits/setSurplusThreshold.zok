@@ -4,6 +4,8 @@ from "ecc/edwardsCompress" import main as edwardsCompress
 from "utils/pack/bool/pack256.zok" import main as bool_256_to_field
 from "utils/pack/bool/nonStrictUnpack256.zok" import main as field_to_bool_256
 from "hashes/poseidon/poseidon.zok" import main as poseidon
+from "./common/merkle-tree/sparse-merkle-tree/checkproof.zok" import main as checkproof
+from "./common/merkle-tree/sparse-merkle-tree/checkproof.zok" import checkUpdatedPath as checkUpdatedPath
 from "./common/merkle-tree/mimc/altbn254/verify-membership/height32.zok" import main as checkRoot
 
 def main(\
@@ -23,7 +25,7 @@ def main(\
 
         
         // We need to hard-code each stateVarId into the circuit:
-        field surplusThreshold_stateVarId_field = 55
+        field surplusThreshold_stateVarId_field = 86
 
 
         field surplusThreshold = surplusThreshold_oldCommitment_value
@@ -57,14 +59,20 @@ surplusThreshold = surplusThresholdParam
         )
         // surplusThreshold_oldCommitment_nullifier : non-existence check
         
+        
 
 
+
+        // prepare secret state 'surplusThreshold' for commitment
+
+          field surplusThreshold_oldCommitment_value_field = surplusThreshold_oldCommitment_value
+          
         // surplusThreshold_oldCommitment_commitment: preimage check
 
 
         field surplusThreshold_oldCommitment_commitment_field = poseidon([\
           surplusThreshold_stateVarId_field,\
-          surplusThreshold_oldCommitment_value,\
+          surplusThreshold_oldCommitment_value_field,\
           surplusThreshold_oldCommitment_owner_publicKey,\
           surplusThreshold_oldCommitment_salt        ])
 
