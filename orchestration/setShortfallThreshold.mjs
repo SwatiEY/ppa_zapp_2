@@ -205,51 +205,23 @@ export class SetShortfallThresholdManager {
 
 		// Encrypt pre-image for state variable shortfallThreshold as a backup:
 
-		let shortfallThreshold_ephSecretKey = generalise(utils.randomHex(31));
-
-		let shortfallThreshold_ephPublicKeyPoint = generalise(
-			scalarMult(
-				shortfallThreshold_ephSecretKey.hex(32),
-				config.BABYJUBJUB.GENERATOR
-			)
-		);
-
-		let shortfallThreshold_ephPublicKey = compressStarlightKey(
-			shortfallThreshold_ephPublicKeyPoint
-		);
-
-		while (shortfallThreshold_ephPublicKey === null) {
-			shortfallThreshold_ephSecretKey = generalise(utils.randomHex(31));
-
-			shortfallThreshold_ephPublicKeyPoint = generalise(
-				scalarMult(
-					shortfallThreshold_ephSecretKey.hex(32),
-					config.BABYJUBJUB.GENERATOR
-				)
-			);
-
-			shortfallThreshold_ephPublicKey = compressStarlightKey(
-				shortfallThreshold_ephPublicKeyPoint
-			);
-		}
-
 		const shortfallThreshold_bcipherText = encrypt(
 			[
 				BigInt(shortfallThreshold_newSalt.hex(32)),
 				BigInt(shortfallThreshold_stateVarId),
 				BigInt(shortfallThreshold.hex(32)),
 			],
-			shortfallThreshold_ephSecretKey.hex(32),
+			masterZkpSecretKey.hex(32),
 			[
-				decompressStarlightKey(shortfallThreshold_newOwnerPublicKey)[0].hex(32),
-				decompressStarlightKey(shortfallThreshold_newOwnerPublicKey)[1].hex(32),
+				decompressStarlightKey(masterZkpPublicKey)[0].hex(32),
+				decompressStarlightKey(masterZkpPublicKey)[1].hex(32),
 			]
 		);
 
 		let shortfallThreshold_cipherText_combined = {
 			varName: "shortfallThreshold",
 			cipherText: shortfallThreshold_bcipherText,
-			ephPublicKey: shortfallThreshold_ephPublicKey.hex(32),
+			ephPublicKey: masterZkpPublicKey.hex(32),
 		};
 
 		BackupData.push(shortfallThreshold_cipherText_combined);

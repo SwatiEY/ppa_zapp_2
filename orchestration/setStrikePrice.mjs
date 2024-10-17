@@ -185,48 +185,23 @@ export class SetStrikePriceManager {
 
 		// Encrypt pre-image for state variable strikePrice as a backup:
 
-		let strikePrice_ephSecretKey = generalise(utils.randomHex(31));
-
-		let strikePrice_ephPublicKeyPoint = generalise(
-			scalarMult(strikePrice_ephSecretKey.hex(32), config.BABYJUBJUB.GENERATOR)
-		);
-
-		let strikePrice_ephPublicKey = compressStarlightKey(
-			strikePrice_ephPublicKeyPoint
-		);
-
-		while (strikePrice_ephPublicKey === null) {
-			strikePrice_ephSecretKey = generalise(utils.randomHex(31));
-
-			strikePrice_ephPublicKeyPoint = generalise(
-				scalarMult(
-					strikePrice_ephSecretKey.hex(32),
-					config.BABYJUBJUB.GENERATOR
-				)
-			);
-
-			strikePrice_ephPublicKey = compressStarlightKey(
-				strikePrice_ephPublicKeyPoint
-			);
-		}
-
 		const strikePrice_bcipherText = encrypt(
 			[
 				BigInt(strikePrice_newSalt.hex(32)),
 				BigInt(strikePrice_stateVarId),
 				BigInt(strikePrice.hex(32)),
 			],
-			strikePrice_ephSecretKey.hex(32),
+			masterZkpSecretKey.hex(32),
 			[
-				decompressStarlightKey(strikePrice_newOwnerPublicKey)[0].hex(32),
-				decompressStarlightKey(strikePrice_newOwnerPublicKey)[1].hex(32),
+				decompressStarlightKey(masterZkpPublicKey)[0].hex(32),
+				decompressStarlightKey(masterZkpPublicKey)[1].hex(32),
 			]
 		);
 
 		let strikePrice_cipherText_combined = {
 			varName: "strikePrice",
 			cipherText: strikePrice_bcipherText,
-			ephPublicKey: strikePrice_ephPublicKey.hex(32),
+			ephPublicKey: masterZkpPublicKey.hex(32),
 		};
 
 		BackupData.push(strikePrice_cipherText_combined);

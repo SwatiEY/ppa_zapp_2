@@ -196,51 +196,23 @@ export class SetSurplusThresholdManager {
 
 		// Encrypt pre-image for state variable surplusThreshold as a backup:
 
-		let surplusThreshold_ephSecretKey = generalise(utils.randomHex(31));
-
-		let surplusThreshold_ephPublicKeyPoint = generalise(
-			scalarMult(
-				surplusThreshold_ephSecretKey.hex(32),
-				config.BABYJUBJUB.GENERATOR
-			)
-		);
-
-		let surplusThreshold_ephPublicKey = compressStarlightKey(
-			surplusThreshold_ephPublicKeyPoint
-		);
-
-		while (surplusThreshold_ephPublicKey === null) {
-			surplusThreshold_ephSecretKey = generalise(utils.randomHex(31));
-
-			surplusThreshold_ephPublicKeyPoint = generalise(
-				scalarMult(
-					surplusThreshold_ephSecretKey.hex(32),
-					config.BABYJUBJUB.GENERATOR
-				)
-			);
-
-			surplusThreshold_ephPublicKey = compressStarlightKey(
-				surplusThreshold_ephPublicKeyPoint
-			);
-		}
-
 		const surplusThreshold_bcipherText = encrypt(
 			[
 				BigInt(surplusThreshold_newSalt.hex(32)),
 				BigInt(surplusThreshold_stateVarId),
 				BigInt(surplusThreshold.hex(32)),
 			],
-			surplusThreshold_ephSecretKey.hex(32),
+			masterZkpSecretKey.hex(32),
 			[
-				decompressStarlightKey(surplusThreshold_newOwnerPublicKey)[0].hex(32),
-				decompressStarlightKey(surplusThreshold_newOwnerPublicKey)[1].hex(32),
+				decompressStarlightKey(masterZkpPublicKey)[0].hex(32),
+				decompressStarlightKey(masterZkpPublicKey)[1].hex(32),
 			]
 		);
 
 		let surplusThreshold_cipherText_combined = {
 			varName: "surplusThreshold",
 			cipherText: surplusThreshold_bcipherText,
-			ephPublicKey: surplusThreshold_ephPublicKey.hex(32),
+			ephPublicKey: masterZkpPublicKey.hex(32),
 		};
 
 		BackupData.push(surplusThreshold_cipherText_combined);

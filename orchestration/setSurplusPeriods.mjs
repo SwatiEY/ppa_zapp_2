@@ -216,60 +216,23 @@ export class SetSurplusPeriodsManager {
 
 		// Encrypt pre-image for state variable numberOfConsecutivePeriodsForSurplus as a backup:
 
-		let numberOfConsecutivePeriodsForSurplus_ephSecretKey = generalise(
-			utils.randomHex(31)
-		);
-
-		let numberOfConsecutivePeriodsForSurplus_ephPublicKeyPoint = generalise(
-			scalarMult(
-				numberOfConsecutivePeriodsForSurplus_ephSecretKey.hex(32),
-				config.BABYJUBJUB.GENERATOR
-			)
-		);
-
-		let numberOfConsecutivePeriodsForSurplus_ephPublicKey =
-			compressStarlightKey(
-				numberOfConsecutivePeriodsForSurplus_ephPublicKeyPoint
-			);
-
-		while (numberOfConsecutivePeriodsForSurplus_ephPublicKey === null) {
-			numberOfConsecutivePeriodsForSurplus_ephSecretKey = generalise(
-				utils.randomHex(31)
-			);
-
-			numberOfConsecutivePeriodsForSurplus_ephPublicKeyPoint = generalise(
-				scalarMult(
-					numberOfConsecutivePeriodsForSurplus_ephSecretKey.hex(32),
-					config.BABYJUBJUB.GENERATOR
-				)
-			);
-
-			numberOfConsecutivePeriodsForSurplus_ephPublicKey = compressStarlightKey(
-				numberOfConsecutivePeriodsForSurplus_ephPublicKeyPoint
-			);
-		}
-
 		const numberOfConsecutivePeriodsForSurplus_bcipherText = encrypt(
 			[
 				BigInt(numberOfConsecutivePeriodsForSurplus_newSalt.hex(32)),
 				BigInt(numberOfConsecutivePeriodsForSurplus_stateVarId),
 				BigInt(numberOfConsecutivePeriodsForSurplus.hex(32)),
 			],
-			numberOfConsecutivePeriodsForSurplus_ephSecretKey.hex(32),
+			masterZkpSecretKey.hex(32),
 			[
-				decompressStarlightKey(
-					numberOfConsecutivePeriodsForSurplus_newOwnerPublicKey
-				)[0].hex(32),
-				decompressStarlightKey(
-					numberOfConsecutivePeriodsForSurplus_newOwnerPublicKey
-				)[1].hex(32),
+				decompressStarlightKey(masterZkpPublicKey)[0].hex(32),
+				decompressStarlightKey(masterZkpPublicKey)[1].hex(32),
 			]
 		);
 
 		let numberOfConsecutivePeriodsForSurplus_cipherText_combined = {
 			varName: "numberOfConsecutivePeriodsForSurplus",
 			cipherText: numberOfConsecutivePeriodsForSurplus_bcipherText,
-			ephPublicKey: numberOfConsecutivePeriodsForSurplus_ephPublicKey.hex(32),
+			ephPublicKey: masterZkpPublicKey.hex(32),
 		};
 
 		BackupData.push(numberOfConsecutivePeriodsForSurplus_cipherText_combined);

@@ -212,33 +212,6 @@ export class SetSequenceNumberIntervalManager {
 
 		// Encrypt pre-image for state variable sequenceNumberInterval as a backup:
 
-		let sequenceNumberInterval_ephSecretKey = generalise(utils.randomHex(31));
-
-		let sequenceNumberInterval_ephPublicKeyPoint = generalise(
-			scalarMult(
-				sequenceNumberInterval_ephSecretKey.hex(32),
-				config.BABYJUBJUB.GENERATOR
-			)
-		);
-
-		let sequenceNumberInterval_ephPublicKey = compressStarlightKey(
-			sequenceNumberInterval_ephPublicKeyPoint
-		);
-
-		while (sequenceNumberInterval_ephPublicKey === null) {
-			sequenceNumberInterval_ephSecretKey = generalise(utils.randomHex(31));
-
-			sequenceNumberInterval_ephPublicKeyPoint = generalise(
-				scalarMult(
-					sequenceNumberInterval_ephSecretKey.hex(32),
-					config.BABYJUBJUB.GENERATOR
-				)
-			);
-
-			sequenceNumberInterval_ephPublicKey = compressStarlightKey(
-				sequenceNumberInterval_ephPublicKeyPoint
-			);
-		}
 
 		const sequenceNumberInterval_bcipherText = encrypt(
 			[
@@ -246,21 +219,17 @@ export class SetSequenceNumberIntervalManager {
 				BigInt(sequenceNumberInterval_stateVarId),
 				BigInt(sequenceNumberInterval.hex(32)),
 			],
-			sequenceNumberInterval_ephSecretKey.hex(32),
+			masterZkpSecretKey.hex(32),
 			[
-				decompressStarlightKey(sequenceNumberInterval_newOwnerPublicKey)[0].hex(
-					32
-				),
-				decompressStarlightKey(sequenceNumberInterval_newOwnerPublicKey)[1].hex(
-					32
-				),
+				decompressStarlightKey(masterZkpPublicKey)[0].hex(32),
+				decompressStarlightKey(masterZkpPublicKey)[1].hex(32),
 			]
 		);
 
 		let sequenceNumberInterval_cipherText_combined = {
 			varName: "sequenceNumberInterval",
 			cipherText: sequenceNumberInterval_bcipherText,
-			ephPublicKey: sequenceNumberInterval_ephPublicKey.hex(32),
+			ephPublicKey: masterZkpPublicKey.hex(32),
 		};
 
 		BackupData.push(sequenceNumberInterval_cipherText_combined);

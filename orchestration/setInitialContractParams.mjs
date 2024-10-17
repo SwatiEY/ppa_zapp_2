@@ -1594,78 +1594,29 @@ export class SetInitialContractParamsManager {
 
 		// Encrypt pre-image for state variable strikePrice as a backup:
 
-		let strikePrice_ephSecretKey = generalise(utils.randomHex(31));
-
-		let strikePrice_ephPublicKeyPoint = generalise(
-			scalarMult(strikePrice_ephSecretKey.hex(32), config.BABYJUBJUB.GENERATOR)
-		);
-
-		let strikePrice_ephPublicKey = compressStarlightKey(
-			strikePrice_ephPublicKeyPoint
-		);
-
-		while (strikePrice_ephPublicKey === null) {
-			strikePrice_ephSecretKey = generalise(utils.randomHex(31));
-
-			strikePrice_ephPublicKeyPoint = generalise(
-				scalarMult(
-					strikePrice_ephSecretKey.hex(32),
-					config.BABYJUBJUB.GENERATOR
-				)
-			);
-
-			strikePrice_ephPublicKey = compressStarlightKey(
-				strikePrice_ephPublicKeyPoint
-			);
-		}
-
 		const strikePrice_bcipherText = encrypt(
 			[
 				BigInt(strikePrice_newSalt.hex(32)),
 				BigInt(strikePrice_stateVarId),
 				BigInt(strikePrice.hex(32)),
 			],
-			strikePrice_ephSecretKey.hex(32),
+			masterZkpSecretKey.hex(32),
 			[
-				decompressStarlightKey(strikePrice_newOwnerPublicKey)[0].hex(32),
-				decompressStarlightKey(strikePrice_newOwnerPublicKey)[1].hex(32),
+				decompressStarlightKey(masterZkpPublicKey)[0].hex(32),
+				decompressStarlightKey(masterZkpPublicKey)[1].hex(32),
 			]
 		);
 
 		let strikePrice_cipherText_combined = {
 			varName: "strikePrice",
 			cipherText: strikePrice_bcipherText,
-			ephPublicKey: strikePrice_ephPublicKey.hex(32),
+			ephPublicKey: masterZkpPublicKey.hex(32),
 		};
 
 		BackupData.push(strikePrice_cipherText_combined);
 
 		// Encrypt pre-image for state variable bundlePrice as a backup:
 
-		let bundlePrice_ephSecretKey = generalise(utils.randomHex(31));
-
-		let bundlePrice_ephPublicKeyPoint = generalise(
-			scalarMult(bundlePrice_ephSecretKey.hex(32), config.BABYJUBJUB.GENERATOR)
-		);
-
-		let bundlePrice_ephPublicKey = compressStarlightKey(
-			bundlePrice_ephPublicKeyPoint
-		);
-
-		while (bundlePrice_ephPublicKey === null) {
-			bundlePrice_ephSecretKey = generalise(utils.randomHex(31));
-
-			bundlePrice_ephPublicKeyPoint = generalise(
-				scalarMult(
-					bundlePrice_ephSecretKey.hex(32),
-					config.BABYJUBJUB.GENERATOR
-				)
-			);
-
-			bundlePrice_ephPublicKey = compressStarlightKey(
-				bundlePrice_ephPublicKeyPoint
-			);
-		}
 
 		const bundlePrice_bcipherText = encrypt(
 			[
@@ -1673,47 +1624,22 @@ export class SetInitialContractParamsManager {
 				BigInt(bundlePrice_stateVarId),
 				BigInt(bundlePrice.hex(32)),
 			],
-			bundlePrice_ephSecretKey.hex(32),
+			masterZkpSecretKey.hex(32),
 			[
-				decompressStarlightKey(bundlePrice_newOwnerPublicKey)[0].hex(32),
-				decompressStarlightKey(bundlePrice_newOwnerPublicKey)[1].hex(32),
+				decompressStarlightKey(masterZkpPublicKey)[0].hex(32),
+				decompressStarlightKey(masterZkpPublicKey)[1].hex(32),
 			]
 		);
 
 		let bundlePrice_cipherText_combined = {
 			varName: "bundlePrice",
 			cipherText: bundlePrice_bcipherText,
-			ephPublicKey: bundlePrice_ephPublicKey.hex(32),
+			ephPublicKey: masterZkpPublicKey.hex(32),
 		};
 
 		BackupData.push(bundlePrice_cipherText_combined);
 
 		// Encrypt pre-image for state variable volumeShare as a backup:
-
-		let volumeShare_ephSecretKey = generalise(utils.randomHex(31));
-
-		let volumeShare_ephPublicKeyPoint = generalise(
-			scalarMult(volumeShare_ephSecretKey.hex(32), config.BABYJUBJUB.GENERATOR)
-		);
-
-		let volumeShare_ephPublicKey = compressStarlightKey(
-			volumeShare_ephPublicKeyPoint
-		);
-
-		while (volumeShare_ephPublicKey === null) {
-			volumeShare_ephSecretKey = generalise(utils.randomHex(31));
-
-			volumeShare_ephPublicKeyPoint = generalise(
-				scalarMult(
-					volumeShare_ephSecretKey.hex(32),
-					config.BABYJUBJUB.GENERATOR
-				)
-			);
-
-			volumeShare_ephPublicKey = compressStarlightKey(
-				volumeShare_ephPublicKeyPoint
-			);
-		}
 
 		const volumeShare_bcipherText = encrypt(
 			[
@@ -1721,50 +1647,22 @@ export class SetInitialContractParamsManager {
 				BigInt(volumeShare_stateVarId),
 				BigInt(volumeShare.hex(32)),
 			],
-			volumeShare_ephSecretKey.hex(32),
+			masterZkpSecretKey.hex(32),
 			[
-				decompressStarlightKey(volumeShare_newOwnerPublicKey)[0].hex(32),
-				decompressStarlightKey(volumeShare_newOwnerPublicKey)[1].hex(32),
+				decompressStarlightKey(masterZkpPublicKey)[0].hex(32),
+				decompressStarlightKey(masterZkpPublicKey)[1].hex(32),
 			]
 		);
 
 		let volumeShare_cipherText_combined = {
 			varName: "volumeShare",
 			cipherText: volumeShare_bcipherText,
-			ephPublicKey: volumeShare_ephPublicKey.hex(32),
+			ephPublicKey: masterZkpPublicKey.hex(32),
 		};
 
 		BackupData.push(volumeShare_cipherText_combined);
 
 		// Encrypt pre-image for state variable dailyInterestRate as a backup:
-
-		let dailyInterestRate_ephSecretKey = generalise(utils.randomHex(31));
-
-		let dailyInterestRate_ephPublicKeyPoint = generalise(
-			scalarMult(
-				dailyInterestRate_ephSecretKey.hex(32),
-				config.BABYJUBJUB.GENERATOR
-			)
-		);
-
-		let dailyInterestRate_ephPublicKey = compressStarlightKey(
-			dailyInterestRate_ephPublicKeyPoint
-		);
-
-		while (dailyInterestRate_ephPublicKey === null) {
-			dailyInterestRate_ephSecretKey = generalise(utils.randomHex(31));
-
-			dailyInterestRate_ephPublicKeyPoint = generalise(
-				scalarMult(
-					dailyInterestRate_ephSecretKey.hex(32),
-					config.BABYJUBJUB.GENERATOR
-				)
-			);
-
-			dailyInterestRate_ephPublicKey = compressStarlightKey(
-				dailyInterestRate_ephPublicKeyPoint
-			);
-		}
 
 		const dailyInterestRate_bcipherText = encrypt(
 			[
@@ -1772,50 +1670,22 @@ export class SetInitialContractParamsManager {
 				BigInt(dailyInterestRate_stateVarId),
 				BigInt(dailyInterestRate.hex(32)),
 			],
-			dailyInterestRate_ephSecretKey.hex(32),
+			masterZkpSecretKey.hex(32),
 			[
-				decompressStarlightKey(dailyInterestRate_newOwnerPublicKey)[0].hex(32),
-				decompressStarlightKey(dailyInterestRate_newOwnerPublicKey)[1].hex(32),
+				decompressStarlightKey(masterZkpPublicKey)[0].hex(32),
+				decompressStarlightKey(masterZkpPublicKey)[1].hex(32),
 			]
 		);
 
 		let dailyInterestRate_cipherText_combined = {
 			varName: "dailyInterestRate",
 			cipherText: dailyInterestRate_bcipherText,
-			ephPublicKey: dailyInterestRate_ephPublicKey.hex(32),
+			ephPublicKey: masterZkpPublicKey.hex(32),
 		};
 
 		BackupData.push(dailyInterestRate_cipherText_combined);
 
 		// Encrypt pre-image for state variable startDateOfContract as a backup:
-
-		let startDateOfContract_ephSecretKey = generalise(utils.randomHex(31));
-
-		let startDateOfContract_ephPublicKeyPoint = generalise(
-			scalarMult(
-				startDateOfContract_ephSecretKey.hex(32),
-				config.BABYJUBJUB.GENERATOR
-			)
-		);
-
-		let startDateOfContract_ephPublicKey = compressStarlightKey(
-			startDateOfContract_ephPublicKeyPoint
-		);
-
-		while (startDateOfContract_ephPublicKey === null) {
-			startDateOfContract_ephSecretKey = generalise(utils.randomHex(31));
-
-			startDateOfContract_ephPublicKeyPoint = generalise(
-				scalarMult(
-					startDateOfContract_ephSecretKey.hex(32),
-					config.BABYJUBJUB.GENERATOR
-				)
-			);
-
-			startDateOfContract_ephPublicKey = compressStarlightKey(
-				startDateOfContract_ephPublicKeyPoint
-			);
-		}
 
 		const startDateOfContract_bcipherText = encrypt(
 			[
@@ -1823,54 +1693,22 @@ export class SetInitialContractParamsManager {
 				BigInt(startDateOfContract_stateVarId),
 				BigInt(startDateOfContract.hex(32)),
 			],
-			startDateOfContract_ephSecretKey.hex(32),
+			masterZkpSecretKey.hex(32),
 			[
-				decompressStarlightKey(startDateOfContract_newOwnerPublicKey)[0].hex(
-					32
-				),
-				decompressStarlightKey(startDateOfContract_newOwnerPublicKey)[1].hex(
-					32
-				),
+				decompressStarlightKey(masterZkpPublicKey)[0].hex(32),
+				decompressStarlightKey(masterZkpPublicKey)[1].hex(32),
 			]
 		);
 
 		let startDateOfContract_cipherText_combined = {
 			varName: "startDateOfContract",
 			cipherText: startDateOfContract_bcipherText,
-			ephPublicKey: startDateOfContract_ephPublicKey.hex(32),
+			ephPublicKey: masterZkpPublicKey.hex(32),
 		};
 
 		BackupData.push(startDateOfContract_cipherText_combined);
 
 		// Encrypt pre-image for state variable expiryDateOfContract as a backup:
-
-		let expiryDateOfContract_ephSecretKey = generalise(utils.randomHex(31));
-
-		let expiryDateOfContract_ephPublicKeyPoint = generalise(
-			scalarMult(
-				expiryDateOfContract_ephSecretKey.hex(32),
-				config.BABYJUBJUB.GENERATOR
-			)
-		);
-
-		let expiryDateOfContract_ephPublicKey = compressStarlightKey(
-			expiryDateOfContract_ephPublicKeyPoint
-		);
-
-		while (expiryDateOfContract_ephPublicKey === null) {
-			expiryDateOfContract_ephSecretKey = generalise(utils.randomHex(31));
-
-			expiryDateOfContract_ephPublicKeyPoint = generalise(
-				scalarMult(
-					expiryDateOfContract_ephSecretKey.hex(32),
-					config.BABYJUBJUB.GENERATOR
-				)
-			);
-
-			expiryDateOfContract_ephPublicKey = compressStarlightKey(
-				expiryDateOfContract_ephPublicKeyPoint
-			);
-		}
 
 		const expiryDateOfContract_bcipherText = encrypt(
 			[
@@ -1878,58 +1716,22 @@ export class SetInitialContractParamsManager {
 				BigInt(expiryDateOfContract_stateVarId),
 				BigInt(expiryDateOfContract.hex(32)),
 			],
-			expiryDateOfContract_ephSecretKey.hex(32),
+			masterZkpSecretKey.hex(32),
 			[
-				decompressStarlightKey(expiryDateOfContract_newOwnerPublicKey)[0].hex(
-					32
-				),
-				decompressStarlightKey(expiryDateOfContract_newOwnerPublicKey)[1].hex(
-					32
-				),
+				decompressStarlightKey(masterZkpPublicKey)[0].hex(32),
+				decompressStarlightKey(masterZkpPublicKey)[1].hex(32),
 			]
 		);
 
 		let expiryDateOfContract_cipherText_combined = {
 			varName: "expiryDateOfContract",
 			cipherText: expiryDateOfContract_bcipherText,
-			ephPublicKey: expiryDateOfContract_ephPublicKey.hex(32),
+			ephPublicKey: masterZkpPublicKey.hex(32),
 		};
 
 		BackupData.push(expiryDateOfContract_cipherText_combined);
 
 		// Encrypt pre-image for state variable latestShortfallSequenceNumber as a backup:
-
-		let latestShortfallSequenceNumber_ephSecretKey = generalise(
-			utils.randomHex(31)
-		);
-
-		let latestShortfallSequenceNumber_ephPublicKeyPoint = generalise(
-			scalarMult(
-				latestShortfallSequenceNumber_ephSecretKey.hex(32),
-				config.BABYJUBJUB.GENERATOR
-			)
-		);
-
-		let latestShortfallSequenceNumber_ephPublicKey = compressStarlightKey(
-			latestShortfallSequenceNumber_ephPublicKeyPoint
-		);
-
-		while (latestShortfallSequenceNumber_ephPublicKey === null) {
-			latestShortfallSequenceNumber_ephSecretKey = generalise(
-				utils.randomHex(31)
-			);
-
-			latestShortfallSequenceNumber_ephPublicKeyPoint = generalise(
-				scalarMult(
-					latestShortfallSequenceNumber_ephSecretKey.hex(32),
-					config.BABYJUBJUB.GENERATOR
-				)
-			);
-
-			latestShortfallSequenceNumber_ephPublicKey = compressStarlightKey(
-				latestShortfallSequenceNumber_ephPublicKeyPoint
-			);
-		}
 
 		const latestShortfallSequenceNumber_bcipherText = encrypt(
 			[
@@ -1937,58 +1739,22 @@ export class SetInitialContractParamsManager {
 				BigInt(latestShortfallSequenceNumber_stateVarId),
 				BigInt(latestShortfallSequenceNumber.hex(32)),
 			],
-			latestShortfallSequenceNumber_ephSecretKey.hex(32),
+			masterZkpSecretKey.hex(32),
 			[
-				decompressStarlightKey(
-					latestShortfallSequenceNumber_newOwnerPublicKey
-				)[0].hex(32),
-				decompressStarlightKey(
-					latestShortfallSequenceNumber_newOwnerPublicKey
-				)[1].hex(32),
+				decompressStarlightKey(masterZkpPublicKey)[0].hex(32),
+				decompressStarlightKey(masterZkpPublicKey)[1].hex(32),
 			]
 		);
 
 		let latestShortfallSequenceNumber_cipherText_combined = {
 			varName: "latestShortfallSequenceNumber",
 			cipherText: latestShortfallSequenceNumber_bcipherText,
-			ephPublicKey: latestShortfallSequenceNumber_ephPublicKey.hex(32),
+			ephPublicKey: masterZkpPublicKey.hex(32),
 		};
 
 		BackupData.push(latestShortfallSequenceNumber_cipherText_combined);
 
 		// Encrypt pre-image for state variable latestSurplusSequenceNumber as a backup:
-
-		let latestSurplusSequenceNumber_ephSecretKey = generalise(
-			utils.randomHex(31)
-		);
-
-		let latestSurplusSequenceNumber_ephPublicKeyPoint = generalise(
-			scalarMult(
-				latestSurplusSequenceNumber_ephSecretKey.hex(32),
-				config.BABYJUBJUB.GENERATOR
-			)
-		);
-
-		let latestSurplusSequenceNumber_ephPublicKey = compressStarlightKey(
-			latestSurplusSequenceNumber_ephPublicKeyPoint
-		);
-
-		while (latestSurplusSequenceNumber_ephPublicKey === null) {
-			latestSurplusSequenceNumber_ephSecretKey = generalise(
-				utils.randomHex(31)
-			);
-
-			latestSurplusSequenceNumber_ephPublicKeyPoint = generalise(
-				scalarMult(
-					latestSurplusSequenceNumber_ephSecretKey.hex(32),
-					config.BABYJUBJUB.GENERATOR
-				)
-			);
-
-			latestSurplusSequenceNumber_ephPublicKey = compressStarlightKey(
-				latestSurplusSequenceNumber_ephPublicKeyPoint
-			);
-		}
 
 		const latestSurplusSequenceNumber_bcipherText = encrypt(
 			[
@@ -1996,54 +1762,22 @@ export class SetInitialContractParamsManager {
 				BigInt(latestSurplusSequenceNumber_stateVarId),
 				BigInt(latestSurplusSequenceNumber.hex(32)),
 			],
-			latestSurplusSequenceNumber_ephSecretKey.hex(32),
+			masterZkpSecretKey.hex(32),
 			[
-				decompressStarlightKey(
-					latestSurplusSequenceNumber_newOwnerPublicKey
-				)[0].hex(32),
-				decompressStarlightKey(
-					latestSurplusSequenceNumber_newOwnerPublicKey
-				)[1].hex(32),
+				decompressStarlightKey(masterZkpPublicKey)[0].hex(32),
+				decompressStarlightKey(masterZkpPublicKey)[1].hex(32),
 			]
 		);
 
 		let latestSurplusSequenceNumber_cipherText_combined = {
 			varName: "latestSurplusSequenceNumber",
 			cipherText: latestSurplusSequenceNumber_bcipherText,
-			ephPublicKey: latestSurplusSequenceNumber_ephPublicKey.hex(32),
+			ephPublicKey: masterZkpPublicKey.hex(32),
 		};
 
 		BackupData.push(latestSurplusSequenceNumber_cipherText_combined);
 
 		// Encrypt pre-image for state variable sequenceNumberInterval as a backup:
-
-		let sequenceNumberInterval_ephSecretKey = generalise(utils.randomHex(31));
-
-		let sequenceNumberInterval_ephPublicKeyPoint = generalise(
-			scalarMult(
-				sequenceNumberInterval_ephSecretKey.hex(32),
-				config.BABYJUBJUB.GENERATOR
-			)
-		);
-
-		let sequenceNumberInterval_ephPublicKey = compressStarlightKey(
-			sequenceNumberInterval_ephPublicKeyPoint
-		);
-
-		while (sequenceNumberInterval_ephPublicKey === null) {
-			sequenceNumberInterval_ephSecretKey = generalise(utils.randomHex(31));
-
-			sequenceNumberInterval_ephPublicKeyPoint = generalise(
-				scalarMult(
-					sequenceNumberInterval_ephSecretKey.hex(32),
-					config.BABYJUBJUB.GENERATOR
-				)
-			);
-
-			sequenceNumberInterval_ephPublicKey = compressStarlightKey(
-				sequenceNumberInterval_ephPublicKeyPoint
-			);
-		}
 
 		const sequenceNumberInterval_bcipherText = encrypt(
 			[
@@ -2051,60 +1785,22 @@ export class SetInitialContractParamsManager {
 				BigInt(sequenceNumberInterval_stateVarId),
 				BigInt(sequenceNumberInterval.hex(32)),
 			],
-			sequenceNumberInterval_ephSecretKey.hex(32),
+			masterZkpSecretKey.hex(32),
 			[
-				decompressStarlightKey(sequenceNumberInterval_newOwnerPublicKey)[0].hex(
-					32
-				),
-				decompressStarlightKey(sequenceNumberInterval_newOwnerPublicKey)[1].hex(
-					32
-				),
+				decompressStarlightKey(masterZkpPublicKey)[0].hex(32),
+				decompressStarlightKey(masterZkpPublicKey)[1].hex(32),
 			]
 		);
 
 		let sequenceNumberInterval_cipherText_combined = {
 			varName: "sequenceNumberInterval",
 			cipherText: sequenceNumberInterval_bcipherText,
-			ephPublicKey: sequenceNumberInterval_ephPublicKey.hex(32),
+			ephPublicKey: masterZkpPublicKey.hex(32),
 		};
 
 		BackupData.push(sequenceNumberInterval_cipherText_combined);
 
 		// Encrypt pre-image for state variable numberOfConsecutivePeriodsForShortfall as a backup:
-
-		let numberOfConsecutivePeriodsForShortfall_ephSecretKey = generalise(
-			utils.randomHex(31)
-		);
-
-		let numberOfConsecutivePeriodsForShortfall_ephPublicKeyPoint = generalise(
-			scalarMult(
-				numberOfConsecutivePeriodsForShortfall_ephSecretKey.hex(32),
-				config.BABYJUBJUB.GENERATOR
-			)
-		);
-
-		let numberOfConsecutivePeriodsForShortfall_ephPublicKey =
-			compressStarlightKey(
-				numberOfConsecutivePeriodsForShortfall_ephPublicKeyPoint
-			);
-
-		while (numberOfConsecutivePeriodsForShortfall_ephPublicKey === null) {
-			numberOfConsecutivePeriodsForShortfall_ephSecretKey = generalise(
-				utils.randomHex(31)
-			);
-
-			numberOfConsecutivePeriodsForShortfall_ephPublicKeyPoint = generalise(
-				scalarMult(
-					numberOfConsecutivePeriodsForShortfall_ephSecretKey.hex(32),
-					config.BABYJUBJUB.GENERATOR
-				)
-			);
-
-			numberOfConsecutivePeriodsForShortfall_ephPublicKey =
-				compressStarlightKey(
-					numberOfConsecutivePeriodsForShortfall_ephPublicKeyPoint
-				);
-		}
 
 		const numberOfConsecutivePeriodsForShortfall_bcipherText = encrypt(
 			[
@@ -2112,54 +1808,22 @@ export class SetInitialContractParamsManager {
 				BigInt(numberOfConsecutivePeriodsForShortfall_stateVarId),
 				BigInt(numberOfConsecutivePeriodsForShortfall.hex(32)),
 			],
-			numberOfConsecutivePeriodsForShortfall_ephSecretKey.hex(32),
+			masterZkpSecretKey.hex(32),
 			[
-				decompressStarlightKey(
-					numberOfConsecutivePeriodsForShortfall_newOwnerPublicKey
-				)[0].hex(32),
-				decompressStarlightKey(
-					numberOfConsecutivePeriodsForShortfall_newOwnerPublicKey
-				)[1].hex(32),
+				decompressStarlightKey(masterZkpPublicKey)[0].hex(32),
+				decompressStarlightKey(masterZkpPublicKey)[1].hex(32),
 			]
 		);
 
 		let numberOfConsecutivePeriodsForShortfall_cipherText_combined = {
 			varName: "numberOfConsecutivePeriodsForShortfall",
 			cipherText: numberOfConsecutivePeriodsForShortfall_bcipherText,
-			ephPublicKey: numberOfConsecutivePeriodsForShortfall_ephPublicKey.hex(32),
+			ephPublicKey: masterZkpPublicKey.hex(32),
 		};
 
 		BackupData.push(numberOfConsecutivePeriodsForShortfall_cipherText_combined);
 
 		// Encrypt pre-image for state variable shortfallThreshold as a backup:
-
-		let shortfallThreshold_ephSecretKey = generalise(utils.randomHex(31));
-
-		let shortfallThreshold_ephPublicKeyPoint = generalise(
-			scalarMult(
-				shortfallThreshold_ephSecretKey.hex(32),
-				config.BABYJUBJUB.GENERATOR
-			)
-		);
-
-		let shortfallThreshold_ephPublicKey = compressStarlightKey(
-			shortfallThreshold_ephPublicKeyPoint
-		);
-
-		while (shortfallThreshold_ephPublicKey === null) {
-			shortfallThreshold_ephSecretKey = generalise(utils.randomHex(31));
-
-			shortfallThreshold_ephPublicKeyPoint = generalise(
-				scalarMult(
-					shortfallThreshold_ephSecretKey.hex(32),
-					config.BABYJUBJUB.GENERATOR
-				)
-			);
-
-			shortfallThreshold_ephPublicKey = compressStarlightKey(
-				shortfallThreshold_ephPublicKeyPoint
-			);
-		}
 
 		const shortfallThreshold_bcipherText = encrypt(
 			[
@@ -2167,55 +1831,22 @@ export class SetInitialContractParamsManager {
 				BigInt(shortfallThreshold_stateVarId),
 				BigInt(shortfallThreshold.hex(32)),
 			],
-			shortfallThreshold_ephSecretKey.hex(32),
+			masterZkpSecretKey.hex(32),
 			[
-				decompressStarlightKey(shortfallThreshold_newOwnerPublicKey)[0].hex(32),
-				decompressStarlightKey(shortfallThreshold_newOwnerPublicKey)[1].hex(32),
+				decompressStarlightKey(masterZkpPublicKey)[0].hex(32),
+				decompressStarlightKey(masterZkpPublicKey)[1].hex(32),
 			]
 		);
 
 		let shortfallThreshold_cipherText_combined = {
 			varName: "shortfallThreshold",
 			cipherText: shortfallThreshold_bcipherText,
-			ephPublicKey: shortfallThreshold_ephPublicKey.hex(32),
+			ephPublicKey: masterZkpPublicKey.hex(32),
 		};
 
 		BackupData.push(shortfallThreshold_cipherText_combined);
 
 		// Encrypt pre-image for state variable numberOfConsecutivePeriodsForSurplus as a backup:
-
-		let numberOfConsecutivePeriodsForSurplus_ephSecretKey = generalise(
-			utils.randomHex(31)
-		);
-
-		let numberOfConsecutivePeriodsForSurplus_ephPublicKeyPoint = generalise(
-			scalarMult(
-				numberOfConsecutivePeriodsForSurplus_ephSecretKey.hex(32),
-				config.BABYJUBJUB.GENERATOR
-			)
-		);
-
-		let numberOfConsecutivePeriodsForSurplus_ephPublicKey =
-			compressStarlightKey(
-				numberOfConsecutivePeriodsForSurplus_ephPublicKeyPoint
-			);
-
-		while (numberOfConsecutivePeriodsForSurplus_ephPublicKey === null) {
-			numberOfConsecutivePeriodsForSurplus_ephSecretKey = generalise(
-				utils.randomHex(31)
-			);
-
-			numberOfConsecutivePeriodsForSurplus_ephPublicKeyPoint = generalise(
-				scalarMult(
-					numberOfConsecutivePeriodsForSurplus_ephSecretKey.hex(32),
-					config.BABYJUBJUB.GENERATOR
-				)
-			);
-
-			numberOfConsecutivePeriodsForSurplus_ephPublicKey = compressStarlightKey(
-				numberOfConsecutivePeriodsForSurplus_ephPublicKeyPoint
-			);
-		}
 
 		const numberOfConsecutivePeriodsForSurplus_bcipherText = encrypt(
 			[
@@ -2223,54 +1854,22 @@ export class SetInitialContractParamsManager {
 				BigInt(numberOfConsecutivePeriodsForSurplus_stateVarId),
 				BigInt(numberOfConsecutivePeriodsForSurplus.hex(32)),
 			],
-			numberOfConsecutivePeriodsForSurplus_ephSecretKey.hex(32),
+			masterZkpSecretKey.hex(32),
 			[
-				decompressStarlightKey(
-					numberOfConsecutivePeriodsForSurplus_newOwnerPublicKey
-				)[0].hex(32),
-				decompressStarlightKey(
-					numberOfConsecutivePeriodsForSurplus_newOwnerPublicKey
-				)[1].hex(32),
+				decompressStarlightKey(masterZkpPublicKey)[0].hex(32),
+				decompressStarlightKey(masterZkpPublicKey)[1].hex(32),
 			]
 		);
 
 		let numberOfConsecutivePeriodsForSurplus_cipherText_combined = {
 			varName: "numberOfConsecutivePeriodsForSurplus",
 			cipherText: numberOfConsecutivePeriodsForSurplus_bcipherText,
-			ephPublicKey: numberOfConsecutivePeriodsForSurplus_ephPublicKey.hex(32),
+			ephPublicKey: masterZkpPublicKey.hex(32),
 		};
 
 		BackupData.push(numberOfConsecutivePeriodsForSurplus_cipherText_combined);
 
 		// Encrypt pre-image for state variable surplusThreshold as a backup:
-
-		let surplusThreshold_ephSecretKey = generalise(utils.randomHex(31));
-
-		let surplusThreshold_ephPublicKeyPoint = generalise(
-			scalarMult(
-				surplusThreshold_ephSecretKey.hex(32),
-				config.BABYJUBJUB.GENERATOR
-			)
-		);
-
-		let surplusThreshold_ephPublicKey = compressStarlightKey(
-			surplusThreshold_ephPublicKeyPoint
-		);
-
-		while (surplusThreshold_ephPublicKey === null) {
-			surplusThreshold_ephSecretKey = generalise(utils.randomHex(31));
-
-			surplusThreshold_ephPublicKeyPoint = generalise(
-				scalarMult(
-					surplusThreshold_ephSecretKey.hex(32),
-					config.BABYJUBJUB.GENERATOR
-				)
-			);
-
-			surplusThreshold_ephPublicKey = compressStarlightKey(
-				surplusThreshold_ephPublicKeyPoint
-			);
-		}
 
 		const surplusThreshold_bcipherText = encrypt(
 			[
@@ -2278,17 +1877,17 @@ export class SetInitialContractParamsManager {
 				BigInt(surplusThreshold_stateVarId),
 				BigInt(surplusThreshold.hex(32)),
 			],
-			surplusThreshold_ephSecretKey.hex(32),
+			masterZkpSecretKey.hex(32),
 			[
-				decompressStarlightKey(surplusThreshold_newOwnerPublicKey)[0].hex(32),
-				decompressStarlightKey(surplusThreshold_newOwnerPublicKey)[1].hex(32),
+				decompressStarlightKey(masterZkpPublicKey)[0].hex(32),
+				decompressStarlightKey(masterZkpPublicKey)[1].hex(32),
 			]
 		);
 
 		let surplusThreshold_cipherText_combined = {
 			varName: "surplusThreshold",
 			cipherText: surplusThreshold_bcipherText,
-			ephPublicKey: surplusThreshold_ephPublicKey.hex(32),
+			ephPublicKey: masterZkpPublicKey.hex(32),
 		};
 
 		BackupData.push(surplusThreshold_cipherText_combined);

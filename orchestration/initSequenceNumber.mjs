@@ -323,37 +323,6 @@ export class InitSequenceNumberManager {
 
 		// Encrypt pre-image for state variable latestShortfallSequenceNumber as a backup:
 
-		let latestShortfallSequenceNumber_ephSecretKey = generalise(
-			utils.randomHex(31)
-		);
-
-		let latestShortfallSequenceNumber_ephPublicKeyPoint = generalise(
-			scalarMult(
-				latestShortfallSequenceNumber_ephSecretKey.hex(32),
-				config.BABYJUBJUB.GENERATOR
-			)
-		);
-
-		let latestShortfallSequenceNumber_ephPublicKey = compressStarlightKey(
-			latestShortfallSequenceNumber_ephPublicKeyPoint
-		);
-
-		while (latestShortfallSequenceNumber_ephPublicKey === null) {
-			latestShortfallSequenceNumber_ephSecretKey = generalise(
-				utils.randomHex(31)
-			);
-
-			latestShortfallSequenceNumber_ephPublicKeyPoint = generalise(
-				scalarMult(
-					latestShortfallSequenceNumber_ephSecretKey.hex(32),
-					config.BABYJUBJUB.GENERATOR
-				)
-			);
-
-			latestShortfallSequenceNumber_ephPublicKey = compressStarlightKey(
-				latestShortfallSequenceNumber_ephPublicKeyPoint
-			);
-		}
 
 		const latestShortfallSequenceNumber_bcipherText = encrypt(
 			[
@@ -361,58 +330,22 @@ export class InitSequenceNumberManager {
 				BigInt(latestShortfallSequenceNumber_stateVarId),
 				BigInt(latestShortfallSequenceNumber.hex(32)),
 			],
-			latestShortfallSequenceNumber_ephSecretKey.hex(32),
+			masterZkpSecretKey.hex(32),
 			[
-				decompressStarlightKey(
-					latestShortfallSequenceNumber_newOwnerPublicKey
-				)[0].hex(32),
-				decompressStarlightKey(
-					latestShortfallSequenceNumber_newOwnerPublicKey
-				)[1].hex(32),
+				decompressStarlightKey(masterZkpPublicKey)[0].hex(32),
+				decompressStarlightKey(masterZkpPublicKey)[1].hex(32),
 			]
 		);
 
 		let latestShortfallSequenceNumber_cipherText_combined = {
 			varName: "latestShortfallSequenceNumber",
 			cipherText: latestShortfallSequenceNumber_bcipherText,
-			ephPublicKey: latestShortfallSequenceNumber_ephPublicKey.hex(32),
+			ephPublicKey: masterZkpPublicKeyy.hex(32),
 		};
 
 		BackupData.push(latestShortfallSequenceNumber_cipherText_combined);
 
 		// Encrypt pre-image for state variable latestSurplusSequenceNumber as a backup:
-
-		let latestSurplusSequenceNumber_ephSecretKey = generalise(
-			utils.randomHex(31)
-		);
-
-		let latestSurplusSequenceNumber_ephPublicKeyPoint = generalise(
-			scalarMult(
-				latestSurplusSequenceNumber_ephSecretKey.hex(32),
-				config.BABYJUBJUB.GENERATOR
-			)
-		);
-
-		let latestSurplusSequenceNumber_ephPublicKey = compressStarlightKey(
-			latestSurplusSequenceNumber_ephPublicKeyPoint
-		);
-
-		while (latestSurplusSequenceNumber_ephPublicKey === null) {
-			latestSurplusSequenceNumber_ephSecretKey = generalise(
-				utils.randomHex(31)
-			);
-
-			latestSurplusSequenceNumber_ephPublicKeyPoint = generalise(
-				scalarMult(
-					latestSurplusSequenceNumber_ephSecretKey.hex(32),
-					config.BABYJUBJUB.GENERATOR
-				)
-			);
-
-			latestSurplusSequenceNumber_ephPublicKey = compressStarlightKey(
-				latestSurplusSequenceNumber_ephPublicKeyPoint
-			);
-		}
 
 		const latestSurplusSequenceNumber_bcipherText = encrypt(
 			[
@@ -420,21 +353,17 @@ export class InitSequenceNumberManager {
 				BigInt(latestSurplusSequenceNumber_stateVarId),
 				BigInt(latestSurplusSequenceNumber.hex(32)),
 			],
-			latestSurplusSequenceNumber_ephSecretKey.hex(32),
+			masterZkpSecretKey.hex(32),
 			[
-				decompressStarlightKey(
-					latestSurplusSequenceNumber_newOwnerPublicKey
-				)[0].hex(32),
-				decompressStarlightKey(
-					latestSurplusSequenceNumber_newOwnerPublicKey
-				)[1].hex(32),
+				decompressStarlightKey(masterZkpPublicKey)[0].hex(32),
+				decompressStarlightKey(masterZkpPublicKey)[1].hex(32),
 			]
 		);
 
 		let latestSurplusSequenceNumber_cipherText_combined = {
 			varName: "latestSurplusSequenceNumber",
 			cipherText: latestSurplusSequenceNumber_bcipherText,
-			ephPublicKey: latestSurplusSequenceNumber_ephPublicKey.hex(32),
+			ephPublicKey: masterZkpPublicKey.hex(32),
 		};
 
 		BackupData.push(latestSurplusSequenceNumber_cipherText_combined);
