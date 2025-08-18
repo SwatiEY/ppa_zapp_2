@@ -59,11 +59,9 @@ volumeShare = volumeShareParam
         )
         // volumeShare_oldCommitment_nullifier : non-existence check
         
-        volumeShare_oldCommitment_owner_secretKey = if volumeShare_oldCommitment_isDummy then 0 else volumeShare_oldCommitment_owner_secretKey fi
- 
-        volumeShare_oldCommitment_salt = if volumeShare_oldCommitment_isDummy then 0 else volumeShare_oldCommitment_salt fi
-
-        volumeShare_oldCommitment_value = if volumeShare_oldCommitment_isDummy then 0 else volumeShare_oldCommitment_value fi
+        assert(!volumeShare_oldCommitment_isDummy || (volumeShare_oldCommitment_owner_secretKey == 0))
+        assert(!volumeShare_oldCommitment_isDummy || (volumeShare_oldCommitment_salt == 0))
+        assert(!volumeShare_oldCommitment_isDummy || (volumeShare_oldCommitment_value == 0))
 
         // prepare secret state 'volumeShare' for commitment
 

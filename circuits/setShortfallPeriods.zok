@@ -59,11 +59,9 @@ numberOfConsecutivePeriodsForShortfall = shortfallPeriods
         )
         // numberOfConsecutivePeriodsForShortfall_oldCommitment_nullifier : non-existence check
         
-        numberOfConsecutivePeriodsForShortfall_oldCommitment_owner_secretKey = if numberOfConsecutivePeriodsForShortfall_oldCommitment_isDummy then 0 else numberOfConsecutivePeriodsForShortfall_oldCommitment_owner_secretKey fi
- 
-        numberOfConsecutivePeriodsForShortfall_oldCommitment_salt = if numberOfConsecutivePeriodsForShortfall_oldCommitment_isDummy then 0 else numberOfConsecutivePeriodsForShortfall_oldCommitment_salt fi
-
-        numberOfConsecutivePeriodsForShortfall_oldCommitment_value = if numberOfConsecutivePeriodsForShortfall_oldCommitment_isDummy then 0 else numberOfConsecutivePeriodsForShortfall_oldCommitment_value fi
+        assert(!numberOfConsecutivePeriodsForShortfall_oldCommitment_isDummy || (numberOfConsecutivePeriodsForShortfall_oldCommitment_owner_secretKey == 0))
+        assert(!numberOfConsecutivePeriodsForShortfall_oldCommitment_isDummy || (numberOfConsecutivePeriodsForShortfall_oldCommitment_salt == 0))
+        assert(!numberOfConsecutivePeriodsForShortfall_oldCommitment_isDummy || (numberOfConsecutivePeriodsForShortfall_oldCommitment_value == 0))
 
         // prepare secret state 'numberOfConsecutivePeriodsForShortfall' for commitment
 

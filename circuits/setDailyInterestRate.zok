@@ -59,11 +59,9 @@ dailyInterestRate = dailyInterestRateParam
         )
         // dailyInterestRate_oldCommitment_nullifier : non-existence check
         
-        dailyInterestRate_oldCommitment_owner_secretKey = if dailyInterestRate_oldCommitment_isDummy then 0 else dailyInterestRate_oldCommitment_owner_secretKey fi
- 
-        dailyInterestRate_oldCommitment_salt = if dailyInterestRate_oldCommitment_isDummy then 0 else dailyInterestRate_oldCommitment_salt fi
-
-        dailyInterestRate_oldCommitment_value = if dailyInterestRate_oldCommitment_isDummy then 0 else dailyInterestRate_oldCommitment_value fi
+        assert(!dailyInterestRate_oldCommitment_isDummy || (dailyInterestRate_oldCommitment_owner_secretKey == 0))
+        assert(!dailyInterestRate_oldCommitment_isDummy || (dailyInterestRate_oldCommitment_salt == 0))
+        assert(!dailyInterestRate_oldCommitment_isDummy || (dailyInterestRate_oldCommitment_value == 0))
 
         // prepare secret state 'dailyInterestRate' for commitment
 

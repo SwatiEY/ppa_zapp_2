@@ -77,11 +77,11 @@ latestSurplusSequenceNumber = 0
         )
         // latestShortfallSequenceNumber_oldCommitment_nullifier : non-existence check
         
-        latestShortfallSequenceNumber_oldCommitment_owner_secretKey = if latestShortfallSequenceNumber_oldCommitment_isDummy then 0 else latestShortfallSequenceNumber_oldCommitment_owner_secretKey fi
+assert(!latestShortfallSequenceNumber_oldCommitment_isDummy || (latestShortfallSequenceNumber_oldCommitment_owner_secretKey == 0))
  
-        latestShortfallSequenceNumber_oldCommitment_salt = if latestShortfallSequenceNumber_oldCommitment_isDummy then 0 else latestShortfallSequenceNumber_oldCommitment_salt fi
+assert(!latestShortfallSequenceNumber_oldCommitment_isDummy || (latestShortfallSequenceNumber_oldCommitment_salt == 0))
 
-        latestShortfallSequenceNumber_oldCommitment_value = if latestShortfallSequenceNumber_oldCommitment_isDummy then 0 else latestShortfallSequenceNumber_oldCommitment_value fi
+assert(!latestShortfallSequenceNumber_oldCommitment_isDummy || (latestShortfallSequenceNumber_oldCommitment_value == 0))
 
         // prepare secret state 'latestShortfallSequenceNumber' for commitment
 
@@ -160,11 +160,11 @@ latestSurplusSequenceNumber = 0
         )
         // latestSurplusSequenceNumber_oldCommitment_nullifier : non-existence check
         
-        latestSurplusSequenceNumber_oldCommitment_owner_secretKey = if latestSurplusSequenceNumber_oldCommitment_isDummy then 0 else latestSurplusSequenceNumber_oldCommitment_owner_secretKey fi
+        assert(!latestSurplusSequenceNumber_oldCommitment_isDummy || (latestSurplusSequenceNumber_oldCommitment_owner_secretKey == 0))
  
-        latestSurplusSequenceNumber_oldCommitment_salt = if latestSurplusSequenceNumber_oldCommitment_isDummy then 0 else latestSurplusSequenceNumber_oldCommitment_salt fi
+        assert(!latestSurplusSequenceNumber_oldCommitment_isDummy || (latestSurplusSequenceNumber_oldCommitment_salt == 0))
 
-        latestSurplusSequenceNumber_oldCommitment_value = if latestSurplusSequenceNumber_oldCommitment_isDummy then 0 else latestSurplusSequenceNumber_oldCommitment_value fi
+        assert(!latestSurplusSequenceNumber_oldCommitment_isDummy || (latestSurplusSequenceNumber_oldCommitment_value == 0))
 
         // prepare secret state 'latestSurplusSequenceNumber' for commitment
 

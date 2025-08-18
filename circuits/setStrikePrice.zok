@@ -59,11 +59,9 @@ strikePrice = strikePriceParam
         )
         // strikePrice_oldCommitment_nullifier : non-existence check
         
-        strikePrice_oldCommitment_owner_secretKey = if strikePrice_oldCommitment_isDummy then 0 else strikePrice_oldCommitment_owner_secretKey fi
- 
-        strikePrice_oldCommitment_salt = if strikePrice_oldCommitment_isDummy then 0 else strikePrice_oldCommitment_salt fi
-
-        strikePrice_oldCommitment_value = if strikePrice_oldCommitment_isDummy then 0 else strikePrice_oldCommitment_value fi
+        assert(!strikePrice_oldCommitment_isDummy || (strikePrice_oldCommitment_owner_secretKey == 0))
+        assert(!strikePrice_oldCommitment_isDummy || (strikePrice_oldCommitment_salt == 0))
+        assert(!strikePrice_oldCommitment_isDummy || (strikePrice_oldCommitment_value == 0))
 
         // prepare secret state 'strikePrice' for commitment
 
