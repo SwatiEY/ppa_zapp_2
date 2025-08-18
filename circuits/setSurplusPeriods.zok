@@ -59,9 +59,11 @@ numberOfConsecutivePeriodsForSurplus = surplusPeriods
         )
         // numberOfConsecutivePeriodsForSurplus_oldCommitment_nullifier : non-existence check
         
-        
+        numberOfConsecutivePeriodsForSurplus_oldCommitment_owner_secretKey = if numberOfConsecutivePeriodsForSurplus_oldCommitment_isDummy then 0 else numberOfConsecutivePeriodsForSurplus_oldCommitment_owner_secretKey fi
+ 
+        numberOfConsecutivePeriodsForSurplus_oldCommitment_salt = if numberOfConsecutivePeriodsForSurplus_oldCommitment_isDummy then 0 else numberOfConsecutivePeriodsForSurplus_oldCommitment_salt fi
 
-
+        numberOfConsecutivePeriodsForSurplus_oldCommitment_value = if numberOfConsecutivePeriodsForSurplus_oldCommitment_isDummy then 0 else numberOfConsecutivePeriodsForSurplus_oldCommitment_value fi
 
         // prepare secret state 'numberOfConsecutivePeriodsForSurplus' for commitment
 

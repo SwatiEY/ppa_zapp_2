@@ -59,9 +59,11 @@ shortfallThreshold = shortfallThresholdParam
         )
         // shortfallThreshold_oldCommitment_nullifier : non-existence check
         
-        
+        shortfallThreshold_oldCommitment_owner_secretKey = if shortfallThreshold_oldCommitment_isDummy then 0 else shortfallThreshold_oldCommitment_owner_secretKey fi
+ 
+        shortfallThreshold_oldCommitment_salt = if shortfallThreshold_oldCommitment_isDummy then 0 else shortfallThreshold_oldCommitment_salt fi
 
-
+        shortfallThreshold_oldCommitment_value = if shortfallThreshold_oldCommitment_isDummy then 0 else shortfallThreshold_oldCommitment_value fi
 
         // prepare secret state 'shortfallThreshold' for commitment
 

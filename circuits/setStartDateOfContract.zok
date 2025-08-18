@@ -59,9 +59,11 @@ startDateOfContract = startDateOfContractParam
         )
         // startDateOfContract_oldCommitment_nullifier : non-existence check
         
-        
+        startDateOfContract_oldCommitment_owner_secretKey = if startDateOfContract_oldCommitment_isDummy then 0 else startDateOfContract_oldCommitment_owner_secretKey fi
+ 
+        startDateOfContract_oldCommitment_salt = if startDateOfContract_oldCommitment_isDummy then 0 else startDateOfContract_oldCommitment_salt fi
 
-
+        startDateOfContract_oldCommitment_value = if startDateOfContract_oldCommitment_isDummy then false else startDateOfContract_oldCommitment_value fi
 
         // prepare secret state 'startDateOfContract' for commitment
 

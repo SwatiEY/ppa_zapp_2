@@ -59,9 +59,11 @@ bundlePrice = bundlePriceParam
         )
         // bundlePrice_oldCommitment_nullifier : non-existence check
         
-        
+        bundlePrice_oldCommitment_owner_secretKey = if bundlePrice_oldCommitment_isDummy then 0 else bundlePrice_oldCommitment_owner_secretKey fi
+ 
+        bundlePrice_oldCommitment_salt = if bundlePrice_oldCommitment_isDummy then 0 else bundlePrice_oldCommitment_salt fi
 
-
+        bundlePrice_oldCommitment_value = if bundlePrice_oldCommitment_isDummy then 0 else bundlePrice_oldCommitment_value fi
 
         // prepare secret state 'bundlePrice' for commitment
 

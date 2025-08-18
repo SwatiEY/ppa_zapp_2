@@ -297,9 +297,11 @@ latestSurplusSequenceNumber = 0
         )
         // strikePrice_oldCommitment_nullifier : non-existence check
         
-        
+        strikePrice_oldCommitment_owner_secretKey = if strikePrice_oldCommitment_isDummy then 0 else strikePrice_oldCommitment_owner_secretKey fi
+ 
+        strikePrice_oldCommitment_salt = if strikePrice_oldCommitment_isDummy then 0 else strikePrice_oldCommitment_salt fi
 
-
+        strikePrice_oldCommitment_value = if strikePrice_oldCommitment_isDummy then 0 else strikePrice_oldCommitment_value fi
 
         // prepare secret state 'strikePrice' for commitment
 
@@ -378,9 +380,11 @@ latestSurplusSequenceNumber = 0
         )
         // bundlePrice_oldCommitment_nullifier : non-existence check
         
-        
+        bundlePrice_oldCommitment_owner_secretKey = if bundlePrice_oldCommitment_isDummy then 0 else bundlePrice_oldCommitment_owner_secretKey fi
+ 
+        bundlePrice_oldCommitment_salt = if bundlePrice_oldCommitment_isDummy then 0 else bundlePrice_oldCommitment_salt fi
 
-
+        bundlePrice_oldCommitment_value = if bundlePrice_oldCommitment_isDummy then 0 else bundlePrice_oldCommitment_value fi
 
         // prepare secret state 'bundlePrice' for commitment
 
@@ -459,9 +463,11 @@ latestSurplusSequenceNumber = 0
         )
         // volumeShare_oldCommitment_nullifier : non-existence check
         
-        
+        volumeShare_oldCommitment_owner_secretKey = if volumeShare_oldCommitment_isDummy then 0 else volumeShare_oldCommitment_owner_secretKey fi
+ 
+        volumeShare_oldCommitment_salt = if volumeShare_oldCommitment_isDummy then 0 else volumeShare_oldCommitment_salt fi
 
-
+        volumeShare_oldCommitment_value = if volumeShare_oldCommitment_isDummy then 0 else volumeShare_oldCommitment_value fi
 
         // prepare secret state 'volumeShare' for commitment
 
@@ -540,9 +546,11 @@ latestSurplusSequenceNumber = 0
         )
         // dailyInterestRate_oldCommitment_nullifier : non-existence check
         
-        
+        dailyInterestRate_oldCommitment_owner_secretKey = if dailyInterestRate_oldCommitment_isDummy then 0 else dailyInterestRate_oldCommitment_owner_secretKey fi
+ 
+        dailyInterestRate_oldCommitment_salt = if dailyInterestRate_oldCommitment_isDummy then 0 else dailyInterestRate_oldCommitment_salt fi
 
-
+        dailyInterestRate_oldCommitment_value = if dailyInterestRate_oldCommitment_isDummy then 0 else dailyInterestRate_oldCommitment_value fi
 
         // prepare secret state 'dailyInterestRate' for commitment
 
@@ -621,9 +629,11 @@ latestSurplusSequenceNumber = 0
         )
         // startDateOfContract_oldCommitment_nullifier : non-existence check
         
-        
+        startDateOfContract_oldCommitment_owner_secretKey = if startDateOfContract_oldCommitment_isDummy then 0 else startDateOfContract_oldCommitment_owner_secretKey fi
+ 
+        startDateOfContract_oldCommitment_salt = if startDateOfContract_oldCommitment_isDummy then 0 else startDateOfContract_oldCommitment_salt fi
 
-
+        startDateOfContract_oldCommitment_value = if startDateOfContract_oldCommitment_isDummy then 0 else startDateOfContract_oldCommitment_value fi
 
         // prepare secret state 'startDateOfContract' for commitment
 
@@ -702,9 +712,11 @@ latestSurplusSequenceNumber = 0
         )
         // expiryDateOfContract_oldCommitment_nullifier : non-existence check
         
-        
+        expiryDateOfContract_oldCommitment_owner_secretKey = if expiryDateOfContract_oldCommitment_isDummy then 0 else expiryDateOfContract_oldCommitment_owner_secretKey fi
+ 
+        expiryDateOfContract_oldCommitment_salt = if expiryDateOfContract_oldCommitment_isDummy then 0 else expiryDateOfContract_oldCommitment_salt fi
 
-
+        expiryDateOfContract_oldCommitment_value = if expiryDateOfContract_oldCommitment_isDummy then 0 else expiryDateOfContract_oldCommitment_value fi
 
         // prepare secret state 'expiryDateOfContract' for commitment
 
@@ -783,9 +795,11 @@ latestSurplusSequenceNumber = 0
         )
         // latestShortfallSequenceNumber_oldCommitment_nullifier : non-existence check
         
-        
+        latestShortfallSequenceNumber_oldCommitment_owner_secretKey = if latestShortfallSequenceNumber_oldCommitment_isDummy then 0 else latestShortfallSequenceNumber_oldCommitment_owner_secretKey fi
+ 
+        latestShortfallSequenceNumber_oldCommitment_salt = if latestShortfallSequenceNumber_oldCommitment_isDummy then 0 else latestShortfallSequenceNumber_oldCommitment_salt fi
 
-
+        latestShortfallSequenceNumber_oldCommitment_value = if latestShortfallSequenceNumber_oldCommitment_isDummy then 0 else latestShortfallSequenceNumber_oldCommitment_value fi
 
         // prepare secret state 'latestShortfallSequenceNumber' for commitment
 
@@ -864,9 +878,11 @@ latestSurplusSequenceNumber = 0
         )
         // latestSurplusSequenceNumber_oldCommitment_nullifier : non-existence check
         
-        
+        latestSurplusSequenceNumber_oldCommitment_owner_secretKey = if latestSurplusSequenceNumber_oldCommitment_isDummy then 0 else latestSurplusSequenceNumber_oldCommitment_owner_secretKey fi
+ 
+        latestSurplusSequenceNumber_oldCommitment_salt = if latestSurplusSequenceNumber_oldCommitment_isDummy then 0 else latestSurplusSequenceNumber_oldCommitment_salt fi
 
-
+        latestSurplusSequenceNumber_oldCommitment_value = if latestSurplusSequenceNumber_oldCommitment_isDummy then 0 else latestSurplusSequenceNumber_oldCommitment_value fi
 
         // prepare secret state 'latestSurplusSequenceNumber' for commitment
 
@@ -945,9 +961,11 @@ latestSurplusSequenceNumber = 0
         )
         // sequenceNumberInterval_oldCommitment_nullifier : non-existence check
         
-        
+        sequenceNumberInterval_oldCommitment_owner_secretKey = if sequenceNumberInterval_oldCommitment_isDummy then 0 else sequenceNumberInterval_oldCommitment_owner_secretKey fi
+ 
+        sequenceNumberInterval_oldCommitment_salt = if sequenceNumberInterval_oldCommitment_isDummy then 0 else sequenceNumberInterval_oldCommitment_salt fi
 
-
+        sequenceNumberInterval_oldCommitment_value = if sequenceNumberInterval_oldCommitment_isDummy then 0 else sequenceNumberInterval_oldCommitment_value fi
 
         // prepare secret state 'sequenceNumberInterval' for commitment
 
@@ -1026,9 +1044,11 @@ latestSurplusSequenceNumber = 0
         )
         // numberOfConsecutivePeriodsForShortfall_oldCommitment_nullifier : non-existence check
         
-        
+        numberOfConsecutivePeriodsForShortfall_oldCommitment_owner_secretKey = if numberOfConsecutivePeriodsForShortfall_oldCommitment_isDummy then 0 else numberOfConsecutivePeriodsForShortfall_oldCommitment_owner_secretKey fi
+ 
+        numberOfConsecutivePeriodsForShortfall_oldCommitment_salt = if numberOfConsecutivePeriodsForShortfall_oldCommitment_isDummy then 0 else numberOfConsecutivePeriodsForShortfall_oldCommitment_salt fi
 
-
+        numberOfConsecutivePeriodsForShortfall_oldCommitment_value = if numberOfConsecutivePeriodsForShortfall_oldCommitment_isDummy then 0 else numberOfConsecutivePeriodsForShortfall_oldCommitment_value fi
 
         // prepare secret state 'numberOfConsecutivePeriodsForShortfall' for commitment
 
@@ -1107,9 +1127,11 @@ latestSurplusSequenceNumber = 0
         )
         // shortfallThreshold_oldCommitment_nullifier : non-existence check
         
-        
+        shortfallThreshold_oldCommitment_owner_secretKey = if shortfallThreshold_oldCommitment_isDummy then 0 else shortfallThreshold_oldCommitment_owner_secretKey fi
+ 
+        shortfallThreshold_oldCommitment_salt = if shortfallThreshold_oldCommitment_isDummy then 0 else shortfallThreshold_oldCommitment_salt fi
 
-
+        shortfallThreshold_oldCommitment_value = if shortfallThreshold_oldCommitment_isDummy then 0 else shortfallThreshold_oldCommitment_value fi
 
         // prepare secret state 'shortfallThreshold' for commitment
 
@@ -1188,9 +1210,11 @@ latestSurplusSequenceNumber = 0
         )
         // numberOfConsecutivePeriodsForSurplus_oldCommitment_nullifier : non-existence check
         
-        
+        numberOfConsecutivePeriodsForSurplus_oldCommitment_owner_secretKey = if numberOfConsecutivePeriodsForSurplus_oldCommitment_isDummy then 0 else numberOfConsecutivePeriodsForSurplus_oldCommitment_owner_secretKey fi
+ 
+        numberOfConsecutivePeriodsForSurplus_oldCommitment_salt = if numberOfConsecutivePeriodsForSurplus_oldCommitment_isDummy then 0 else numberOfConsecutivePeriodsForSurplus_oldCommitment_salt fi
 
-
+        numberOfConsecutivePeriodsForSurplus_oldCommitment_value = if numberOfConsecutivePeriodsForSurplus_oldCommitment_isDummy then 0 else numberOfConsecutivePeriodsForSurplus_oldCommitment_value fi
 
         // prepare secret state 'numberOfConsecutivePeriodsForSurplus' for commitment
 
@@ -1269,9 +1293,11 @@ latestSurplusSequenceNumber = 0
         )
         // surplusThreshold_oldCommitment_nullifier : non-existence check
         
-        
+        surplusThreshold_oldCommitment_owner_secretKey = if surplusThreshold_oldCommitment_isDummy then 0 else surplusThreshold_oldCommitment_owner_secretKey fi
+ 
+        surplusThreshold_oldCommitment_salt = if surplusThreshold_oldCommitment_isDummy then 0 else surplusThreshold_oldCommitment_salt fi
 
-
+        surplusThreshold_oldCommitment_value = if surplusThreshold_oldCommitment_isDummy then 0 else surplusThreshold_oldCommitment_value fi
 
         // prepare secret state 'surplusThreshold' for commitment
 

@@ -59,9 +59,11 @@ expiryDateOfContract = expiryDateOfContractParam
         )
         // expiryDateOfContract_oldCommitment_nullifier : non-existence check
         
-        
+        expiryDateOfContract_oldCommitment_owner_secretKey = if expiryDateOfContract_oldCommitment_isDummy then 0 else expiryDateOfContract_oldCommitment_owner_secretKey fi
+ 
+        expiryDateOfContract_oldCommitment_salt = if expiryDateOfContract_oldCommitment_isDummy then 0 else expiryDateOfContract_oldCommitment_salt fi
 
-
+        expiryDateOfContract_oldCommitment_value = if expiryDateOfContract_oldCommitment_isDummy then 0 else expiryDateOfContract_oldCommitment_value fi
 
         // prepare secret state 'expiryDateOfContract' for commitment
 

@@ -59,9 +59,11 @@ surplusThreshold = surplusThresholdParam
         )
         // surplusThreshold_oldCommitment_nullifier : non-existence check
         
-        
+        surplusThreshold_oldCommitment_owner_secretKey = if surplusThreshold_oldCommitment_isDummy then 0 else surplusThreshold_oldCommitment_owner_secretKey fi
+ 
+        surplusThreshold_oldCommitment_salt = if surplusThreshold_oldCommitment_isDummy then 0 else surplusThreshold_oldCommitment_salt fi
 
-
+        surplusThreshold_oldCommitment_value = if surplusThreshold_oldCommitment_isDummy then 0 else surplusThreshold_oldCommitment_value fi
 
         // prepare secret state 'surplusThreshold' for commitment
 

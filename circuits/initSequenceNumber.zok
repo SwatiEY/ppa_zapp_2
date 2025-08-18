@@ -77,9 +77,11 @@ latestSurplusSequenceNumber = 0
         )
         // latestShortfallSequenceNumber_oldCommitment_nullifier : non-existence check
         
-        
+        latestShortfallSequenceNumber_oldCommitment_owner_secretKey = if latestShortfallSequenceNumber_oldCommitment_isDummy then 0 else latestShortfallSequenceNumber_oldCommitment_owner_secretKey fi
+ 
+        latestShortfallSequenceNumber_oldCommitment_salt = if latestShortfallSequenceNumber_oldCommitment_isDummy then 0 else latestShortfallSequenceNumber_oldCommitment_salt fi
 
-
+        latestShortfallSequenceNumber_oldCommitment_value = if latestShortfallSequenceNumber_oldCommitment_isDummy then 0 else latestShortfallSequenceNumber_oldCommitment_value fi
 
         // prepare secret state 'latestShortfallSequenceNumber' for commitment
 
@@ -158,9 +160,11 @@ latestSurplusSequenceNumber = 0
         )
         // latestSurplusSequenceNumber_oldCommitment_nullifier : non-existence check
         
-        
+        latestSurplusSequenceNumber_oldCommitment_owner_secretKey = if latestSurplusSequenceNumber_oldCommitment_isDummy then 0 else latestSurplusSequenceNumber_oldCommitment_owner_secretKey fi
+ 
+        latestSurplusSequenceNumber_oldCommitment_salt = if latestSurplusSequenceNumber_oldCommitment_isDummy then 0 else latestSurplusSequenceNumber_oldCommitment_salt fi
 
-
+        latestSurplusSequenceNumber_oldCommitment_value = if latestSurplusSequenceNumber_oldCommitment_isDummy then 0 else latestSurplusSequenceNumber_oldCommitment_value fi
 
         // prepare secret state 'latestSurplusSequenceNumber' for commitment
 
