@@ -207,55 +207,23 @@ export class SetStartDateOfContractManager {
 
 		// Encrypt pre-image for state variable startDateOfContract as a backup:
 
-		let startDateOfContract_ephSecretKey = generalise(utils.randomHex(31));
-
-		let startDateOfContract_ephPublicKeyPoint = generalise(
-			scalarMult(
-				startDateOfContract_ephSecretKey.hex(32),
-				config.BABYJUBJUB.GENERATOR
-			)
-		);
-
-		let startDateOfContract_ephPublicKey = compressStarlightKey(
-			startDateOfContract_ephPublicKeyPoint
-		);
-
-		while (startDateOfContract_ephPublicKey === null) {
-			startDateOfContract_ephSecretKey = generalise(utils.randomHex(31));
-
-			startDateOfContract_ephPublicKeyPoint = generalise(
-				scalarMult(
-					startDateOfContract_ephSecretKey.hex(32),
-					config.BABYJUBJUB.GENERATOR
-				)
-			);
-
-			startDateOfContract_ephPublicKey = compressStarlightKey(
-				startDateOfContract_ephPublicKeyPoint
-			);
-		}
-
 		const startDateOfContract_bcipherText = encrypt(
 			[
 				BigInt(startDateOfContract_newSalt.hex(32)),
 				BigInt(startDateOfContract_stateVarId),
 				BigInt(startDateOfContract.hex(32)),
 			],
-			startDateOfContract_ephSecretKey.hex(32),
+			masterZkpSecretKey.hex(32),
 			[
-				decompressStarlightKey(startDateOfContract_newOwnerPublicKey)[0].hex(
-					32
-				),
-				decompressStarlightKey(startDateOfContract_newOwnerPublicKey)[1].hex(
-					32
-				),
+				decompressStarlightKey(masterZkpPublicKey)[0].hex(32),
+				decompressStarlightKey(masterZkpPublicKey)[1].hex(32),
 			]
 		);
 
 		let startDateOfContract_cipherText_combined = {
 			varName: "startDateOfContract",
 			cipherText: startDateOfContract_bcipherText,
-			ephPublicKey: startDateOfContract_ephPublicKey.hex(32),
+			ephPublicKey: masterZkpPublicKey.hex(32),
 		};
 
 		BackupData.push(startDateOfContract_cipherText_combined);

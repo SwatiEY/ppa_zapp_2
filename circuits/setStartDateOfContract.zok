@@ -59,9 +59,9 @@ startDateOfContract = startDateOfContractParam
         )
         // startDateOfContract_oldCommitment_nullifier : non-existence check
         
-        
-
-
+        assert(!startDateOfContract_oldCommitment_isDummy || (startDateOfContract_oldCommitment_owner_secretKey == 0))
+        assert(!startDateOfContract_oldCommitment_isDummy || (startDateOfContract_oldCommitment_salt == 0))
+        assert(!startDateOfContract_oldCommitment_isDummy || (startDateOfContract_oldCommitment_value == 0))
 
         // prepare secret state 'startDateOfContract' for commitment
 

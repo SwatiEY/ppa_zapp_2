@@ -297,9 +297,9 @@ latestSurplusSequenceNumber = 0
         )
         // strikePrice_oldCommitment_nullifier : non-existence check
         
-        
-
-
+        assert(!strikePrice_oldCommitment_isDummy || (strikePrice_oldCommitment_owner_secretKey == 0))
+        assert(!strikePrice_oldCommitment_isDummy || (strikePrice_oldCommitment_salt == 0))
+        assert(!strikePrice_oldCommitment_isDummy || (strikePrice_oldCommitment_value == 0))
 
         // prepare secret state 'strikePrice' for commitment
 
@@ -378,9 +378,9 @@ latestSurplusSequenceNumber = 0
         )
         // bundlePrice_oldCommitment_nullifier : non-existence check
         
-        
-
-
+        assert(!bundlePrice_oldCommitment_isDummy || (bundlePrice_oldCommitment_owner_secretKey == 0))
+        assert(!bundlePrice_oldCommitment_isDummy || (bundlePrice_oldCommitment_salt == 0))
+        assert(!bundlePrice_oldCommitment_isDummy || (bundlePrice_oldCommitment_value == 0))
 
         // prepare secret state 'bundlePrice' for commitment
 
@@ -459,9 +459,9 @@ latestSurplusSequenceNumber = 0
         )
         // volumeShare_oldCommitment_nullifier : non-existence check
         
-        
-
-
+        assert(!volumeShare_oldCommitment_isDummy || (volumeShare_oldCommitment_owner_secretKey == 0))
+        assert(!volumeShare_oldCommitment_isDummy || (volumeShare_oldCommitment_salt == 0))
+        assert(!volumeShare_oldCommitment_isDummy || (volumeShare_oldCommitment_value == 0))
 
         // prepare secret state 'volumeShare' for commitment
 
@@ -540,9 +540,9 @@ latestSurplusSequenceNumber = 0
         )
         // dailyInterestRate_oldCommitment_nullifier : non-existence check
         
-        
-
-
+        assert(!dailyInterestRate_oldCommitment_isDummy || (dailyInterestRate_oldCommitment_owner_secretKey == 0))
+        assert(!dailyInterestRate_oldCommitment_isDummy || (dailyInterestRate_oldCommitment_salt == 0))
+        assert(!dailyInterestRate_oldCommitment_isDummy || (dailyInterestRate_oldCommitment_value == 0))
 
         // prepare secret state 'dailyInterestRate' for commitment
 
@@ -621,9 +621,9 @@ latestSurplusSequenceNumber = 0
         )
         // startDateOfContract_oldCommitment_nullifier : non-existence check
         
-        
-
-
+        assert(!startDateOfContract_oldCommitment_isDummy || (startDateOfContract_oldCommitment_owner_secretKey == 0))
+        assert(!startDateOfContract_oldCommitment_isDummy || (startDateOfContract_oldCommitment_salt == 0))
+        assert(!startDateOfContract_oldCommitment_isDummy || (startDateOfContract_oldCommitment_value == 0))
 
         // prepare secret state 'startDateOfContract' for commitment
 
@@ -702,9 +702,9 @@ latestSurplusSequenceNumber = 0
         )
         // expiryDateOfContract_oldCommitment_nullifier : non-existence check
         
-        
-
-
+        assert(!expiryDateOfContract_oldCommitment_isDummy || (expiryDateOfContract_oldCommitment_owner_secretKey == 0))
+        assert(!expiryDateOfContract_oldCommitment_isDummy || (expiryDateOfContract_oldCommitment_salt == 0))
+        assert(!expiryDateOfContract_oldCommitment_isDummy || (expiryDateOfContract_oldCommitment_value == 0))
 
         // prepare secret state 'expiryDateOfContract' for commitment
 
@@ -783,9 +783,9 @@ latestSurplusSequenceNumber = 0
         )
         // latestShortfallSequenceNumber_oldCommitment_nullifier : non-existence check
         
-        
-
-
+        assert(!latestShortfallSequenceNumber_oldCommitment_isDummy || (latestShortfallSequenceNumber_oldCommitment_owner_secretKey == 0))
+        assert(!latestShortfallSequenceNumber_oldCommitment_isDummy || (latestShortfallSequenceNumber_oldCommitment_salt == 0))
+        assert(!latestShortfallSequenceNumber_oldCommitment_isDummy || (latestShortfallSequenceNumber_oldCommitment_value == 0))
 
         // prepare secret state 'latestShortfallSequenceNumber' for commitment
 
@@ -864,9 +864,9 @@ latestSurplusSequenceNumber = 0
         )
         // latestSurplusSequenceNumber_oldCommitment_nullifier : non-existence check
         
-        
-
-
+        assert(!latestSurplusSequenceNumber_oldCommitment_isDummy || (latestSurplusSequenceNumber_oldCommitment_owner_secretKey == 0))
+        assert(!latestSurplusSequenceNumber_oldCommitment_isDummy || (latestSurplusSequenceNumber_oldCommitment_salt == 0))
+        assert(!latestSurplusSequenceNumber_oldCommitment_isDummy || (latestSurplusSequenceNumber_oldCommitment_value == 0))
 
         // prepare secret state 'latestSurplusSequenceNumber' for commitment
 
@@ -945,9 +945,9 @@ latestSurplusSequenceNumber = 0
         )
         // sequenceNumberInterval_oldCommitment_nullifier : non-existence check
         
-        
-
-
+        assert(!sequenceNumberInterval_oldCommitment_isDummy || (sequenceNumberInterval_oldCommitment_owner_secretKey == 0))
+        assert(!sequenceNumberInterval_oldCommitment_isDummy || (sequenceNumberInterval_oldCommitment_salt == 0))
+        assert(!sequenceNumberInterval_oldCommitment_isDummy || (sequenceNumberInterval_oldCommitment_value == 0))
 
         // prepare secret state 'sequenceNumberInterval' for commitment
 
@@ -1026,9 +1026,9 @@ latestSurplusSequenceNumber = 0
         )
         // numberOfConsecutivePeriodsForShortfall_oldCommitment_nullifier : non-existence check
         
-        
-
-
+        assert(!numberOfConsecutivePeriodsForShortfall_oldCommitment_isDummy || (numberOfConsecutivePeriodsForShortfall_oldCommitment_owner_secretKey == 0))
+        assert(!numberOfConsecutivePeriodsForShortfall_oldCommitment_isDummy || (numberOfConsecutivePeriodsForShortfall_oldCommitment_salt == 0))
+        assert(!numberOfConsecutivePeriodsForShortfall_oldCommitment_isDummy || (numberOfConsecutivePeriodsForShortfall_oldCommitment_value == 0))
 
         // prepare secret state 'numberOfConsecutivePeriodsForShortfall' for commitment
 
@@ -1107,9 +1107,9 @@ latestSurplusSequenceNumber = 0
         )
         // shortfallThreshold_oldCommitment_nullifier : non-existence check
         
-        
-
-
+        assert(!shortfallThreshold_oldCommitment_isDummy || (shortfallThreshold_oldCommitment_owner_secretKey == 0))
+        assert(!shortfallThreshold_oldCommitment_isDummy || (shortfallThreshold_oldCommitment_salt == 0))
+        assert(!shortfallThreshold_oldCommitment_isDummy || (shortfallThreshold_oldCommitment_value == 0))
 
         // prepare secret state 'shortfallThreshold' for commitment
 
@@ -1188,9 +1188,9 @@ latestSurplusSequenceNumber = 0
         )
         // numberOfConsecutivePeriodsForSurplus_oldCommitment_nullifier : non-existence check
         
-        
-
-
+        assert(!numberOfConsecutivePeriodsForSurplus_oldCommitment_isDummy || (numberOfConsecutivePeriodsForSurplus_oldCommitment_owner_secretKey == 0))
+        assert(!numberOfConsecutivePeriodsForSurplus_oldCommitment_isDummy || (numberOfConsecutivePeriodsForSurplus_oldCommitment_salt == 0))
+        assert(!numberOfConsecutivePeriodsForSurplus_oldCommitment_isDummy || (numberOfConsecutivePeriodsForSurplus_oldCommitment_value == 0))
 
         // prepare secret state 'numberOfConsecutivePeriodsForSurplus' for commitment
 
@@ -1269,9 +1269,9 @@ latestSurplusSequenceNumber = 0
         )
         // surplusThreshold_oldCommitment_nullifier : non-existence check
         
-        
-
-
+        assert(!surplusThreshold_oldCommitment_isDummy || (surplusThreshold_oldCommitment_owner_secretKey == 0))
+        assert(!surplusThreshold_oldCommitment_isDummy || (surplusThreshold_oldCommitment_salt == 0))
+        assert(!surplusThreshold_oldCommitment_isDummy || (surplusThreshold_oldCommitment_value == 0))
 
         // prepare secret state 'surplusThreshold' for commitment
 

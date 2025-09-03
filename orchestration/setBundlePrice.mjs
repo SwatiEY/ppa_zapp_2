@@ -185,48 +185,23 @@ export class SetBundlePriceManager {
 
 		// Encrypt pre-image for state variable bundlePrice as a backup:
 
-		let bundlePrice_ephSecretKey = generalise(utils.randomHex(31));
-
-		let bundlePrice_ephPublicKeyPoint = generalise(
-			scalarMult(bundlePrice_ephSecretKey.hex(32), config.BABYJUBJUB.GENERATOR)
-		);
-
-		let bundlePrice_ephPublicKey = compressStarlightKey(
-			bundlePrice_ephPublicKeyPoint
-		);
-
-		while (bundlePrice_ephPublicKey === null) {
-			bundlePrice_ephSecretKey = generalise(utils.randomHex(31));
-
-			bundlePrice_ephPublicKeyPoint = generalise(
-				scalarMult(
-					bundlePrice_ephSecretKey.hex(32),
-					config.BABYJUBJUB.GENERATOR
-				)
-			);
-
-			bundlePrice_ephPublicKey = compressStarlightKey(
-				bundlePrice_ephPublicKeyPoint
-			);
-		}
-
 		const bundlePrice_bcipherText = encrypt(
 			[
 				BigInt(bundlePrice_newSalt.hex(32)),
 				BigInt(bundlePrice_stateVarId),
 				BigInt(bundlePrice.hex(32)),
 			],
-			bundlePrice_ephSecretKey.hex(32),
+			masterZkpSecretKey.hex(32),
 			[
-				decompressStarlightKey(bundlePrice_newOwnerPublicKey)[0].hex(32),
-				decompressStarlightKey(bundlePrice_newOwnerPublicKey)[1].hex(32),
+				decompressStarlightKey(masterZkpPublicKey)[0].hex(32),
+				decompressStarlightKey(masterZkpPublicKey)[1].hex(32),
 			]
 		);
 
 		let bundlePrice_cipherText_combined = {
 			varName: "bundlePrice",
 			cipherText: bundlePrice_bcipherText,
-			ephPublicKey: bundlePrice_ephPublicKey.hex(32),
+			ephPublicKey: masterZkpPublicKey.hex(32),
 		};
 
 		BackupData.push(bundlePrice_cipherText_combined);

@@ -185,48 +185,23 @@ export class SetVolumeShareManager {
 
 		// Encrypt pre-image for state variable volumeShare as a backup:
 
-		let volumeShare_ephSecretKey = generalise(utils.randomHex(31));
-
-		let volumeShare_ephPublicKeyPoint = generalise(
-			scalarMult(volumeShare_ephSecretKey.hex(32), config.BABYJUBJUB.GENERATOR)
-		);
-
-		let volumeShare_ephPublicKey = compressStarlightKey(
-			volumeShare_ephPublicKeyPoint
-		);
-
-		while (volumeShare_ephPublicKey === null) {
-			volumeShare_ephSecretKey = generalise(utils.randomHex(31));
-
-			volumeShare_ephPublicKeyPoint = generalise(
-				scalarMult(
-					volumeShare_ephSecretKey.hex(32),
-					config.BABYJUBJUB.GENERATOR
-				)
-			);
-
-			volumeShare_ephPublicKey = compressStarlightKey(
-				volumeShare_ephPublicKeyPoint
-			);
-		}
-
 		const volumeShare_bcipherText = encrypt(
 			[
 				BigInt(volumeShare_newSalt.hex(32)),
 				BigInt(volumeShare_stateVarId),
 				BigInt(volumeShare.hex(32)),
 			],
-			volumeShare_ephSecretKey.hex(32),
+			masterZkpSecretKey.hex(32),
 			[
-				decompressStarlightKey(volumeShare_newOwnerPublicKey)[0].hex(32),
-				decompressStarlightKey(volumeShare_newOwnerPublicKey)[1].hex(32),
+				decompressStarlightKey(masterZkpPublicKey)[0].hex(32),
+				decompressStarlightKey(masterZkpPublicKey)[1].hex(32),
 			]
 		);
 
 		let volumeShare_cipherText_combined = {
 			varName: "volumeShare",
 			cipherText: volumeShare_bcipherText,
-			ephPublicKey: volumeShare_ephPublicKey.hex(32),
+			ephPublicKey: masterZkpPublicKey.hex(32),
 		};
 
 		BackupData.push(volumeShare_cipherText_combined);

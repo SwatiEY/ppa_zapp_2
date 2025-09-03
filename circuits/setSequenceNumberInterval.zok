@@ -59,9 +59,9 @@ sequenceNumberInterval = sequenceNumberIntervalParam
         )
         // sequenceNumberInterval_oldCommitment_nullifier : non-existence check
         
-        
-
-
+        assert(!sequenceNumberInterval_oldCommitment_isDummy || (sequenceNumberInterval_oldCommitment_owner_secretKey == 0))
+        assert(!sequenceNumberInterval_oldCommitment_isDummy || (sequenceNumberInterval_oldCommitment_salt == 0))
+        assert(!sequenceNumberInterval_oldCommitment_isDummy || (sequenceNumberInterval_oldCommitment_value == 0))
 
         // prepare secret state 'sequenceNumberInterval' for commitment
 

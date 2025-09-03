@@ -3617,35 +3617,7 @@ let index_1 = generalise(parseInt(surplusIndex.integer, 10) + 0);
 
 		// Encrypt pre-image for state variable shortfalls_index as a backup:
 
-		let shortfalls_index_ephSecretKey = generalise(utils.randomHex(31));
-
-		let shortfalls_index_ephPublicKeyPoint = generalise(
-			scalarMult(
-				shortfalls_index_ephSecretKey.hex(32),
-				config.BABYJUBJUB.GENERATOR
-			)
-		);
-
-		let shortfalls_index_ephPublicKey = compressStarlightKey(
-			shortfalls_index_ephPublicKeyPoint
-		);
-
-		while (shortfalls_index_ephPublicKey === null) {
-			shortfalls_index_ephSecretKey = generalise(utils.randomHex(31));
-
-			shortfalls_index_ephPublicKeyPoint = generalise(
-				scalarMult(
-					shortfalls_index_ephSecretKey.hex(32),
-					config.BABYJUBJUB.GENERATOR
-				)
-			);
-
-			shortfalls_index_ephPublicKey = compressStarlightKey(
-				shortfalls_index_ephPublicKeyPoint
-			);
-		}
-
-		const shortfalls_index_bcipherText = encrypt(
+				const shortfalls_index_bcipherText = encrypt(
 			[
 				BigInt(shortfalls_index_newSalt.hex(32)),
 				BigInt(generalise(index).hex(32)),
@@ -3654,54 +3626,22 @@ let index_1 = generalise(parseInt(surplusIndex.integer, 10) + 0);
 				BigInt(shortfalls_index.volume.hex(32)),
 				BigInt(shortfalls_index.price.hex(32)),
 			],
-			shortfalls_index_ephSecretKey.hex(32),
+			masterZkpSecretKey.hex(32),
 			[
-				decompressStarlightKey(shortfalls_index_newOwnerPublicKey)[0].hex(32),
-				decompressStarlightKey(shortfalls_index_newOwnerPublicKey)[1].hex(32),
+				decompressStarlightKey(masterZkpPublicKey)[0].hex(32),
+				decompressStarlightKey(masterZkpPublicKey)[1].hex(32),
 			]
 		);
 
 		let shortfalls_index_cipherText_combined = {
 			varName: "shortfalls a",
 			cipherText: shortfalls_index_bcipherText,
-			ephPublicKey: shortfalls_index_ephPublicKey.hex(32),
+			ephPublicKey: masterZkpPublicKey.hex(32),
 		};
 
 		BackupData.push(shortfalls_index_cipherText_combined);
 
 		// Encrypt pre-image for state variable latestShortfallSequenceNumber as a backup:
-
-		let latestShortfallSequenceNumber_ephSecretKey = generalise(
-			utils.randomHex(31)
-		);
-
-		let latestShortfallSequenceNumber_ephPublicKeyPoint = generalise(
-			scalarMult(
-				latestShortfallSequenceNumber_ephSecretKey.hex(32),
-				config.BABYJUBJUB.GENERATOR
-			)
-		);
-
-		let latestShortfallSequenceNumber_ephPublicKey = compressStarlightKey(
-			latestShortfallSequenceNumber_ephPublicKeyPoint
-		);
-
-		while (latestShortfallSequenceNumber_ephPublicKey === null) {
-			latestShortfallSequenceNumber_ephSecretKey = generalise(
-				utils.randomHex(31)
-			);
-
-			latestShortfallSequenceNumber_ephPublicKeyPoint = generalise(
-				scalarMult(
-					latestShortfallSequenceNumber_ephSecretKey.hex(32),
-					config.BABYJUBJUB.GENERATOR
-				)
-			);
-
-			latestShortfallSequenceNumber_ephPublicKey = compressStarlightKey(
-				latestShortfallSequenceNumber_ephPublicKeyPoint
-			);
-		}
 
 		const latestShortfallSequenceNumber_bcipherText = encrypt(
 			[
@@ -3709,54 +3649,23 @@ let index_1 = generalise(parseInt(surplusIndex.integer, 10) + 0);
 				BigInt(latestShortfallSequenceNumber_stateVarId),
 				BigInt(latestShortfallSequenceNumber.hex(32)),
 			],
-			latestShortfallSequenceNumber_ephSecretKey.hex(32),
+			masterZkpSecretKey.hex(32),
 			[
-				decompressStarlightKey(
-					latestShortfallSequenceNumber_newOwnerPublicKey
-				)[0].hex(32),
-				decompressStarlightKey(
-					latestShortfallSequenceNumber_newOwnerPublicKey
-				)[1].hex(32),
+				decompressStarlightKey(masterZkpPublicKey)[0].hex(32),
+				decompressStarlightKey(masterZkpPublicKey)[1].hex(32),
 			]
 		);
 
 		let latestShortfallSequenceNumber_cipherText_combined = {
 			varName: "latestShortfallSequenceNumber",
 			cipherText: latestShortfallSequenceNumber_bcipherText,
-			ephPublicKey: latestShortfallSequenceNumber_ephPublicKey.hex(32),
+			ephPublicKey: masterZkpSecretKey.hex(32),
 		};
 
 		BackupData.push(latestShortfallSequenceNumber_cipherText_combined);
 
 		// Encrypt pre-image for state variable surpluses_index_1 as a backup:
 
-		let surpluses_index_1_ephSecretKey = generalise(utils.randomHex(31));
-
-		let surpluses_index_1_ephPublicKeyPoint = generalise(
-			scalarMult(
-				surpluses_index_1_ephSecretKey.hex(32),
-				config.BABYJUBJUB.GENERATOR
-			)
-		);
-
-		let surpluses_index_1_ephPublicKey = compressStarlightKey(
-			surpluses_index_1_ephPublicKeyPoint
-		);
-
-		while (surpluses_index_1_ephPublicKey === null) {
-			surpluses_index_1_ephSecretKey = generalise(utils.randomHex(31));
-
-			surpluses_index_1_ephPublicKeyPoint = generalise(
-				scalarMult(
-					surpluses_index_1_ephSecretKey.hex(32),
-					config.BABYJUBJUB.GENERATOR
-				)
-			);
-
-			surpluses_index_1_ephPublicKey = compressStarlightKey(
-				surpluses_index_1_ephPublicKeyPoint
-			);
-		}
 
 		const surpluses_index_1_bcipherText = encrypt(
 			[
@@ -3767,113 +3676,46 @@ let index_1 = generalise(parseInt(surplusIndex.integer, 10) + 0);
 				BigInt(surpluses_index_1.volume.hex(32)),
 				BigInt(surpluses_index_1.price.hex(32)),
 			],
-			surpluses_index_1_ephSecretKey.hex(32),
+			masterZkpSecretKey.hex(32),
 			[
-				decompressStarlightKey(surpluses_index_1_newOwnerPublicKey)[0].hex(32),
-				decompressStarlightKey(surpluses_index_1_newOwnerPublicKey)[1].hex(32),
+				decompressStarlightKey(masterZkpPublicKey)[0].hex(32),
+				decompressStarlightKey(masterZkpPublicKey)[1].hex(32),
 			]
 		);
 
 		let surpluses_index_1_cipherText_combined = {
 			varName: "surpluses a",
 			cipherText: surpluses_index_1_bcipherText,
-			ephPublicKey: surpluses_index_1_ephPublicKey.hex(32),
+			ephPublicKey: masterZkpPublicKey.hex(32),
 		};
 
 		BackupData.push(surpluses_index_1_cipherText_combined);
 
 		// Encrypt pre-image for state variable latestSurplusSequenceNumber as a backup:
 
-		let latestSurplusSequenceNumber_ephSecretKey = generalise(
-			utils.randomHex(31)
-		);
-
-		let latestSurplusSequenceNumber_ephPublicKeyPoint = generalise(
-			scalarMult(
-				latestSurplusSequenceNumber_ephSecretKey.hex(32),
-				config.BABYJUBJUB.GENERATOR
-			)
-		);
-
-		let latestSurplusSequenceNumber_ephPublicKey = compressStarlightKey(
-			latestSurplusSequenceNumber_ephPublicKeyPoint
-		);
-
-		while (latestSurplusSequenceNumber_ephPublicKey === null) {
-			latestSurplusSequenceNumber_ephSecretKey = generalise(
-				utils.randomHex(31)
-			);
-
-			latestSurplusSequenceNumber_ephPublicKeyPoint = generalise(
-				scalarMult(
-					latestSurplusSequenceNumber_ephSecretKey.hex(32),
-					config.BABYJUBJUB.GENERATOR
-				)
-			);
-
-			latestSurplusSequenceNumber_ephPublicKey = compressStarlightKey(
-				latestSurplusSequenceNumber_ephPublicKeyPoint
-			);
-		}
-
+		
 		const latestSurplusSequenceNumber_bcipherText = encrypt(
 			[
 				BigInt(latestSurplusSequenceNumber_newSalt.hex(32)),
 				BigInt(latestSurplusSequenceNumber_stateVarId),
 				BigInt(latestSurplusSequenceNumber.hex(32)),
 			],
-			latestSurplusSequenceNumber_ephSecretKey.hex(32),
+			masterZkpSecretKey.hex(32),
 			[
-				decompressStarlightKey(
-					latestSurplusSequenceNumber_newOwnerPublicKey
-				)[0].hex(32),
-				decompressStarlightKey(
-					latestSurplusSequenceNumber_newOwnerPublicKey
-				)[1].hex(32),
+				decompressStarlightKey(masterZkpPublicKey)[0].hex(32),
+				decompressStarlightKey(masterZkpPublicKey)[1].hex(32),
 			]
 		);
 
 		let latestSurplusSequenceNumber_cipherText_combined = {
 			varName: "latestSurplusSequenceNumber",
 			cipherText: latestSurplusSequenceNumber_bcipherText,
-			ephPublicKey: latestSurplusSequenceNumber_ephPublicKey.hex(32),
+			ephPublicKey: masterZkpPublicKey.hex(32),
 		};
 
 		BackupData.push(latestSurplusSequenceNumber_cipherText_combined);
 
 		// Encrypt pre-image for state variable generatorCfdNetPosition_billNumber as a backup:
-
-		let generatorCfdNetPosition_billNumber_ephSecretKey = generalise(
-			utils.randomHex(31)
-		);
-
-		let generatorCfdNetPosition_billNumber_ephPublicKeyPoint = generalise(
-			scalarMult(
-				generatorCfdNetPosition_billNumber_ephSecretKey.hex(32),
-				config.BABYJUBJUB.GENERATOR
-			)
-		);
-
-		let generatorCfdNetPosition_billNumber_ephPublicKey = compressStarlightKey(
-			generatorCfdNetPosition_billNumber_ephPublicKeyPoint
-		);
-
-		while (generatorCfdNetPosition_billNumber_ephPublicKey === null) {
-			generatorCfdNetPosition_billNumber_ephSecretKey = generalise(
-				utils.randomHex(31)
-			);
-
-			generatorCfdNetPosition_billNumber_ephPublicKeyPoint = generalise(
-				scalarMult(
-					generatorCfdNetPosition_billNumber_ephSecretKey.hex(32),
-					config.BABYJUBJUB.GENERATOR
-				)
-			);
-
-			generatorCfdNetPosition_billNumber_ephPublicKey = compressStarlightKey(
-				generatorCfdNetPosition_billNumber_ephPublicKeyPoint
-			);
-		}
 
 		const generatorCfdNetPosition_billNumber_bcipherText = encrypt(
 			[
@@ -3884,58 +3726,22 @@ let index_1 = generalise(parseInt(surplusIndex.integer, 10) + 0);
 				),
 				BigInt(generatorCfdNetPosition_billNumber.hex(32)),
 			],
-			generatorCfdNetPosition_billNumber_ephSecretKey.hex(32),
+			masterZkpSecretKey.hex(32),
 			[
-				decompressStarlightKey(
-					generatorCfdNetPosition_billNumber_newOwnerPublicKey
-				)[0].hex(32),
-				decompressStarlightKey(
-					generatorCfdNetPosition_billNumber_newOwnerPublicKey
-				)[1].hex(32),
+				decompressStarlightKey(masterZkpPublicKey)[0].hex(32),
+				decompressStarlightKey(masterZkpPublicKey)[1].hex(32),
 			]
 		);
 
 		let generatorCfdNetPosition_billNumber_cipherText_combined = {
 			varName: "generatorCfdNetPosition a",
 			cipherText: generatorCfdNetPosition_billNumber_bcipherText,
-			ephPublicKey: generatorCfdNetPosition_billNumber_ephPublicKey.hex(32),
+			ephPublicKey: masterZkpPublicKey.hex(32),
 		};
 
 		BackupData.push(generatorCfdNetPosition_billNumber_cipherText_combined);
 
 		// Encrypt pre-image for state variable offtakerCfdNetPosition_billNumber as a backup:
-
-		let offtakerCfdNetPosition_billNumber_ephSecretKey = generalise(
-			utils.randomHex(31)
-		);
-
-		let offtakerCfdNetPosition_billNumber_ephPublicKeyPoint = generalise(
-			scalarMult(
-				offtakerCfdNetPosition_billNumber_ephSecretKey.hex(32),
-				config.BABYJUBJUB.GENERATOR
-			)
-		);
-
-		let offtakerCfdNetPosition_billNumber_ephPublicKey = compressStarlightKey(
-			offtakerCfdNetPosition_billNumber_ephPublicKeyPoint
-		);
-
-		while (offtakerCfdNetPosition_billNumber_ephPublicKey === null) {
-			offtakerCfdNetPosition_billNumber_ephSecretKey = generalise(
-				utils.randomHex(31)
-			);
-
-			offtakerCfdNetPosition_billNumber_ephPublicKeyPoint = generalise(
-				scalarMult(
-					offtakerCfdNetPosition_billNumber_ephSecretKey.hex(32),
-					config.BABYJUBJUB.GENERATOR
-				)
-			);
-
-			offtakerCfdNetPosition_billNumber_ephPublicKey = compressStarlightKey(
-				offtakerCfdNetPosition_billNumber_ephPublicKeyPoint
-			);
-		}
 
 		const offtakerCfdNetPosition_billNumber_bcipherText = encrypt(
 			[
@@ -3946,58 +3752,22 @@ let index_1 = generalise(parseInt(surplusIndex.integer, 10) + 0);
 				),
 				BigInt(offtakerCfdNetPosition_billNumber.hex(32)),
 			],
-			offtakerCfdNetPosition_billNumber_ephSecretKey.hex(32),
+			masterZkpSecretKey.hex(32),
 			[
-				decompressStarlightKey(
-					offtakerCfdNetPosition_billNumber_newOwnerPublicKey
-				)[0].hex(32),
-				decompressStarlightKey(
-					offtakerCfdNetPosition_billNumber_newOwnerPublicKey
-				)[1].hex(32),
+				decompressStarlightKey(masterZkpPublicKey)[0].hex(32),
+				decompressStarlightKey(masterZkpPublicKey)[1].hex(32),
 			]
 		);
 
 		let offtakerCfdNetPosition_billNumber_cipherText_combined = {
 			varName: "offtakerCfdNetPosition a",
 			cipherText: offtakerCfdNetPosition_billNumber_bcipherText,
-			ephPublicKey: offtakerCfdNetPosition_billNumber_ephPublicKey.hex(32),
+			ephPublicKey: masterZkpPublicKey.hex(32),
 		};
 
 		BackupData.push(offtakerCfdNetPosition_billNumber_cipherText_combined);
 
 		// Encrypt pre-image for state variable generatorInterest_billNumber as a backup:
-
-		let generatorInterest_billNumber_ephSecretKey = generalise(
-			utils.randomHex(31)
-		);
-
-		let generatorInterest_billNumber_ephPublicKeyPoint = generalise(
-			scalarMult(
-				generatorInterest_billNumber_ephSecretKey.hex(32),
-				config.BABYJUBJUB.GENERATOR
-			)
-		);
-
-		let generatorInterest_billNumber_ephPublicKey = compressStarlightKey(
-			generatorInterest_billNumber_ephPublicKeyPoint
-		);
-
-		while (generatorInterest_billNumber_ephPublicKey === null) {
-			generatorInterest_billNumber_ephSecretKey = generalise(
-				utils.randomHex(31)
-			);
-
-			generatorInterest_billNumber_ephPublicKeyPoint = generalise(
-				scalarMult(
-					generatorInterest_billNumber_ephSecretKey.hex(32),
-					config.BABYJUBJUB.GENERATOR
-				)
-			);
-
-			generatorInterest_billNumber_ephPublicKey = compressStarlightKey(
-				generatorInterest_billNumber_ephPublicKeyPoint
-			);
-		}
 
 		const generatorInterest_billNumber_bcipherText = encrypt(
 			[
@@ -4006,58 +3776,24 @@ let index_1 = generalise(parseInt(surplusIndex.integer, 10) + 0);
 				BigInt(generalise(generatorInterest_billNumber_stateVarIdInit).hex(32)),
 				BigInt(generatorInterest_billNumber.hex(32)),
 			],
-			generatorInterest_billNumber_ephSecretKey.hex(32),
+			masterZkpSecretKey.hex(32),
 			[
-				decompressStarlightKey(
-					generatorInterest_billNumber_newOwnerPublicKey
-				)[0].hex(32),
-				decompressStarlightKey(
-					generatorInterest_billNumber_newOwnerPublicKey
-				)[1].hex(32),
+				decompressStarlightKey(masterZkpPublicKey)[0].hex(32),
+				decompressStarlightKey(masterZkpPublicKey)[1].hex(32),
 			]
 		);
 
 		let generatorInterest_billNumber_cipherText_combined = {
 			varName: "generatorInterest a",
 			cipherText: generatorInterest_billNumber_bcipherText,
-			ephPublicKey: generatorInterest_billNumber_ephPublicKey.hex(32),
+			ephPublicKey: masterZkpPublicKey.hex(32),
 		};
 
 		BackupData.push(generatorInterest_billNumber_cipherText_combined);
 
 		// Encrypt pre-image for state variable offtakerInterest_billNumber as a backup:
 
-		let offtakerInterest_billNumber_ephSecretKey = generalise(
-			utils.randomHex(31)
-		);
-
-		let offtakerInterest_billNumber_ephPublicKeyPoint = generalise(
-			scalarMult(
-				offtakerInterest_billNumber_ephSecretKey.hex(32),
-				config.BABYJUBJUB.GENERATOR
-			)
-		);
-
-		let offtakerInterest_billNumber_ephPublicKey = compressStarlightKey(
-			offtakerInterest_billNumber_ephPublicKeyPoint
-		);
-
-		while (offtakerInterest_billNumber_ephPublicKey === null) {
-			offtakerInterest_billNumber_ephSecretKey = generalise(
-				utils.randomHex(31)
-			);
-
-			offtakerInterest_billNumber_ephPublicKeyPoint = generalise(
-				scalarMult(
-					offtakerInterest_billNumber_ephSecretKey.hex(32),
-					config.BABYJUBJUB.GENERATOR
-				)
-			);
-
-			offtakerInterest_billNumber_ephPublicKey = compressStarlightKey(
-				offtakerInterest_billNumber_ephPublicKeyPoint
-			);
-		}
+		
 
 		const offtakerInterest_billNumber_bcipherText = encrypt(
 			[
@@ -4066,60 +3802,23 @@ let index_1 = generalise(parseInt(surplusIndex.integer, 10) + 0);
 				BigInt(generalise(offtakerInterest_billNumber_stateVarIdInit).hex(32)),
 				BigInt(offtakerInterest_billNumber.hex(32)),
 			],
-			offtakerInterest_billNumber_ephSecretKey.hex(32),
+			masterZkpSecretKey.hex(32),
 			[
-				decompressStarlightKey(
-					offtakerInterest_billNumber_newOwnerPublicKey
-				)[0].hex(32),
-				decompressStarlightKey(
-					offtakerInterest_billNumber_newOwnerPublicKey
-				)[1].hex(32),
+				decompressStarlightKey(masterZkpPublicKey)[0].hex(32),
+				decompressStarlightKey(masterZkpPublicKey)[1].hex(32),
 			]
 		);
 
 		let offtakerInterest_billNumber_cipherText_combined = {
 			varName: "offtakerInterest a",
 			cipherText: offtakerInterest_billNumber_bcipherText,
-			ephPublicKey: offtakerInterest_billNumber_ephPublicKey.hex(32),
+			ephPublicKey: masterZkpPublicKey.hex(32),
 		};
 
 		BackupData.push(offtakerInterest_billNumber_cipherText_combined);
 
 		// Encrypt pre-image for state variable offtakerNegativePriceCharges_billNumber as a backup:
 
-		let offtakerNegativePriceCharges_billNumber_ephSecretKey = generalise(
-			utils.randomHex(31)
-		);
-
-		let offtakerNegativePriceCharges_billNumber_ephPublicKeyPoint = generalise(
-			scalarMult(
-				offtakerNegativePriceCharges_billNumber_ephSecretKey.hex(32),
-				config.BABYJUBJUB.GENERATOR
-			)
-		);
-
-		let offtakerNegativePriceCharges_billNumber_ephPublicKey =
-			compressStarlightKey(
-				offtakerNegativePriceCharges_billNumber_ephPublicKeyPoint
-			);
-
-		while (offtakerNegativePriceCharges_billNumber_ephPublicKey === null) {
-			offtakerNegativePriceCharges_billNumber_ephSecretKey = generalise(
-				utils.randomHex(31)
-			);
-
-			offtakerNegativePriceCharges_billNumber_ephPublicKeyPoint = generalise(
-				scalarMult(
-					offtakerNegativePriceCharges_billNumber_ephSecretKey.hex(32),
-					config.BABYJUBJUB.GENERATOR
-				)
-			);
-
-			offtakerNegativePriceCharges_billNumber_ephPublicKey =
-				compressStarlightKey(
-					offtakerNegativePriceCharges_billNumber_ephPublicKeyPoint
-				);
-		}
 
 		const offtakerNegativePriceCharges_billNumber_bcipherText = encrypt(
 			[
@@ -4132,14 +3831,10 @@ let index_1 = generalise(parseInt(surplusIndex.integer, 10) + 0);
 				),
 				BigInt(offtakerNegativePriceCharges_billNumber.hex(32)),
 			],
-			offtakerNegativePriceCharges_billNumber_ephSecretKey.hex(32),
+			masterZkpSecretKey.hex(32),
 			[
-				decompressStarlightKey(
-					offtakerNegativePriceCharges_billNumber_newOwnerPublicKey
-				)[0].hex(32),
-				decompressStarlightKey(
-					offtakerNegativePriceCharges_billNumber_newOwnerPublicKey
-				)[1].hex(32),
+				decompressStarlightKey(masterZkpPublicKey)[0].hex(32),
+				decompressStarlightKey(masterZkpPublicKey)[1].hex(32),
 			]
 		);
 
@@ -4147,7 +3842,7 @@ let index_1 = generalise(parseInt(surplusIndex.integer, 10) + 0);
 			varName: "offtakerNegativePriceCharges a",
 			cipherText: offtakerNegativePriceCharges_billNumber_bcipherText,
 			ephPublicKey:
-				offtakerNegativePriceCharges_billNumber_ephPublicKey.hex(32),
+				masterZkpPublicKey.hex(32),
 		};
 
 		BackupData.push(
@@ -4155,40 +3850,6 @@ let index_1 = generalise(parseInt(surplusIndex.integer, 10) + 0);
 		);
 
 		// Encrypt pre-image for state variable generatorNegativePriceCharges_billNumber as a backup:
-
-		let generatorNegativePriceCharges_billNumber_ephSecretKey = generalise(
-			utils.randomHex(31)
-		);
-
-		let generatorNegativePriceCharges_billNumber_ephPublicKeyPoint = generalise(
-			scalarMult(
-				generatorNegativePriceCharges_billNumber_ephSecretKey.hex(32),
-				config.BABYJUBJUB.GENERATOR
-			)
-		);
-
-		let generatorNegativePriceCharges_billNumber_ephPublicKey =
-			compressStarlightKey(
-				generatorNegativePriceCharges_billNumber_ephPublicKeyPoint
-			);
-
-		while (generatorNegativePriceCharges_billNumber_ephPublicKey === null) {
-			generatorNegativePriceCharges_billNumber_ephSecretKey = generalise(
-				utils.randomHex(31)
-			);
-
-			generatorNegativePriceCharges_billNumber_ephPublicKeyPoint = generalise(
-				scalarMult(
-					generatorNegativePriceCharges_billNumber_ephSecretKey.hex(32),
-					config.BABYJUBJUB.GENERATOR
-				)
-			);
-
-			generatorNegativePriceCharges_billNumber_ephPublicKey =
-				compressStarlightKey(
-					generatorNegativePriceCharges_billNumber_ephPublicKeyPoint
-				);
-		}
 
 		const generatorNegativePriceCharges_billNumber_bcipherText = encrypt(
 			[
@@ -4201,14 +3862,10 @@ let index_1 = generalise(parseInt(surplusIndex.integer, 10) + 0);
 				),
 				BigInt(generatorNegativePriceCharges_billNumber.hex(32)),
 			],
-			generatorNegativePriceCharges_billNumber_ephSecretKey.hex(32),
+			masterZkpSecretKey.hex(32),
 			[
-				decompressStarlightKey(
-					generatorNegativePriceCharges_billNumber_newOwnerPublicKey
-				)[0].hex(32),
-				decompressStarlightKey(
-					generatorNegativePriceCharges_billNumber_newOwnerPublicKey
-				)[1].hex(32),
+				decompressStarlightKey(masterZkpPublicKey)[0].hex(32),
+				decompressStarlightKey(masterZkpPublicKey)[1].hex(32),
 			]
 		);
 
@@ -4216,7 +3873,7 @@ let index_1 = generalise(parseInt(surplusIndex.integer, 10) + 0);
 			varName: "generatorNegativePriceCharges a",
 			cipherText: generatorNegativePriceCharges_billNumber_bcipherText,
 			ephPublicKey:
-				generatorNegativePriceCharges_billNumber_ephPublicKey.hex(32),
+				masterZkpPublicKey.hex(32),
 		};
 
 		BackupData.push(
@@ -4225,92 +3882,28 @@ let index_1 = generalise(parseInt(surplusIndex.integer, 10) + 0);
 
 		// Encrypt pre-image for state variable shortfallPositiveChargeSum as a backup:
 
-		let shortfallPositiveChargeSum_ephSecretKey = generalise(
-			utils.randomHex(31)
-		);
-
-		let shortfallPositiveChargeSum_ephPublicKeyPoint = generalise(
-			scalarMult(
-				shortfallPositiveChargeSum_ephSecretKey.hex(32),
-				config.BABYJUBJUB.GENERATOR
-			)
-		);
-
-		let shortfallPositiveChargeSum_ephPublicKey = compressStarlightKey(
-			shortfallPositiveChargeSum_ephPublicKeyPoint
-		);
-
-		while (shortfallPositiveChargeSum_ephPublicKey === null) {
-			shortfallPositiveChargeSum_ephSecretKey = generalise(utils.randomHex(31));
-
-			shortfallPositiveChargeSum_ephPublicKeyPoint = generalise(
-				scalarMult(
-					shortfallPositiveChargeSum_ephSecretKey.hex(32),
-					config.BABYJUBJUB.GENERATOR
-				)
-			);
-
-			shortfallPositiveChargeSum_ephPublicKey = compressStarlightKey(
-				shortfallPositiveChargeSum_ephPublicKeyPoint
-			);
-		}
-
 		const shortfallPositiveChargeSum_bcipherText = encrypt(
 			[
 				BigInt(shortfallPositiveChargeSum_newSalt.hex(32)),
 				BigInt(shortfallPositiveChargeSum_stateVarId),
 				BigInt(shortfallPositiveChargeSum.hex(32)),
 			],
-			shortfallPositiveChargeSum_ephSecretKey.hex(32),
+			masterZkpSecretKey.hex(32),
 			[
-				decompressStarlightKey(
-					shortfallPositiveChargeSum_newOwnerPublicKey
-				)[0].hex(32),
-				decompressStarlightKey(
-					shortfallPositiveChargeSum_newOwnerPublicKey
-				)[1].hex(32),
+				decompressStarlightKey(masterZkpPublicKey)[0].hex(32),
+				decompressStarlightKey(masterZkpPublicKey)[1].hex(32),
 			]
 		);
 
 		let shortfallPositiveChargeSum_cipherText_combined = {
 			varName: "shortfallPositiveChargeSum",
 			cipherText: shortfallPositiveChargeSum_bcipherText,
-			ephPublicKey: shortfallPositiveChargeSum_ephPublicKey.hex(32),
+			ephPublicKey: masterZkpPublicKey.hex(32),
 		};
 
 		BackupData.push(shortfallPositiveChargeSum_cipherText_combined);
 
 		// Encrypt pre-image for state variable shortfallNegativeChargeSum as a backup:
-
-		let shortfallNegativeChargeSum_ephSecretKey = generalise(
-			utils.randomHex(31)
-		);
-
-		let shortfallNegativeChargeSum_ephPublicKeyPoint = generalise(
-			scalarMult(
-				shortfallNegativeChargeSum_ephSecretKey.hex(32),
-				config.BABYJUBJUB.GENERATOR
-			)
-		);
-
-		let shortfallNegativeChargeSum_ephPublicKey = compressStarlightKey(
-			shortfallNegativeChargeSum_ephPublicKeyPoint
-		);
-
-		while (shortfallNegativeChargeSum_ephPublicKey === null) {
-			shortfallNegativeChargeSum_ephSecretKey = generalise(utils.randomHex(31));
-
-			shortfallNegativeChargeSum_ephPublicKeyPoint = generalise(
-				scalarMult(
-					shortfallNegativeChargeSum_ephSecretKey.hex(32),
-					config.BABYJUBJUB.GENERATOR
-				)
-			);
-
-			shortfallNegativeChargeSum_ephPublicKey = compressStarlightKey(
-				shortfallNegativeChargeSum_ephPublicKeyPoint
-			);
-		}
 
 		const shortfallNegativeChargeSum_bcipherText = encrypt(
 			[
@@ -4318,54 +3911,22 @@ let index_1 = generalise(parseInt(surplusIndex.integer, 10) + 0);
 				BigInt(shortfallNegativeChargeSum_stateVarId),
 				BigInt(shortfallNegativeChargeSum.hex(32)),
 			],
-			shortfallNegativeChargeSum_ephSecretKey.hex(32),
+			masterZkpSecretKey.hex(32),
 			[
-				decompressStarlightKey(
-					shortfallNegativeChargeSum_newOwnerPublicKey
-				)[0].hex(32),
-				decompressStarlightKey(
-					shortfallNegativeChargeSum_newOwnerPublicKey
-				)[1].hex(32),
+				decompressStarlightKey(masterZkpPublicKey)[0].hex(32),
+				decompressStarlightKey(masterZkpPublicKey)[1].hex(32),
 			]
 		);
 
 		let shortfallNegativeChargeSum_cipherText_combined = {
 			varName: "shortfallNegativeChargeSum",
 			cipherText: shortfallNegativeChargeSum_bcipherText,
-			ephPublicKey: shortfallNegativeChargeSum_ephPublicKey.hex(32),
+			ephPublicKey: masterZkpPublicKey.hex(32),
 		};
 
 		BackupData.push(shortfallNegativeChargeSum_cipherText_combined);
 
 		// Encrypt pre-image for state variable shortfallIndex as a backup:
-
-		let shortfallIndex_ephSecretKey = generalise(utils.randomHex(31));
-
-		let shortfallIndex_ephPublicKeyPoint = generalise(
-			scalarMult(
-				shortfallIndex_ephSecretKey.hex(32),
-				config.BABYJUBJUB.GENERATOR
-			)
-		);
-
-		let shortfallIndex_ephPublicKey = compressStarlightKey(
-			shortfallIndex_ephPublicKeyPoint
-		);
-
-		while (shortfallIndex_ephPublicKey === null) {
-			shortfallIndex_ephSecretKey = generalise(utils.randomHex(31));
-
-			shortfallIndex_ephPublicKeyPoint = generalise(
-				scalarMult(
-					shortfallIndex_ephSecretKey.hex(32),
-					config.BABYJUBJUB.GENERATOR
-				)
-			);
-
-			shortfallIndex_ephPublicKey = compressStarlightKey(
-				shortfallIndex_ephPublicKeyPoint
-			);
-		}
 
 		const shortfallIndex_bcipherText = encrypt(
 			[
@@ -4373,54 +3934,22 @@ let index_1 = generalise(parseInt(surplusIndex.integer, 10) + 0);
 				BigInt(shortfallIndex_stateVarId),
 				BigInt(shortfallIndex.hex(32)),
 			],
-			shortfallIndex_ephSecretKey.hex(32),
+			masterZkpSecretKey.hex(32),
 			[
-				decompressStarlightKey(shortfallIndex_newOwnerPublicKey)[0].hex(32),
-				decompressStarlightKey(shortfallIndex_newOwnerPublicKey)[1].hex(32),
+				decompressStarlightKey(masterZkpPublicKey)[0].hex(32),
+				decompressStarlightKey(masterZkpPublicKey)[1].hex(32),
 			]
 		);
 
 		let shortfallIndex_cipherText_combined = {
 			varName: "shortfallIndex",
 			cipherText: shortfallIndex_bcipherText,
-			ephPublicKey: shortfallIndex_ephPublicKey.hex(32),
+			ephPublicKey: masterZkpPublicKey.hex(32),
 		};
 
 		BackupData.push(shortfallIndex_cipherText_combined);
 
 		// Encrypt pre-image for state variable shortfallPositiveCharges_billNumber as a backup:
-
-		let shortfallPositiveCharges_billNumber_ephSecretKey = generalise(
-			utils.randomHex(31)
-		);
-
-		let shortfallPositiveCharges_billNumber_ephPublicKeyPoint = generalise(
-			scalarMult(
-				shortfallPositiveCharges_billNumber_ephSecretKey.hex(32),
-				config.BABYJUBJUB.GENERATOR
-			)
-		);
-
-		let shortfallPositiveCharges_billNumber_ephPublicKey = compressStarlightKey(
-			shortfallPositiveCharges_billNumber_ephPublicKeyPoint
-		);
-
-		while (shortfallPositiveCharges_billNumber_ephPublicKey === null) {
-			shortfallPositiveCharges_billNumber_ephSecretKey = generalise(
-				utils.randomHex(31)
-			);
-
-			shortfallPositiveCharges_billNumber_ephPublicKeyPoint = generalise(
-				scalarMult(
-					shortfallPositiveCharges_billNumber_ephSecretKey.hex(32),
-					config.BABYJUBJUB.GENERATOR
-				)
-			);
-
-			shortfallPositiveCharges_billNumber_ephPublicKey = compressStarlightKey(
-				shortfallPositiveCharges_billNumber_ephPublicKeyPoint
-			);
-		}
 
 		const shortfallPositiveCharges_billNumber_bcipherText = encrypt(
 			[
@@ -4431,58 +3960,22 @@ let index_1 = generalise(parseInt(surplusIndex.integer, 10) + 0);
 				),
 				BigInt(shortfallPositiveCharges_billNumber.hex(32)),
 			],
-			shortfallPositiveCharges_billNumber_ephSecretKey.hex(32),
+			masterZkpSecretKey.hex(32),
 			[
-				decompressStarlightKey(
-					shortfallPositiveCharges_billNumber_newOwnerPublicKey
-				)[0].hex(32),
-				decompressStarlightKey(
-					shortfallPositiveCharges_billNumber_newOwnerPublicKey
-				)[1].hex(32),
+				decompressStarlightKey(masterZkpPublicKey)[0].hex(32),
+				decompressStarlightKey(masterZkpPublicKey)[1].hex(32),
 			]
 		);
 
 		let shortfallPositiveCharges_billNumber_cipherText_combined = {
 			varName: "shortfallPositiveCharges a",
 			cipherText: shortfallPositiveCharges_billNumber_bcipherText,
-			ephPublicKey: shortfallPositiveCharges_billNumber_ephPublicKey.hex(32),
+			ephPublicKey: masterZkpPublicKey.hex(32),
 		};
 
 		BackupData.push(shortfallPositiveCharges_billNumber_cipherText_combined);
 
 		// Encrypt pre-image for state variable shortfallNegativeCharges_billNumber as a backup:
-
-		let shortfallNegativeCharges_billNumber_ephSecretKey = generalise(
-			utils.randomHex(31)
-		);
-
-		let shortfallNegativeCharges_billNumber_ephPublicKeyPoint = generalise(
-			scalarMult(
-				shortfallNegativeCharges_billNumber_ephSecretKey.hex(32),
-				config.BABYJUBJUB.GENERATOR
-			)
-		);
-
-		let shortfallNegativeCharges_billNumber_ephPublicKey = compressStarlightKey(
-			shortfallNegativeCharges_billNumber_ephPublicKeyPoint
-		);
-
-		while (shortfallNegativeCharges_billNumber_ephPublicKey === null) {
-			shortfallNegativeCharges_billNumber_ephSecretKey = generalise(
-				utils.randomHex(31)
-			);
-
-			shortfallNegativeCharges_billNumber_ephPublicKeyPoint = generalise(
-				scalarMult(
-					shortfallNegativeCharges_billNumber_ephSecretKey.hex(32),
-					config.BABYJUBJUB.GENERATOR
-				)
-			);
-
-			shortfallNegativeCharges_billNumber_ephPublicKey = compressStarlightKey(
-				shortfallNegativeCharges_billNumber_ephPublicKeyPoint
-			);
-		}
 
 		const shortfallNegativeCharges_billNumber_bcipherText = encrypt(
 			[
@@ -4493,54 +3986,22 @@ let index_1 = generalise(parseInt(surplusIndex.integer, 10) + 0);
 				),
 				BigInt(shortfallNegativeCharges_billNumber.hex(32)),
 			],
-			shortfallNegativeCharges_billNumber_ephSecretKey.hex(32),
+			masterZkpSecretKey.hex(32),
 			[
-				decompressStarlightKey(
-					shortfallNegativeCharges_billNumber_newOwnerPublicKey
-				)[0].hex(32),
-				decompressStarlightKey(
-					shortfallNegativeCharges_billNumber_newOwnerPublicKey
-				)[1].hex(32),
+				decompressStarlightKey(masterZkpPublicKey)[0].hex(32),
+				decompressStarlightKey(masterZkpPublicKey)[1].hex(32),
 			]
 		);
 
 		let shortfallNegativeCharges_billNumber_cipherText_combined = {
 			varName: "shortfallNegativeCharges a",
 			cipherText: shortfallNegativeCharges_billNumber_bcipherText,
-			ephPublicKey: shortfallNegativeCharges_billNumber_ephPublicKey.hex(32),
+			ephPublicKey: masterZkpPublicKey.hex(32),
 		};
 
 		BackupData.push(shortfallNegativeCharges_billNumber_cipherText_combined);
 
 		// Encrypt pre-image for state variable surplusPositiveChargeSum as a backup:
-
-		let surplusPositiveChargeSum_ephSecretKey = generalise(utils.randomHex(31));
-
-		let surplusPositiveChargeSum_ephPublicKeyPoint = generalise(
-			scalarMult(
-				surplusPositiveChargeSum_ephSecretKey.hex(32),
-				config.BABYJUBJUB.GENERATOR
-			)
-		);
-
-		let surplusPositiveChargeSum_ephPublicKey = compressStarlightKey(
-			surplusPositiveChargeSum_ephPublicKeyPoint
-		);
-
-		while (surplusPositiveChargeSum_ephPublicKey === null) {
-			surplusPositiveChargeSum_ephSecretKey = generalise(utils.randomHex(31));
-
-			surplusPositiveChargeSum_ephPublicKeyPoint = generalise(
-				scalarMult(
-					surplusPositiveChargeSum_ephSecretKey.hex(32),
-					config.BABYJUBJUB.GENERATOR
-				)
-			);
-
-			surplusPositiveChargeSum_ephPublicKey = compressStarlightKey(
-				surplusPositiveChargeSum_ephPublicKeyPoint
-			);
-		}
 
 		const surplusPositiveChargeSum_bcipherText = encrypt(
 			[
@@ -4548,54 +4009,22 @@ let index_1 = generalise(parseInt(surplusIndex.integer, 10) + 0);
 				BigInt(surplusPositiveChargeSum_stateVarId),
 				BigInt(surplusPositiveChargeSum.hex(32)),
 			],
-			surplusPositiveChargeSum_ephSecretKey.hex(32),
+			masterZkpSecretKey.hex(32),
 			[
-				decompressStarlightKey(
-					surplusPositiveChargeSum_newOwnerPublicKey
-				)[0].hex(32),
-				decompressStarlightKey(
-					surplusPositiveChargeSum_newOwnerPublicKey
-				)[1].hex(32),
+				decompressStarlightKey(masterZkpPublicKey)[0].hex(32),
+				decompressStarlightKey(masterZkpPublicKey)[1].hex(32),
 			]
 		);
 
 		let surplusPositiveChargeSum_cipherText_combined = {
 			varName: "surplusPositiveChargeSum",
 			cipherText: surplusPositiveChargeSum_bcipherText,
-			ephPublicKey: surplusPositiveChargeSum_ephPublicKey.hex(32),
+			ephPublicKey: masterZkpPublicKey.hex(32),
 		};
 
 		BackupData.push(surplusPositiveChargeSum_cipherText_combined);
 
 		// Encrypt pre-image for state variable surplusNegativeChargeSum as a backup:
-
-		let surplusNegativeChargeSum_ephSecretKey = generalise(utils.randomHex(31));
-
-		let surplusNegativeChargeSum_ephPublicKeyPoint = generalise(
-			scalarMult(
-				surplusNegativeChargeSum_ephSecretKey.hex(32),
-				config.BABYJUBJUB.GENERATOR
-			)
-		);
-
-		let surplusNegativeChargeSum_ephPublicKey = compressStarlightKey(
-			surplusNegativeChargeSum_ephPublicKeyPoint
-		);
-
-		while (surplusNegativeChargeSum_ephPublicKey === null) {
-			surplusNegativeChargeSum_ephSecretKey = generalise(utils.randomHex(31));
-
-			surplusNegativeChargeSum_ephPublicKeyPoint = generalise(
-				scalarMult(
-					surplusNegativeChargeSum_ephSecretKey.hex(32),
-					config.BABYJUBJUB.GENERATOR
-				)
-			);
-
-			surplusNegativeChargeSum_ephPublicKey = compressStarlightKey(
-				surplusNegativeChargeSum_ephPublicKeyPoint
-			);
-		}
 
 		const surplusNegativeChargeSum_bcipherText = encrypt(
 			[
@@ -4603,51 +4032,22 @@ let index_1 = generalise(parseInt(surplusIndex.integer, 10) + 0);
 				BigInt(surplusNegativeChargeSum_stateVarId),
 				BigInt(surplusNegativeChargeSum.hex(32)),
 			],
-			surplusNegativeChargeSum_ephSecretKey.hex(32),
+			masterZkpSecretKey.hex(32),
 			[
-				decompressStarlightKey(
-					surplusNegativeChargeSum_newOwnerPublicKey
-				)[0].hex(32),
-				decompressStarlightKey(
-					surplusNegativeChargeSum_newOwnerPublicKey
-				)[1].hex(32),
+				decompressStarlightKey(masterZkpPublicKey)[0].hex(32),
+				decompressStarlightKey(masterZkpPublicKey)[1].hex(32),
 			]
 		);
 
 		let surplusNegativeChargeSum_cipherText_combined = {
 			varName: "surplusNegativeChargeSum",
 			cipherText: surplusNegativeChargeSum_bcipherText,
-			ephPublicKey: surplusNegativeChargeSum_ephPublicKey.hex(32),
+			ephPublicKey: masterZkpPublicKey.hex(32),
 		};
 
 		BackupData.push(surplusNegativeChargeSum_cipherText_combined);
 
 		// Encrypt pre-image for state variable surplusIndex as a backup:
-
-		let surplusIndex_ephSecretKey = generalise(utils.randomHex(31));
-
-		let surplusIndex_ephPublicKeyPoint = generalise(
-			scalarMult(surplusIndex_ephSecretKey.hex(32), config.BABYJUBJUB.GENERATOR)
-		);
-
-		let surplusIndex_ephPublicKey = compressStarlightKey(
-			surplusIndex_ephPublicKeyPoint
-		);
-
-		while (surplusIndex_ephPublicKey === null) {
-			surplusIndex_ephSecretKey = generalise(utils.randomHex(31));
-
-			surplusIndex_ephPublicKeyPoint = generalise(
-				scalarMult(
-					surplusIndex_ephSecretKey.hex(32),
-					config.BABYJUBJUB.GENERATOR
-				)
-			);
-
-			surplusIndex_ephPublicKey = compressStarlightKey(
-				surplusIndex_ephPublicKeyPoint
-			);
-		}
 
 		const surplusIndex_bcipherText = encrypt(
 			[
@@ -4655,54 +4055,22 @@ let index_1 = generalise(parseInt(surplusIndex.integer, 10) + 0);
 				BigInt(surplusIndex_stateVarId),
 				BigInt(surplusIndex.hex(32)),
 			],
-			surplusIndex_ephSecretKey.hex(32),
+			masterZkpSecretKey.hex(32),
 			[
-				decompressStarlightKey(surplusIndex_newOwnerPublicKey)[0].hex(32),
-				decompressStarlightKey(surplusIndex_newOwnerPublicKey)[1].hex(32),
+				decompressStarlightKey(masterZkpPublicKey)[0].hex(32),
+				decompressStarlightKey(masterZkpPublicKey)[1].hex(32),
 			]
 		);
 
 		let surplusIndex_cipherText_combined = {
 			varName: "surplusIndex",
 			cipherText: surplusIndex_bcipherText,
-			ephPublicKey: surplusIndex_ephPublicKey.hex(32),
+			ephPublicKey: masterZkpPublicKey.hex(32),
 		};
 
 		BackupData.push(surplusIndex_cipherText_combined);
 
 		// Encrypt pre-image for state variable surplusPositiveCharges_billNumber as a backup:
-
-		let surplusPositiveCharges_billNumber_ephSecretKey = generalise(
-			utils.randomHex(31)
-		);
-
-		let surplusPositiveCharges_billNumber_ephPublicKeyPoint = generalise(
-			scalarMult(
-				surplusPositiveCharges_billNumber_ephSecretKey.hex(32),
-				config.BABYJUBJUB.GENERATOR
-			)
-		);
-
-		let surplusPositiveCharges_billNumber_ephPublicKey = compressStarlightKey(
-			surplusPositiveCharges_billNumber_ephPublicKeyPoint
-		);
-
-		while (surplusPositiveCharges_billNumber_ephPublicKey === null) {
-			surplusPositiveCharges_billNumber_ephSecretKey = generalise(
-				utils.randomHex(31)
-			);
-
-			surplusPositiveCharges_billNumber_ephPublicKeyPoint = generalise(
-				scalarMult(
-					surplusPositiveCharges_billNumber_ephSecretKey.hex(32),
-					config.BABYJUBJUB.GENERATOR
-				)
-			);
-
-			surplusPositiveCharges_billNumber_ephPublicKey = compressStarlightKey(
-				surplusPositiveCharges_billNumber_ephPublicKeyPoint
-			);
-		}
 
 		const surplusPositiveCharges_billNumber_bcipherText = encrypt(
 			[
@@ -4713,58 +4081,22 @@ let index_1 = generalise(parseInt(surplusIndex.integer, 10) + 0);
 				),
 				BigInt(surplusPositiveCharges_billNumber.hex(32)),
 			],
-			surplusPositiveCharges_billNumber_ephSecretKey.hex(32),
+			masterZkpSecretKey.hex(32),
 			[
-				decompressStarlightKey(
-					surplusPositiveCharges_billNumber_newOwnerPublicKey
-				)[0].hex(32),
-				decompressStarlightKey(
-					surplusPositiveCharges_billNumber_newOwnerPublicKey
-				)[1].hex(32),
+				decompressStarlightKey(masterZkpPublicKey)[0].hex(32),
+				decompressStarlightKey(masterZkpPublicKey)[1].hex(32),
 			]
 		);
 
 		let surplusPositiveCharges_billNumber_cipherText_combined = {
 			varName: "surplusPositiveCharges a",
 			cipherText: surplusPositiveCharges_billNumber_bcipherText,
-			ephPublicKey: surplusPositiveCharges_billNumber_ephPublicKey.hex(32),
+			ephPublicKey: masterZkpPublicKey.hex(32),
 		};
 
 		BackupData.push(surplusPositiveCharges_billNumber_cipherText_combined);
 
 		// Encrypt pre-image for state variable surplusNegativeCharges_billNumber as a backup:
-
-		let surplusNegativeCharges_billNumber_ephSecretKey = generalise(
-			utils.randomHex(31)
-		);
-
-		let surplusNegativeCharges_billNumber_ephPublicKeyPoint = generalise(
-			scalarMult(
-				surplusNegativeCharges_billNumber_ephSecretKey.hex(32),
-				config.BABYJUBJUB.GENERATOR
-			)
-		);
-
-		let surplusNegativeCharges_billNumber_ephPublicKey = compressStarlightKey(
-			surplusNegativeCharges_billNumber_ephPublicKeyPoint
-		);
-
-		while (surplusNegativeCharges_billNumber_ephPublicKey === null) {
-			surplusNegativeCharges_billNumber_ephSecretKey = generalise(
-				utils.randomHex(31)
-			);
-
-			surplusNegativeCharges_billNumber_ephPublicKeyPoint = generalise(
-				scalarMult(
-					surplusNegativeCharges_billNumber_ephSecretKey.hex(32),
-					config.BABYJUBJUB.GENERATOR
-				)
-			);
-
-			surplusNegativeCharges_billNumber_ephPublicKey = compressStarlightKey(
-				surplusNegativeCharges_billNumber_ephPublicKeyPoint
-			);
-		}
 
 		const surplusNegativeCharges_billNumber_bcipherText = encrypt(
 			[
@@ -4775,21 +4107,17 @@ let index_1 = generalise(parseInt(surplusIndex.integer, 10) + 0);
 				),
 				BigInt(surplusNegativeCharges_billNumber.hex(32)),
 			],
-			surplusNegativeCharges_billNumber_ephSecretKey.hex(32),
+			masterZkpSecretKey.hex(32),
 			[
-				decompressStarlightKey(
-					surplusNegativeCharges_billNumber_newOwnerPublicKey
-				)[0].hex(32),
-				decompressStarlightKey(
-					surplusNegativeCharges_billNumber_newOwnerPublicKey
-				)[1].hex(32),
-			]
+				decompressStarlightKey(masterZkpPublicKey)[0].hex(32),
+				decompressStarlightKey(masterZkpPublicKey)[1].hex(32),
+			].hex(32),
 		);
 
 		let surplusNegativeCharges_billNumber_cipherText_combined = {
 			varName: "surplusNegativeCharges a",
 			cipherText: surplusNegativeCharges_billNumber_bcipherText,
-			ephPublicKey: surplusNegativeCharges_billNumber_ephPublicKey.hex(32),
+			ephPublicKey: masterZkpPublicKey.hex(32),
 		};
 
 		BackupData.push(surplusNegativeCharges_billNumber_cipherText_combined);

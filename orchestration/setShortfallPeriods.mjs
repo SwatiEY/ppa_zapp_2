@@ -216,61 +216,23 @@ export class SetShortfallPeriodsManager {
 
 		// Encrypt pre-image for state variable numberOfConsecutivePeriodsForShortfall as a backup:
 
-		let numberOfConsecutivePeriodsForShortfall_ephSecretKey = generalise(
-			utils.randomHex(31)
-		);
-
-		let numberOfConsecutivePeriodsForShortfall_ephPublicKeyPoint = generalise(
-			scalarMult(
-				numberOfConsecutivePeriodsForShortfall_ephSecretKey.hex(32),
-				config.BABYJUBJUB.GENERATOR
-			)
-		);
-
-		let numberOfConsecutivePeriodsForShortfall_ephPublicKey =
-			compressStarlightKey(
-				numberOfConsecutivePeriodsForShortfall_ephPublicKeyPoint
-			);
-
-		while (numberOfConsecutivePeriodsForShortfall_ephPublicKey === null) {
-			numberOfConsecutivePeriodsForShortfall_ephSecretKey = generalise(
-				utils.randomHex(31)
-			);
-
-			numberOfConsecutivePeriodsForShortfall_ephPublicKeyPoint = generalise(
-				scalarMult(
-					numberOfConsecutivePeriodsForShortfall_ephSecretKey.hex(32),
-					config.BABYJUBJUB.GENERATOR
-				)
-			);
-
-			numberOfConsecutivePeriodsForShortfall_ephPublicKey =
-				compressStarlightKey(
-					numberOfConsecutivePeriodsForShortfall_ephPublicKeyPoint
-				);
-		}
-
 		const numberOfConsecutivePeriodsForShortfall_bcipherText = encrypt(
 			[
 				BigInt(numberOfConsecutivePeriodsForShortfall_newSalt.hex(32)),
 				BigInt(numberOfConsecutivePeriodsForShortfall_stateVarId),
 				BigInt(numberOfConsecutivePeriodsForShortfall.hex(32)),
 			],
-			numberOfConsecutivePeriodsForShortfall_ephSecretKey.hex(32),
+			masterZkpSecretKey.hex(32),
 			[
-				decompressStarlightKey(
-					numberOfConsecutivePeriodsForShortfall_newOwnerPublicKey
-				)[0].hex(32),
-				decompressStarlightKey(
-					numberOfConsecutivePeriodsForShortfall_newOwnerPublicKey
-				)[1].hex(32),
+				decompressStarlightKey(masterZkpPublicKey)[0].hex(32),
+				decompressStarlightKey(masterZkpPublicKey)[1].hex(32),
 			]
 		);
 
 		let numberOfConsecutivePeriodsForShortfall_cipherText_combined = {
 			varName: "numberOfConsecutivePeriodsForShortfall",
 			cipherText: numberOfConsecutivePeriodsForShortfall_bcipherText,
-			ephPublicKey: numberOfConsecutivePeriodsForShortfall_ephPublicKey.hex(32),
+			ephPublicKey: masterZkpPublicKey.hex(32),
 		};
 
 		BackupData.push(numberOfConsecutivePeriodsForShortfall_cipherText_combined);

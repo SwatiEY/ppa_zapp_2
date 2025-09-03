@@ -201,51 +201,23 @@ export class SetDailyInterestRateManager {
 
 		// Encrypt pre-image for state variable dailyInterestRate as a backup:
 
-		let dailyInterestRate_ephSecretKey = generalise(utils.randomHex(31));
-
-		let dailyInterestRate_ephPublicKeyPoint = generalise(
-			scalarMult(
-				dailyInterestRate_ephSecretKey.hex(32),
-				config.BABYJUBJUB.GENERATOR
-			)
-		);
-
-		let dailyInterestRate_ephPublicKey = compressStarlightKey(
-			dailyInterestRate_ephPublicKeyPoint
-		);
-
-		while (dailyInterestRate_ephPublicKey === null) {
-			dailyInterestRate_ephSecretKey = generalise(utils.randomHex(31));
-
-			dailyInterestRate_ephPublicKeyPoint = generalise(
-				scalarMult(
-					dailyInterestRate_ephSecretKey.hex(32),
-					config.BABYJUBJUB.GENERATOR
-				)
-			);
-
-			dailyInterestRate_ephPublicKey = compressStarlightKey(
-				dailyInterestRate_ephPublicKeyPoint
-			);
-		}
-
 		const dailyInterestRate_bcipherText = encrypt(
 			[
 				BigInt(dailyInterestRate_newSalt.hex(32)),
 				BigInt(dailyInterestRate_stateVarId),
 				BigInt(dailyInterestRate.hex(32)),
 			],
-			dailyInterestRate_ephSecretKey.hex(32),
+			masterZkpSecretKey.hex(32),
 			[
-				decompressStarlightKey(dailyInterestRate_newOwnerPublicKey)[0].hex(32),
-				decompressStarlightKey(dailyInterestRate_newOwnerPublicKey)[1].hex(32),
+				decompressStarlightKey(masterZkpPublicKey)[0].hex(32),
+				decompressStarlightKey(masterZkpPublicKey)[1].hex(32),
 			]
 		);
 
 		let dailyInterestRate_cipherText_combined = {
 			varName: "dailyInterestRate",
 			cipherText: dailyInterestRate_bcipherText,
-			ephPublicKey: dailyInterestRate_ephPublicKey.hex(32),
+			ephPublicKey: masterZkpPublicKey.hex(32),
 		};
 
 		BackupData.push(dailyInterestRate_cipherText_combined);

@@ -77,9 +77,11 @@ latestSurplusSequenceNumber = 0
         )
         // latestShortfallSequenceNumber_oldCommitment_nullifier : non-existence check
         
-        
+assert(!latestShortfallSequenceNumber_oldCommitment_isDummy || (latestShortfallSequenceNumber_oldCommitment_owner_secretKey == 0))
+ 
+assert(!latestShortfallSequenceNumber_oldCommitment_isDummy || (latestShortfallSequenceNumber_oldCommitment_salt == 0))
 
-
+assert(!latestShortfallSequenceNumber_oldCommitment_isDummy || (latestShortfallSequenceNumber_oldCommitment_value == 0))
 
         // prepare secret state 'latestShortfallSequenceNumber' for commitment
 
@@ -158,9 +160,11 @@ latestSurplusSequenceNumber = 0
         )
         // latestSurplusSequenceNumber_oldCommitment_nullifier : non-existence check
         
-        
+        assert(!latestSurplusSequenceNumber_oldCommitment_isDummy || (latestSurplusSequenceNumber_oldCommitment_owner_secretKey == 0))
+ 
+        assert(!latestSurplusSequenceNumber_oldCommitment_isDummy || (latestSurplusSequenceNumber_oldCommitment_salt == 0))
 
-
+        assert(!latestSurplusSequenceNumber_oldCommitment_isDummy || (latestSurplusSequenceNumber_oldCommitment_value == 0))
 
         // prepare secret state 'latestSurplusSequenceNumber' for commitment
 

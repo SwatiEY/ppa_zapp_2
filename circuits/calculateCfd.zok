@@ -16,7 +16,7 @@ field price
       }
 
 def main(\
-	private field billNumber,\
+  private field billNumber,\
 	private field sequenceNumber,\
 	private field totalGeneratedVolume,\
 	private field expectedVolume,\
@@ -523,17 +523,17 @@ def main(\
 
         assert(referenceDate <= expiryDateOfContract)
 
-		field offtakerVolume = totalGeneratedVolume * volumeShare * marginalLossFactor
+    field offtakerVolume = totalGeneratedVolume * volumeShare * marginalLossFactor
 
-		field fixedAmount = 0
+    field fixedAmount = 0
 
 
             fixedAmount = if bundlePrice <= 0 then offtakerVolume * strikePrice else fixedAmount fi
             fixedAmount = if bundlePrice <= 0 then fixedAmount else offtakerVolume * bundlePrice fi
 
-		field netPositiveAdjustment = 0
+    field netPositiveAdjustment = 0
 
-		field netNegativeAdjustment = 0
+    field netNegativeAdjustment = 0
 
 
             netNegativeAdjustment = if negativeAdjustment > positiveAdjustment then negativeAdjustment - positiveAdjustment else netNegativeAdjustment fi
@@ -546,27 +546,27 @@ def main(\
             generatorCfdNetPosition_billNumber = if (floatingAmount + netNegativeAdjustment_temp) > (fixedAmount_temp + netPositiveAdjustment_temp) then floatingAmount + netNegativeAdjustment - fixedAmount - netPositiveAdjustment else generatorCfdNetPosition_billNumber fi
             offtakerCfdNetPosition_billNumber = if (floatingAmount + netNegativeAdjustment_temp) > (fixedAmount_temp + netPositiveAdjustment_temp) then offtakerCfdNetPosition_billNumber else fixedAmount + netPositiveAdjustment - floatingAmount - netNegativeAdjustment fi
 
-		field shortfallSequence = 0
+    field shortfallSequence = 0
 
 
         field latestShortfallSequenceNumber_temp = latestShortfallSequenceNumber
             shortfallSequence = if sequenceNumber == latestShortfallSequenceNumber_temp + sequenceNumberInterval || latestShortfallSequenceNumber_temp == 0 || sequenceNumber == 0 then 1 else shortfallSequence fi
 
-		field surplusSequence = 0
+    field surplusSequence = 0
 
 
         field latestSurplusSequenceNumber_temp = latestSurplusSequenceNumber
             surplusSequence = if sequenceNumber == latestSurplusSequenceNumber_temp + sequenceNumberInterval || latestSurplusSequenceNumber_temp == 0 || sequenceNumber == 0 then 1 else surplusSequence fi
 
-		field positivePriceDifference = 0
+    field positivePriceDifference = 0
 
-		field negativePriceDifference = 0
+    field negativePriceDifference = 0
 
 
             positivePriceDifference = if averagePrice > strikePrice then averagePrice - strikePrice else positivePriceDifference fi
             negativePriceDifference = if averagePrice > strikePrice then negativePriceDifference else strikePrice - averagePrice fi
 
-		field volumeDifference = 0
+    field volumeDifference = 0
 
 
             volumeDifference = if expectedVolume > offtakerVolume then expectedVolume - offtakerVolume else volumeDifference fi
@@ -578,7 +578,7 @@ def main(\
 
             offtakerNegativePriceCharges_billNumber = if negativePriceOccurredParam && expectedVolume <= offtakerVolume then volumeDifference * strikePrice else offtakerNegativePriceCharges_billNumber fi
 
-		field index = shortfallIndex + 0
+    field index = shortfallIndex + 0
 
 
         field shortfallSequence_temp = shortfallSequence
@@ -1033,7 +1033,26 @@ for u32 i in 0..5 do
         )
         // shortfalls_index_oldCommitment_nullifier : non-existence check
         
-        
+        assert(\
+          !shortfalls_index_oldCommitment_isDummy || (shortfalls_index_oldCommitment_owner_secretKey == 0)\
+        )
+ 
+        assert(\
+          !shortfalls_index_oldCommitment_isDummy || (shortfalls_index_oldCommitment_salt == 0)\
+        )
+
+
+        assert(\
+          !shortfalls_index_oldCommitment_isDummy || (shortfalls_index_oldCommitment_value.billNumber == 0)\
+        )
+
+        assert(\
+          !shortfalls_index_oldCommitment_isDummy || (shortfalls_index_oldCommitment_value.volume == 0)\
+        )
+
+        assert(\
+          !shortfalls_index_oldCommitment_isDummy || (shortfalls_index_oldCommitment_value.price == 0)\
+        )
 
 
           // prepare secret state 'shortfalls_index' for commitment
@@ -1044,9 +1063,9 @@ for u32 i in 0..5 do
 
           field shortfalls_index_oldCommitment_commitment_field = poseidon([\
             shortfalls_index_stateVarId_field,\
-            	 shortfalls_index_oldCommitment_value.billNumber,\
-	 shortfalls_index_oldCommitment_value.volume,\
-	 shortfalls_index_oldCommitment_value.price,\
+               shortfalls_index_oldCommitment_value.billNumber,\
+   shortfalls_index_oldCommitment_value.volume,\
+   shortfalls_index_oldCommitment_value.price,\
             shortfalls_index_oldCommitment_owner_publicKey,\
             shortfalls_index_oldCommitment_salt\
           ])
@@ -1060,6 +1079,8 @@ for u32 i in 0..5 do
           shortfalls_index_oldCommitment_commitment_field,\
           shortfalls_index_oldCommitment_membershipWitness_index\
         )
+
+        
 
 
         // Note: Don't bother actually asserting existence, if the oldCommitment is a dummy:
@@ -1080,9 +1101,9 @@ for u32 i in 0..5 do
 
           field shortfalls_index_newCommitment_commitment_check_field = poseidon([\
             shortfalls_index_stateVarId_field,\
-            	 shortfalls_index_newCommitment_value.billNumber,\
-	 shortfalls_index_newCommitment_value.volume,\
-	 shortfalls_index_newCommitment_value.price,\
+               shortfalls_index_newCommitment_value.billNumber,\
+   shortfalls_index_newCommitment_value.volume,\
+   shortfalls_index_newCommitment_value.price,\
             shortfalls_index_newCommitment_owner_publicKey,\
             shortfalls_index_newCommitment_salt\
           ])
@@ -1119,7 +1140,17 @@ for u32 i in 0..5 do
         // latestShortfallSequenceNumber_oldCommitment_nullifier : non-existence check
         
         
+        assert(\
+          !latestShortfallSequenceNumber_oldCommitment_isDummy || (latestShortfallSequenceNumber_oldCommitment_owner_secretKey == 0)\
+        )
+ 
+        assert(\
+          !latestShortfallSequenceNumber_oldCommitment_isDummy || (latestShortfallSequenceNumber_oldCommitment_salt == 0)\
+        )
 
+        assert(\
+            !latestShortfallSequenceNumber_oldCommitment_isDummy || (latestShortfallSequenceNumber_oldCommitment_value == 0)\
+        )
 
 
         // prepare secret state 'latestShortfallSequenceNumber' for commitment
@@ -1202,7 +1233,27 @@ for u32 i in 0..5 do
         )
         // surpluses_index_1_oldCommitment_nullifier : non-existence check
         
-        
+        assert(\
+          !surpluses_index_1_oldCommitment_isDummy || (surpluses_index_1_oldCommitment_owner_secretKey == 0)\
+        )
+ 
+        assert(\
+          !surpluses_index_1_oldCommitment_isDummy || (surpluses_index_1_oldCommitment_salt == 0)\
+        )
+
+
+        assert(\
+          !surpluses_index_1_oldCommitment_isDummy || (surpluses_index_1_oldCommitment_value.billNumber == 0)\
+        )
+
+        assert(\
+          !surpluses_index_1_oldCommitment_isDummy || (surpluses_index_1_oldCommitment_value.volume == 0)\
+        )
+
+        assert(\
+          !surpluses_index_1_oldCommitment_isDummy || (surpluses_index_1_oldCommitment_value.price == 0)\
+        )
+
 
 
           // prepare secret state 'surpluses_index_1' for commitment
@@ -1213,9 +1264,9 @@ for u32 i in 0..5 do
 
           field surpluses_index_1_oldCommitment_commitment_field = poseidon([\
             surpluses_index_1_stateVarId_field,\
-            	 surpluses_index_1_oldCommitment_value.billNumber,\
-	 surpluses_index_1_oldCommitment_value.volume,\
-	 surpluses_index_1_oldCommitment_value.price,\
+               surpluses_index_1_oldCommitment_value.billNumber,\
+   surpluses_index_1_oldCommitment_value.volume,\
+   surpluses_index_1_oldCommitment_value.price,\
             surpluses_index_1_oldCommitment_owner_publicKey,\
             surpluses_index_1_oldCommitment_salt\
           ])
@@ -1249,9 +1300,9 @@ for u32 i in 0..5 do
 
           field surpluses_index_1_newCommitment_commitment_check_field = poseidon([\
             surpluses_index_1_stateVarId_field,\
-            	 surpluses_index_1_newCommitment_value.billNumber,\
-	 surpluses_index_1_newCommitment_value.volume,\
-	 surpluses_index_1_newCommitment_value.price,\
+               surpluses_index_1_newCommitment_value.billNumber,\
+   surpluses_index_1_newCommitment_value.volume,\
+   surpluses_index_1_newCommitment_value.price,\
             surpluses_index_1_newCommitment_owner_publicKey,\
             surpluses_index_1_newCommitment_salt\
           ])
@@ -1287,7 +1338,17 @@ for u32 i in 0..5 do
         )
         // latestSurplusSequenceNumber_oldCommitment_nullifier : non-existence check
         
-        
+        assert(\
+          !latestSurplusSequenceNumber_oldCommitment_isDummy || (latestSurplusSequenceNumber_oldCommitment_owner_secretKey == 0)\
+        )
+ 
+        assert(\
+          !latestSurplusSequenceNumber_oldCommitment_isDummy || (latestSurplusSequenceNumber_oldCommitment_salt == 0)\
+        )
+
+        assert(\
+            !latestSurplusSequenceNumber_oldCommitment_isDummy || (latestSurplusSequenceNumber_oldCommitment_value == 0)\
+        )
 
 
 
@@ -1430,9 +1491,17 @@ for u32 i in 0..5 do
         )
         // generatorCfdNetPosition_billNumber_oldCommitment_nullifier : non-existence check
         
-        
+        assert(\
+          !generatorCfdNetPosition_billNumber_oldCommitment_isDummy || (generatorCfdNetPosition_billNumber_oldCommitment_owner_secretKey == 0)\
+        )
+ 
+        assert(\
+          !generatorCfdNetPosition_billNumber_oldCommitment_isDummy || (generatorCfdNetPosition_billNumber_oldCommitment_salt == 0)\
+        )
 
-
+        assert(\
+            !generatorCfdNetPosition_billNumber_oldCommitment_isDummy || (generatorCfdNetPosition_billNumber_oldCommitment_value == 0)\
+        )
 
         // prepare secret state 'generatorCfdNetPosition_billNumber' for commitment
 
@@ -1514,9 +1583,17 @@ for u32 i in 0..5 do
         )
         // offtakerCfdNetPosition_billNumber_oldCommitment_nullifier : non-existence check
         
-        
+        assert(\
+          !offtakerCfdNetPosition_billNumber_oldCommitment_isDummy || (offtakerCfdNetPosition_billNumber_oldCommitment_owner_secretKey == 0)\
+        )
+ 
+        assert(\
+          !offtakerCfdNetPosition_billNumber_oldCommitment_isDummy || (offtakerCfdNetPosition_billNumber_oldCommitment_salt == 0)\
+        )
 
-
+        assert(\
+            !offtakerCfdNetPosition_billNumber_oldCommitment_isDummy || (offtakerCfdNetPosition_billNumber_oldCommitment_value == 0)\
+        )
 
         // prepare secret state 'offtakerCfdNetPosition_billNumber' for commitment
 
@@ -1598,9 +1675,17 @@ for u32 i in 0..5 do
         )
         // generatorInterest_billNumber_oldCommitment_nullifier : non-existence check
         
-        
+        assert(\
+          !generatorInterest_billNumber_oldCommitment_isDummy || (generatorInterest_billNumber_oldCommitment_owner_secretKey == 0)\
+        )
+ 
+        assert(\
+          !generatorInterest_billNumber_oldCommitment_isDummy || (generatorInterest_billNumber_oldCommitment_salt == 0)\
+        )
 
-
+        assert(\
+            !generatorInterest_billNumber_oldCommitment_isDummy || (generatorInterest_billNumber_oldCommitment_value == 0)\
+        )
 
         // prepare secret state 'generatorInterest_billNumber' for commitment
 
@@ -1682,9 +1767,17 @@ for u32 i in 0..5 do
         )
         // offtakerInterest_billNumber_oldCommitment_nullifier : non-existence check
         
-        
+        assert(\
+          !offtakerInterest_billNumber_oldCommitment_isDummy || (offtakerInterest_billNumber_oldCommitment_owner_secretKey == 0)\
+        )
+ 
+        assert(\
+          !offtakerInterest_billNumber_oldCommitment_isDummy || (offtakerInterest_billNumber_oldCommitment_salt == 0)\
+        )
 
-
+        assert(\
+            !offtakerInterest_billNumber_oldCommitment_isDummy || (offtakerInterest_billNumber_oldCommitment_value == 0)\
+        )
 
         // prepare secret state 'offtakerInterest_billNumber' for commitment
 
@@ -1766,9 +1859,17 @@ for u32 i in 0..5 do
         )
         // offtakerNegativePriceCharges_billNumber_oldCommitment_nullifier : non-existence check
         
-        
+        assert(\
+          !offtakerNegativePriceCharges_billNumber_oldCommitment_isDummy || (offtakerNegativePriceCharges_billNumber_oldCommitment_owner_secretKey == 0)\
+        )
+ 
+        assert(\
+          !offtakerNegativePriceCharges_billNumber_oldCommitment_isDummy || (offtakerNegativePriceCharges_billNumber_oldCommitment_salt == 0)\
+        )
 
-
+        assert(\
+            !offtakerNegativePriceCharges_billNumber_oldCommitment_isDummy || (offtakerNegativePriceCharges_billNumber_oldCommitment_value == 0)\
+        )
 
         // prepare secret state 'offtakerNegativePriceCharges_billNumber' for commitment
 
@@ -1850,9 +1951,17 @@ for u32 i in 0..5 do
         )
         // generatorNegativePriceCharges_billNumber_oldCommitment_nullifier : non-existence check
         
-        
+        assert(\
+          !generatorNegativePriceCharges_billNumber_oldCommitment_isDummy || (generatorNegativePriceCharges_billNumber_oldCommitment_owner_secretKey == 0)\
+        )
+ 
+        assert(\
+          !generatorNegativePriceCharges_billNumber_oldCommitment_isDummy || (generatorNegativePriceCharges_billNumber_oldCommitment_salt == 0)\
+        )
 
-
+        assert(\
+            !generatorNegativePriceCharges_billNumber_oldCommitment_isDummy || (generatorNegativePriceCharges_billNumber_oldCommitment_value == 0)\
+        )
 
         // prepare secret state 'generatorNegativePriceCharges_billNumber' for commitment
 
@@ -2049,9 +2158,17 @@ for u32 i in 0..5 do
         )
         // shortfallPositiveChargeSum_oldCommitment_nullifier : non-existence check
         
-        
+        assert(\
+          !shortfallPositiveChargeSum_oldCommitment_isDummy || (shortfallPositiveChargeSum_oldCommitment_owner_secretKey == 0)\
+        )
+ 
+        assert(\
+          !shortfallPositiveChargeSum_oldCommitment_isDummy || (shortfallPositiveChargeSum_oldCommitment_salt == 0)\
+        )
 
-
+        assert(\
+            !shortfallPositiveChargeSum_oldCommitment_isDummy || (shortfallPositiveChargeSum_oldCommitment_value == 0)\
+        )
 
         // prepare secret state 'shortfallPositiveChargeSum' for commitment
 
@@ -2130,9 +2247,17 @@ for u32 i in 0..5 do
         )
         // shortfallNegativeChargeSum_oldCommitment_nullifier : non-existence check
         
-        
+        assert(\
+          !shortfallNegativeChargeSum_oldCommitment_isDummy || (shortfallNegativeChargeSum_oldCommitment_owner_secretKey == 0)\
+        )
+ 
+        assert(\
+          !shortfallNegativeChargeSum_oldCommitment_isDummy || (shortfallNegativeChargeSum_oldCommitment_salt == 0)\
+        )
 
-
+        assert(\
+            !shortfallNegativeChargeSum_oldCommitment_isDummy || (shortfallNegativeChargeSum_oldCommitment_value == 0)\
+        )
 
         // prepare secret state 'shortfallNegativeChargeSum' for commitment
 
@@ -2211,9 +2336,17 @@ for u32 i in 0..5 do
         )
         // shortfallIndex_oldCommitment_nullifier : non-existence check
         
-        
+        assert(\
+          !shortfallIndex_oldCommitment_isDummy || (shortfallIndex_oldCommitment_owner_secretKey == 0)\
+        )
+ 
+        assert(\
+          !shortfallIndex_oldCommitment_isDummy || (shortfallIndex_oldCommitment_salt == 0)\
+        )
 
-
+        assert(\
+            !shortfallIndex_oldCommitment_isDummy || (shortfallIndex_oldCommitment_value == 0)\
+        )
 
         // prepare secret state 'shortfallIndex' for commitment
 
@@ -2295,9 +2428,17 @@ for u32 i in 0..5 do
         )
         // shortfallPositiveCharges_billNumber_oldCommitment_nullifier : non-existence check
         
-        
+        assert(\
+          !shortfallPositiveCharges_billNumber_oldCommitment_isDummy || (shortfallPositiveCharges_billNumber_oldCommitment_owner_secretKey == 0)\
+        )
+ 
+        assert(\
+          !shortfallPositiveCharges_billNumber_oldCommitment_isDummy || (shortfallPositiveCharges_billNumber_oldCommitment_salt == 0)\
+        )
 
-
+        assert(\
+            !shortfallPositiveCharges_billNumber_oldCommitment_isDummy || (shortfallPositiveCharges_billNumber_oldCommitment_value == 0)\
+        )
 
         // prepare secret state 'shortfallPositiveCharges_billNumber' for commitment
 
@@ -2379,9 +2520,17 @@ for u32 i in 0..5 do
         )
         // shortfallNegativeCharges_billNumber_oldCommitment_nullifier : non-existence check
         
-        
+        assert(\
+          !shortfallNegativeCharges_billNumber_oldCommitment_isDummy || (shortfallNegativeCharges_billNumber_oldCommitment_owner_secretKey == 0)\
+        )
+ 
+        assert(\
+          !shortfallNegativeCharges_billNumber_oldCommitment_isDummy || (shortfallNegativeCharges_billNumber_oldCommitment_salt == 0)\
+        )
 
-
+        assert(\
+            !shortfallNegativeCharges_billNumber_oldCommitment_isDummy || (shortfallNegativeCharges_billNumber_oldCommitment_value == 0)\
+        )
 
         // prepare secret state 'shortfallNegativeCharges_billNumber' for commitment
 
@@ -2578,9 +2727,15 @@ for u32 i in 0..5 do
         )
         // surplusPositiveChargeSum_oldCommitment_nullifier : non-existence check
         
-        
+        assert(\
+          !surplusPositiveChargeSum_oldCommitment_isDummy || (surplusPositiveChargeSum_oldCommitment_owner_secretKey == 0)\
+        )
+ 
+        assert(\
+          !surplusPositiveChargeSum_oldCommitment_isDummy || (surplusPositiveChargeSum_oldCommitment_salt == 0)\
+        )
 
-
+        assert(!surplusPositiveChargeSum_oldCommitment_isDummy || (surplusPositiveChargeSum_oldCommitment_value == 0))
 
         // prepare secret state 'surplusPositiveChargeSum' for commitment
 
@@ -2659,9 +2814,15 @@ for u32 i in 0..5 do
         )
         // surplusNegativeChargeSum_oldCommitment_nullifier : non-existence check
         
-        
+        assert(\
+          !surplusNegativeChargeSum_oldCommitment_isDummy || (surplusNegativeChargeSum_oldCommitment_owner_secretKey == 0)\
+        )
+ 
+        assert(\
+          !surplusNegativeChargeSum_oldCommitment_isDummy || (surplusNegativeChargeSum_oldCommitment_salt == 0)\
+        )
 
-
+        assert(!surplusNegativeChargeSum_oldCommitment_isDummy || (surplusNegativeChargeSum_oldCommitment_value == 0))
 
         // prepare secret state 'surplusNegativeChargeSum' for commitment
 
@@ -2740,9 +2901,15 @@ for u32 i in 0..5 do
         )
         // surplusIndex_oldCommitment_nullifier : non-existence check
         
-        
+        assert(\
+          !surplusIndex_oldCommitment_isDummy || (surplusIndex_oldCommitment_owner_secretKey == 0)\
+        )
+ 
+        assert(\
+          !surplusIndex_oldCommitment_isDummy || (surplusIndex_oldCommitment_salt == 0)\
+        )
 
-
+        assert(!surplusIndex_oldCommitment_isDummy || (surplusIndex_oldCommitment_value == 0))
 
         // prepare secret state 'surplusIndex' for commitment
 
@@ -2824,9 +2991,15 @@ for u32 i in 0..5 do
         )
         // surplusPositiveCharges_billNumber_oldCommitment_nullifier : non-existence check
         
-        
+        assert(\
+          !surplusPositiveCharges_billNumber_oldCommitment_isDummy || (surplusPositiveCharges_billNumber_oldCommitment_owner_secretKey == 0)\
+        )
+ 
+        assert(\
+          !surplusPositiveCharges_billNumber_oldCommitment_isDummy || (surplusPositiveCharges_billNumber_oldCommitment_salt == 0)\
+        )
 
-
+        assert(!surplusPositiveCharges_billNumber_oldCommitment_isDummy || (surplusPositiveCharges_billNumber_oldCommitment_value == 0))
 
         // prepare secret state 'surplusPositiveCharges_billNumber' for commitment
 
@@ -2908,9 +3081,15 @@ for u32 i in 0..5 do
         )
         // surplusNegativeCharges_billNumber_oldCommitment_nullifier : non-existence check
         
-        
+        assert(\
+          !surplusNegativeCharges_billNumber_oldCommitment_isDummy || (surplusNegativeCharges_billNumber_oldCommitment_owner_secretKey == 0)\
+        )
+ 
+        assert(\
+          !surplusNegativeCharges_billNumber_oldCommitment_isDummy || (surplusNegativeCharges_billNumber_oldCommitment_salt == 0)\
+        )
 
-
+        assert(!surplusNegativeCharges_billNumber_oldCommitment_isDummy || (surplusNegativeCharges_billNumber_oldCommitment_value == 0))
 
         // prepare secret state 'surplusNegativeCharges_billNumber' for commitment
 

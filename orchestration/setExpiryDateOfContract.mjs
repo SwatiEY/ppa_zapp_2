@@ -207,55 +207,23 @@ export class SetExpiryDateOfContractManager {
 
 		// Encrypt pre-image for state variable expiryDateOfContract as a backup:
 
-		let expiryDateOfContract_ephSecretKey = generalise(utils.randomHex(31));
-
-		let expiryDateOfContract_ephPublicKeyPoint = generalise(
-			scalarMult(
-				expiryDateOfContract_ephSecretKey.hex(32),
-				config.BABYJUBJUB.GENERATOR
-			)
-		);
-
-		let expiryDateOfContract_ephPublicKey = compressStarlightKey(
-			expiryDateOfContract_ephPublicKeyPoint
-		);
-
-		while (expiryDateOfContract_ephPublicKey === null) {
-			expiryDateOfContract_ephSecretKey = generalise(utils.randomHex(31));
-
-			expiryDateOfContract_ephPublicKeyPoint = generalise(
-				scalarMult(
-					expiryDateOfContract_ephSecretKey.hex(32),
-					config.BABYJUBJUB.GENERATOR
-				)
-			);
-
-			expiryDateOfContract_ephPublicKey = compressStarlightKey(
-				expiryDateOfContract_ephPublicKeyPoint
-			);
-		}
-
 		const expiryDateOfContract_bcipherText = encrypt(
 			[
 				BigInt(expiryDateOfContract_newSalt.hex(32)),
 				BigInt(expiryDateOfContract_stateVarId),
 				BigInt(expiryDateOfContract.hex(32)),
 			],
-			expiryDateOfContract_ephSecretKey.hex(32),
+			masterZkpSecretKey.hex(32),
 			[
-				decompressStarlightKey(expiryDateOfContract_newOwnerPublicKey)[0].hex(
-					32
-				),
-				decompressStarlightKey(expiryDateOfContract_newOwnerPublicKey)[1].hex(
-					32
-				),
+				decompressStarlightKey(masterZkpPublicKey)[0].hex(32),
+				decompressStarlightKey(masterZkpPublicKey)[1].hex(32),
 			]
 		);
 
 		let expiryDateOfContract_cipherText_combined = {
 			varName: "expiryDateOfContract",
 			cipherText: expiryDateOfContract_bcipherText,
-			ephPublicKey: expiryDateOfContract_ephPublicKey.hex(32),
+			ephPublicKey: masterZkpPublicKey.hex(32),
 		};
 
 		BackupData.push(expiryDateOfContract_cipherText_combined);
