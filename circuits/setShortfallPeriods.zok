@@ -21,29 +21,29 @@ def main(\
 	private field numberOfConsecutivePeriodsForShortfall_newCommitment_owner_publicKey,\
 	private field numberOfConsecutivePeriodsForShortfall_newCommitment_salt,\
 	public field numberOfConsecutivePeriodsForShortfall_newCommitment_commitment\
-) -> (bool):
+) -> bool {
 
         
         // We need to hard-code each stateVarId into the circuit:
-        field numberOfConsecutivePeriodsForShortfall_stateVarId_field = 66
+        field numberOfConsecutivePeriodsForShortfall_stateVarId_field = 66;
 
 
-        field numberOfConsecutivePeriodsForShortfall = numberOfConsecutivePeriodsForShortfall_oldCommitment_value
+        field mut numberOfConsecutivePeriodsForShortfall = numberOfConsecutivePeriodsForShortfall_oldCommitment_value;
 
-numberOfConsecutivePeriodsForShortfall = shortfallPeriods
+numberOfConsecutivePeriodsForShortfall = shortfallPeriods;
 
 
         // numberOfConsecutivePeriodsForShortfall_oldCommitment - PoKoSK:
         // The correctness of this secret key will be constrained within the oldCommitment existence check.
 
-        field[2] numberOfConsecutivePeriodsForShortfall_oldCommitment_owner_publicKey_point = scalarMult(field_to_bool_256(numberOfConsecutivePeriodsForShortfall_oldCommitment_owner_secretKey), [curveParams().Gu, curveParams().Gv], curveParams())
+        field[2] numberOfConsecutivePeriodsForShortfall_oldCommitment_owner_publicKey_point = scalarMult(field_to_bool_256(numberOfConsecutivePeriodsForShortfall_oldCommitment_owner_secretKey), [curveParams().Gu, curveParams().Gv], curveParams());
 
-        bool numberOfConsecutivePeriodsForShortfall_oldCommitment_owner_publicKey_sign = edwardsCompress(numberOfConsecutivePeriodsForShortfall_oldCommitment_owner_publicKey_point)[0]
+        bool numberOfConsecutivePeriodsForShortfall_oldCommitment_owner_publicKey_sign = edwardsCompress(numberOfConsecutivePeriodsForShortfall_oldCommitment_owner_publicKey_point)[0];
 
-        bool[254] numberOfConsecutivePeriodsForShortfall_oldCommitment_yBits = field_to_bool_256(numberOfConsecutivePeriodsForShortfall_oldCommitment_owner_publicKey_point[1])[2..256]
-        numberOfConsecutivePeriodsForShortfall_oldCommitment_yBits[0] = numberOfConsecutivePeriodsForShortfall_oldCommitment_owner_publicKey_sign
+        bool[254] mut numberOfConsecutivePeriodsForShortfall_oldCommitment_yBits = field_to_bool_256(numberOfConsecutivePeriodsForShortfall_oldCommitment_owner_publicKey_point[1])[2..256];
+        numberOfConsecutivePeriodsForShortfall_oldCommitment_yBits[0] = numberOfConsecutivePeriodsForShortfall_oldCommitment_owner_publicKey_sign;
 
-        field numberOfConsecutivePeriodsForShortfall_oldCommitment_owner_publicKey = bool_256_to_field([false, false, ...numberOfConsecutivePeriodsForShortfall_oldCommitment_yBits])
+        field numberOfConsecutivePeriodsForShortfall_oldCommitment_owner_publicKey = bool_256_to_field([false, false, ...numberOfConsecutivePeriodsForShortfall_oldCommitment_yBits]);
 
 
         // Nullify numberOfConsecutivePeriodsForShortfall:
@@ -52,20 +52,20 @@ numberOfConsecutivePeriodsForShortfall = shortfallPeriods
           numberOfConsecutivePeriodsForShortfall_stateVarId_field,\
           numberOfConsecutivePeriodsForShortfall_oldCommitment_owner_secretKey,\
           numberOfConsecutivePeriodsForShortfall_oldCommitment_salt\
-        ])
+        ]);
 
         assert(\
         field_to_bool_256(numberOfConsecutivePeriodsForShortfall_oldCommitment_nullifier)[8..256] == field_to_bool_256(numberOfConsecutivePeriodsForShortfall_oldCommitment_nullifier_check_field)[8..256]\
-        )
+        );
         // numberOfConsecutivePeriodsForShortfall_oldCommitment_nullifier : non-existence check
         
-        assert(!numberOfConsecutivePeriodsForShortfall_oldCommitment_isDummy || (numberOfConsecutivePeriodsForShortfall_oldCommitment_owner_secretKey == 0))
-        assert(!numberOfConsecutivePeriodsForShortfall_oldCommitment_isDummy || (numberOfConsecutivePeriodsForShortfall_oldCommitment_salt == 0))
-        assert(!numberOfConsecutivePeriodsForShortfall_oldCommitment_isDummy || (numberOfConsecutivePeriodsForShortfall_oldCommitment_value == 0))
+        assert(!numberOfConsecutivePeriodsForShortfall_oldCommitment_isDummy || (numberOfConsecutivePeriodsForShortfall_oldCommitment_owner_secretKey == 0));
+        assert(!numberOfConsecutivePeriodsForShortfall_oldCommitment_isDummy || (numberOfConsecutivePeriodsForShortfall_oldCommitment_salt == 0));
+        assert(!numberOfConsecutivePeriodsForShortfall_oldCommitment_isDummy || (numberOfConsecutivePeriodsForShortfall_oldCommitment_value == 0));
 
         // prepare secret state 'numberOfConsecutivePeriodsForShortfall' for commitment
 
-          field numberOfConsecutivePeriodsForShortfall_oldCommitment_value_field = numberOfConsecutivePeriodsForShortfall_oldCommitment_value
+          field numberOfConsecutivePeriodsForShortfall_oldCommitment_value_field = numberOfConsecutivePeriodsForShortfall_oldCommitment_value;
           
         // numberOfConsecutivePeriodsForShortfall_oldCommitment_commitment: preimage check
 
@@ -74,31 +74,31 @@ numberOfConsecutivePeriodsForShortfall = shortfallPeriods
           numberOfConsecutivePeriodsForShortfall_stateVarId_field,\
           numberOfConsecutivePeriodsForShortfall_oldCommitment_value_field,\
           numberOfConsecutivePeriodsForShortfall_oldCommitment_owner_publicKey,\
-          numberOfConsecutivePeriodsForShortfall_oldCommitment_salt        ])
+          numberOfConsecutivePeriodsForShortfall_oldCommitment_salt        ]);
 
 
         // numberOfConsecutivePeriodsForShortfall_oldCommitment_commitment: existence check
 
 
-        field numberOfConsecutivePeriodsForShortfall_commitmentRoot_check = checkRoot(\
+        field mut numberOfConsecutivePeriodsForShortfall_commitmentRoot_check = checkRoot(\
           numberOfConsecutivePeriodsForShortfall_oldCommitment_membershipWitness_siblingPath,\
           numberOfConsecutivePeriodsForShortfall_oldCommitment_commitment_field,\
           numberOfConsecutivePeriodsForShortfall_oldCommitment_membershipWitness_index\
-        )
+        );
 
 
         // Note: Don't bother actually asserting existence, if the oldCommitment is a dummy:
-        numberOfConsecutivePeriodsForShortfall_commitmentRoot_check = if numberOfConsecutivePeriodsForShortfall_oldCommitment_isDummy == true then commitmentRoot else numberOfConsecutivePeriodsForShortfall_commitmentRoot_check fi
+        numberOfConsecutivePeriodsForShortfall_commitmentRoot_check = if (numberOfConsecutivePeriodsForShortfall_oldCommitment_isDummy == true) { commitmentRoot } else { numberOfConsecutivePeriodsForShortfall_commitmentRoot_check };
 
 
         assert(\
           field_to_bool_256(commitmentRoot)[8..256] == field_to_bool_256(numberOfConsecutivePeriodsForShortfall_commitmentRoot_check)[8..256]\
-        )
+        );
 
 
         // prepare secret state 'numberOfConsecutivePeriodsForShortfall' for commitment
 
-        field numberOfConsecutivePeriodsForShortfall_newCommitment_value_field = numberOfConsecutivePeriodsForShortfall
+        field numberOfConsecutivePeriodsForShortfall_newCommitment_value_field = numberOfConsecutivePeriodsForShortfall;
 
         // numberOfConsecutivePeriodsForShortfall_newCommitment_commitment - preimage check
 
@@ -107,10 +107,11 @@ numberOfConsecutivePeriodsForShortfall = shortfallPeriods
           numberOfConsecutivePeriodsForShortfall_newCommitment_value_field,\
           numberOfConsecutivePeriodsForShortfall_newCommitment_owner_publicKey,\
           numberOfConsecutivePeriodsForShortfall_newCommitment_salt\
-        ])
+        ]);
 
         assert(\
           field_to_bool_256(numberOfConsecutivePeriodsForShortfall_newCommitment_commitment)[8..256] == field_to_bool_256(numberOfConsecutivePeriodsForShortfall_newCommitment_commitment_check_field)[8..256]\
-        )
+        );
 
-         return true
+         return true;
+}
