@@ -1,12 +1,12 @@
-from "ecc/babyjubjubParams" import main as curveParams
-from "ecc/edwardsScalarMult" import main as scalarMult
-from "ecc/edwardsCompress" import main as edwardsCompress
-from "utils/pack/bool/pack256.zok" import main as bool_256_to_field
-from "utils/pack/bool/nonStrictUnpack256.zok" import main as field_to_bool_256
-from "hashes/poseidon/poseidon.zok" import main as poseidon
-from "./common/merkle-tree/sparse-merkle-tree/checkproof.zok" import main as checkproof
-from "./common/merkle-tree/sparse-merkle-tree/checkproof.zok" import checkUpdatedPath as checkUpdatedPath
-from "./common/merkle-tree/mimc/altbn254/verify-membership/height32.zok" import main as checkRoot
+from "ecc/babyjubjubParams" import main as curveParams;
+from "ecc/edwardsScalarMult" import main as scalarMult;
+from "ecc/edwardsCompress" import main as edwardsCompress;
+from "utils/pack/bool/pack256.zok" import main as bool_256_to_field;
+from "utils/pack/bool/nonStrictUnpack256.zok" import main as field_to_bool_256;
+from "hashes/poseidon/poseidon.zok" import main as poseidon;
+from "./common/merkle-tree/sparse-merkle-tree/checkproof.zok" import main as checkproof;
+from "./common/merkle-tree/sparse-merkle-tree/checkproof.zok" import checkUpdatedPath as checkUpdatedPath;
+from "./common/merkle-tree/mimc/altbn254/verify-membership/height32.zok" import main as checkRoot;
 
 def main(\
 	private field latestShortfallSequenceNumber_oldCommitment_owner_secretKey,\
@@ -30,38 +30,38 @@ def main(\
 	private field latestSurplusSequenceNumber_newCommitment_owner_publicKey,\
 	private field latestSurplusSequenceNumber_newCommitment_salt,\
 	public field latestSurplusSequenceNumber_newCommitment_commitment\
-) -> (bool):
+) -> bool {
 
         
         // We need to hard-code each stateVarId into the circuit:
-        field latestShortfallSequenceNumber_stateVarId_field = 24
+        field latestShortfallSequenceNumber_stateVarId_field = 24;
 
 
-        field latestShortfallSequenceNumber = latestShortfallSequenceNumber_oldCommitment_value
+        field mut latestShortfallSequenceNumber = latestShortfallSequenceNumber_oldCommitment_value;
 
 
         // We need to hard-code each stateVarId into the circuit:
-        field latestSurplusSequenceNumber_stateVarId_field = 31
+        field latestSurplusSequenceNumber_stateVarId_field = 31;
 
 
-        field latestSurplusSequenceNumber = latestSurplusSequenceNumber_oldCommitment_value
+        field mut latestSurplusSequenceNumber = latestSurplusSequenceNumber_oldCommitment_value;
 
-latestShortfallSequenceNumber = 0
+latestShortfallSequenceNumber = 0;
 
-latestSurplusSequenceNumber = 0
+latestSurplusSequenceNumber = 0;
 
 
         // latestShortfallSequenceNumber_oldCommitment - PoKoSK:
         // The correctness of this secret key will be constrained within the oldCommitment existence check.
 
-        field[2] latestShortfallSequenceNumber_oldCommitment_owner_publicKey_point = scalarMult(field_to_bool_256(latestShortfallSequenceNumber_oldCommitment_owner_secretKey), [curveParams().Gu, curveParams().Gv], curveParams())
+        field[2] latestShortfallSequenceNumber_oldCommitment_owner_publicKey_point = scalarMult(field_to_bool_256(latestShortfallSequenceNumber_oldCommitment_owner_secretKey), [curveParams().Gu, curveParams().Gv], curveParams());
 
-        bool latestShortfallSequenceNumber_oldCommitment_owner_publicKey_sign = edwardsCompress(latestShortfallSequenceNumber_oldCommitment_owner_publicKey_point)[0]
+        bool latestShortfallSequenceNumber_oldCommitment_owner_publicKey_sign = edwardsCompress(latestShortfallSequenceNumber_oldCommitment_owner_publicKey_point)[0];
 
-        bool[254] latestShortfallSequenceNumber_oldCommitment_yBits = field_to_bool_256(latestShortfallSequenceNumber_oldCommitment_owner_publicKey_point[1])[2..256]
-        latestShortfallSequenceNumber_oldCommitment_yBits[0] = latestShortfallSequenceNumber_oldCommitment_owner_publicKey_sign
+        bool[254] mut latestShortfallSequenceNumber_oldCommitment_yBits = field_to_bool_256(latestShortfallSequenceNumber_oldCommitment_owner_publicKey_point[1])[2..256];
+        latestShortfallSequenceNumber_oldCommitment_yBits[0] = latestShortfallSequenceNumber_oldCommitment_owner_publicKey_sign;
 
-        field latestShortfallSequenceNumber_oldCommitment_owner_publicKey = bool_256_to_field([false, false, ...latestShortfallSequenceNumber_oldCommitment_yBits])
+        field latestShortfallSequenceNumber_oldCommitment_owner_publicKey = bool_256_to_field([false, false, ...latestShortfallSequenceNumber_oldCommitment_yBits]);
 
 
         // Nullify latestShortfallSequenceNumber:
@@ -70,22 +70,22 @@ latestSurplusSequenceNumber = 0
           latestShortfallSequenceNumber_stateVarId_field,\
           latestShortfallSequenceNumber_oldCommitment_owner_secretKey,\
           latestShortfallSequenceNumber_oldCommitment_salt\
-        ])
+        ]);
 
         assert(\
         field_to_bool_256(latestShortfallSequenceNumber_oldCommitment_nullifier)[8..256] == field_to_bool_256(latestShortfallSequenceNumber_oldCommitment_nullifier_check_field)[8..256]\
-        )
+        );
         // latestShortfallSequenceNumber_oldCommitment_nullifier : non-existence check
         
-assert(!latestShortfallSequenceNumber_oldCommitment_isDummy || (latestShortfallSequenceNumber_oldCommitment_owner_secretKey == 0))
+assert(!latestShortfallSequenceNumber_oldCommitment_isDummy || (latestShortfallSequenceNumber_oldCommitment_owner_secretKey == 0));
  
-assert(!latestShortfallSequenceNumber_oldCommitment_isDummy || (latestShortfallSequenceNumber_oldCommitment_salt == 0))
+assert(!latestShortfallSequenceNumber_oldCommitment_isDummy || (latestShortfallSequenceNumber_oldCommitment_salt == 0));
 
-assert(!latestShortfallSequenceNumber_oldCommitment_isDummy || (latestShortfallSequenceNumber_oldCommitment_value == 0))
+assert(!latestShortfallSequenceNumber_oldCommitment_isDummy || (latestShortfallSequenceNumber_oldCommitment_value == 0));
 
         // prepare secret state 'latestShortfallSequenceNumber' for commitment
 
-          field latestShortfallSequenceNumber_oldCommitment_value_field = latestShortfallSequenceNumber_oldCommitment_value
+          field latestShortfallSequenceNumber_oldCommitment_value_field = latestShortfallSequenceNumber_oldCommitment_value;
           
         // latestShortfallSequenceNumber_oldCommitment_commitment: preimage check
 
@@ -94,31 +94,31 @@ assert(!latestShortfallSequenceNumber_oldCommitment_isDummy || (latestShortfallS
           latestShortfallSequenceNumber_stateVarId_field,\
           latestShortfallSequenceNumber_oldCommitment_value_field,\
           latestShortfallSequenceNumber_oldCommitment_owner_publicKey,\
-          latestShortfallSequenceNumber_oldCommitment_salt        ])
+          latestShortfallSequenceNumber_oldCommitment_salt        ]);
 
 
         // latestShortfallSequenceNumber_oldCommitment_commitment: existence check
 
 
-        field latestShortfallSequenceNumber_commitmentRoot_check = checkRoot(\
+        field mut latestShortfallSequenceNumber_commitmentRoot_check = checkRoot(\
           latestShortfallSequenceNumber_oldCommitment_membershipWitness_siblingPath,\
           latestShortfallSequenceNumber_oldCommitment_commitment_field,\
           latestShortfallSequenceNumber_oldCommitment_membershipWitness_index\
-        )
+        );
 
 
         // Note: Don't bother actually asserting existence, if the oldCommitment is a dummy:
-        latestShortfallSequenceNumber_commitmentRoot_check = if latestShortfallSequenceNumber_oldCommitment_isDummy == true then commitmentRoot else latestShortfallSequenceNumber_commitmentRoot_check fi
+        latestShortfallSequenceNumber_commitmentRoot_check = if (latestShortfallSequenceNumber_oldCommitment_isDummy == true) { commitmentRoot } else { latestShortfallSequenceNumber_commitmentRoot_check };
 
 
         assert(\
           field_to_bool_256(commitmentRoot)[8..256] == field_to_bool_256(latestShortfallSequenceNumber_commitmentRoot_check)[8..256]\
-        )
+        );
 
 
         // prepare secret state 'latestShortfallSequenceNumber' for commitment
 
-        field latestShortfallSequenceNumber_newCommitment_value_field = latestShortfallSequenceNumber
+        field latestShortfallSequenceNumber_newCommitment_value_field = latestShortfallSequenceNumber;
 
         // latestShortfallSequenceNumber_newCommitment_commitment - preimage check
 
@@ -127,24 +127,24 @@ assert(!latestShortfallSequenceNumber_oldCommitment_isDummy || (latestShortfallS
           latestShortfallSequenceNumber_newCommitment_value_field,\
           latestShortfallSequenceNumber_newCommitment_owner_publicKey,\
           latestShortfallSequenceNumber_newCommitment_salt\
-        ])
+        ]);
 
         assert(\
           field_to_bool_256(latestShortfallSequenceNumber_newCommitment_commitment)[8..256] == field_to_bool_256(latestShortfallSequenceNumber_newCommitment_commitment_check_field)[8..256]\
-        )
+        );
 
 
         // latestSurplusSequenceNumber_oldCommitment - PoKoSK:
         // The correctness of this secret key will be constrained within the oldCommitment existence check.
 
-        field[2] latestSurplusSequenceNumber_oldCommitment_owner_publicKey_point = scalarMult(field_to_bool_256(latestSurplusSequenceNumber_oldCommitment_owner_secretKey), [curveParams().Gu, curveParams().Gv], curveParams())
+        field[2] latestSurplusSequenceNumber_oldCommitment_owner_publicKey_point = scalarMult(field_to_bool_256(latestSurplusSequenceNumber_oldCommitment_owner_secretKey), [curveParams().Gu, curveParams().Gv], curveParams());
 
-        bool latestSurplusSequenceNumber_oldCommitment_owner_publicKey_sign = edwardsCompress(latestSurplusSequenceNumber_oldCommitment_owner_publicKey_point)[0]
+        bool latestSurplusSequenceNumber_oldCommitment_owner_publicKey_sign = edwardsCompress(latestSurplusSequenceNumber_oldCommitment_owner_publicKey_point)[0];
 
-        bool[254] latestSurplusSequenceNumber_oldCommitment_yBits = field_to_bool_256(latestSurplusSequenceNumber_oldCommitment_owner_publicKey_point[1])[2..256]
-        latestSurplusSequenceNumber_oldCommitment_yBits[0] = latestSurplusSequenceNumber_oldCommitment_owner_publicKey_sign
+        bool[254] mut latestSurplusSequenceNumber_oldCommitment_yBits = field_to_bool_256(latestSurplusSequenceNumber_oldCommitment_owner_publicKey_point[1])[2..256];
+        latestSurplusSequenceNumber_oldCommitment_yBits[0] = latestSurplusSequenceNumber_oldCommitment_owner_publicKey_sign;
 
-        field latestSurplusSequenceNumber_oldCommitment_owner_publicKey = bool_256_to_field([false, false, ...latestSurplusSequenceNumber_oldCommitment_yBits])
+        field latestSurplusSequenceNumber_oldCommitment_owner_publicKey = bool_256_to_field([false, false, ...latestSurplusSequenceNumber_oldCommitment_yBits]);
 
 
         // Nullify latestSurplusSequenceNumber:
@@ -153,22 +153,22 @@ assert(!latestShortfallSequenceNumber_oldCommitment_isDummy || (latestShortfallS
           latestSurplusSequenceNumber_stateVarId_field,\
           latestSurplusSequenceNumber_oldCommitment_owner_secretKey,\
           latestSurplusSequenceNumber_oldCommitment_salt\
-        ])
+        ]);
 
         assert(\
         field_to_bool_256(latestSurplusSequenceNumber_oldCommitment_nullifier)[8..256] == field_to_bool_256(latestSurplusSequenceNumber_oldCommitment_nullifier_check_field)[8..256]\
-        )
+        );
         // latestSurplusSequenceNumber_oldCommitment_nullifier : non-existence check
         
-        assert(!latestSurplusSequenceNumber_oldCommitment_isDummy || (latestSurplusSequenceNumber_oldCommitment_owner_secretKey == 0))
+        assert(!latestSurplusSequenceNumber_oldCommitment_isDummy || (latestSurplusSequenceNumber_oldCommitment_owner_secretKey == 0));
  
-        assert(!latestSurplusSequenceNumber_oldCommitment_isDummy || (latestSurplusSequenceNumber_oldCommitment_salt == 0))
+        assert(!latestSurplusSequenceNumber_oldCommitment_isDummy || (latestSurplusSequenceNumber_oldCommitment_salt == 0));
 
-        assert(!latestSurplusSequenceNumber_oldCommitment_isDummy || (latestSurplusSequenceNumber_oldCommitment_value == 0))
+        assert(!latestSurplusSequenceNumber_oldCommitment_isDummy || (latestSurplusSequenceNumber_oldCommitment_value == 0));
 
         // prepare secret state 'latestSurplusSequenceNumber' for commitment
 
-          field latestSurplusSequenceNumber_oldCommitment_value_field = latestSurplusSequenceNumber_oldCommitment_value
+          field latestSurplusSequenceNumber_oldCommitment_value_field = latestSurplusSequenceNumber_oldCommitment_value;
           
         // latestSurplusSequenceNumber_oldCommitment_commitment: preimage check
 
@@ -177,31 +177,31 @@ assert(!latestShortfallSequenceNumber_oldCommitment_isDummy || (latestShortfallS
           latestSurplusSequenceNumber_stateVarId_field,\
           latestSurplusSequenceNumber_oldCommitment_value_field,\
           latestSurplusSequenceNumber_oldCommitment_owner_publicKey,\
-          latestSurplusSequenceNumber_oldCommitment_salt        ])
+          latestSurplusSequenceNumber_oldCommitment_salt        ]);
 
 
         // latestSurplusSequenceNumber_oldCommitment_commitment: existence check
 
 
-        field latestSurplusSequenceNumber_commitmentRoot_check = checkRoot(\
+        field mut latestSurplusSequenceNumber_commitmentRoot_check = checkRoot(\
           latestSurplusSequenceNumber_oldCommitment_membershipWitness_siblingPath,\
           latestSurplusSequenceNumber_oldCommitment_commitment_field,\
           latestSurplusSequenceNumber_oldCommitment_membershipWitness_index\
-        )
+        );
 
 
         // Note: Don't bother actually asserting existence, if the oldCommitment is a dummy:
-        latestSurplusSequenceNumber_commitmentRoot_check = if latestSurplusSequenceNumber_oldCommitment_isDummy == true then commitmentRoot else latestSurplusSequenceNumber_commitmentRoot_check fi
+        latestSurplusSequenceNumber_commitmentRoot_check = if (latestSurplusSequenceNumber_oldCommitment_isDummy == true) { commitmentRoot } else { latestSurplusSequenceNumber_commitmentRoot_check };
 
 
         assert(\
           field_to_bool_256(commitmentRoot)[8..256] == field_to_bool_256(latestSurplusSequenceNumber_commitmentRoot_check)[8..256]\
-        )
+        );
 
 
         // prepare secret state 'latestSurplusSequenceNumber' for commitment
 
-        field latestSurplusSequenceNumber_newCommitment_value_field = latestSurplusSequenceNumber
+        field latestSurplusSequenceNumber_newCommitment_value_field = latestSurplusSequenceNumber;
 
         // latestSurplusSequenceNumber_newCommitment_commitment - preimage check
 
@@ -210,10 +210,11 @@ assert(!latestShortfallSequenceNumber_oldCommitment_isDummy || (latestShortfallS
           latestSurplusSequenceNumber_newCommitment_value_field,\
           latestSurplusSequenceNumber_newCommitment_owner_publicKey,\
           latestSurplusSequenceNumber_newCommitment_salt\
-        ])
+        ]);
 
         assert(\
           field_to_bool_256(latestSurplusSequenceNumber_newCommitment_commitment)[8..256] == field_to_bool_256(latestSurplusSequenceNumber_newCommitment_commitment_check_field)[8..256]\
-        )
+        );
 
-         return true
+         return true;
+}
