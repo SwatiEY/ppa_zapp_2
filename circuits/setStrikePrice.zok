@@ -4,6 +4,8 @@ from "ecc/edwardsCompress" import main as edwardsCompress
 from "utils/pack/bool/pack256.zok" import main as bool_256_to_field
 from "utils/pack/bool/nonStrictUnpack256.zok" import main as field_to_bool_256
 from "hashes/poseidon/poseidon.zok" import main as poseidon
+from "./common/merkle-tree/sparse-merkle-tree/checkproof.zok" import main as checkproof
+from "./common/merkle-tree/sparse-merkle-tree/checkproof.zok" import checkUpdatedPath as checkUpdatedPath
 from "./common/merkle-tree/mimc/altbn254/verify-membership/height32.zok" import main as checkRoot
 
 def main(\
@@ -57,13 +59,20 @@ strikePrice = strikePriceParam
         )
         // strikePrice_oldCommitment_nullifier : non-existence check
         
+        assert(!strikePrice_oldCommitment_isDummy || (strikePrice_oldCommitment_owner_secretKey == 0))
+        assert(!strikePrice_oldCommitment_isDummy || (strikePrice_oldCommitment_salt == 0))
+        assert(!strikePrice_oldCommitment_isDummy || (strikePrice_oldCommitment_value == 0))
 
+        // prepare secret state 'strikePrice' for commitment
+
+          field strikePrice_oldCommitment_value_field = strikePrice_oldCommitment_value
+          
         // strikePrice_oldCommitment_commitment: preimage check
 
 
         field strikePrice_oldCommitment_commitment_field = poseidon([\
           strikePrice_stateVarId_field,\
-          strikePrice_oldCommitment_value,\
+          strikePrice_oldCommitment_value_field,\
           strikePrice_oldCommitment_owner_publicKey,\
           strikePrice_oldCommitment_salt        ])
 

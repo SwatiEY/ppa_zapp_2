@@ -4,6 +4,8 @@ from "ecc/edwardsCompress" import main as edwardsCompress
 from "utils/pack/bool/pack256.zok" import main as bool_256_to_field
 from "utils/pack/bool/nonStrictUnpack256.zok" import main as field_to_bool_256
 from "hashes/poseidon/poseidon.zok" import main as poseidon
+from "./common/merkle-tree/sparse-merkle-tree/checkproof.zok" import main as checkproof
+from "./common/merkle-tree/sparse-merkle-tree/checkproof.zok" import checkUpdatedPath as checkUpdatedPath
 from "./common/merkle-tree/mimc/altbn254/verify-membership/height32.zok" import main as checkRoot
 
 def main(\
@@ -23,7 +25,7 @@ def main(\
 
         
         // We need to hard-code each stateVarId into the circuit:
-        field numberOfConsecutivePeriodsForSurplus_stateVarId_field = 72
+        field numberOfConsecutivePeriodsForSurplus_stateVarId_field = 84
 
 
         field numberOfConsecutivePeriodsForSurplus = numberOfConsecutivePeriodsForSurplus_oldCommitment_value
@@ -57,14 +59,20 @@ numberOfConsecutivePeriodsForSurplus = surplusPeriods
         )
         // numberOfConsecutivePeriodsForSurplus_oldCommitment_nullifier : non-existence check
         
+        assert(!numberOfConsecutivePeriodsForSurplus_oldCommitment_isDummy || (numberOfConsecutivePeriodsForSurplus_oldCommitment_owner_secretKey == 0))
+        assert(!numberOfConsecutivePeriodsForSurplus_oldCommitment_isDummy || (numberOfConsecutivePeriodsForSurplus_oldCommitment_salt == 0))
+        assert(!numberOfConsecutivePeriodsForSurplus_oldCommitment_isDummy || (numberOfConsecutivePeriodsForSurplus_oldCommitment_value == 0))
 
+        // prepare secret state 'numberOfConsecutivePeriodsForSurplus' for commitment
 
+          field numberOfConsecutivePeriodsForSurplus_oldCommitment_value_field = numberOfConsecutivePeriodsForSurplus_oldCommitment_value
+          
         // numberOfConsecutivePeriodsForSurplus_oldCommitment_commitment: preimage check
 
 
         field numberOfConsecutivePeriodsForSurplus_oldCommitment_commitment_field = poseidon([\
           numberOfConsecutivePeriodsForSurplus_stateVarId_field,\
-          numberOfConsecutivePeriodsForSurplus_oldCommitment_value,\
+          numberOfConsecutivePeriodsForSurplus_oldCommitment_value_field,\
           numberOfConsecutivePeriodsForSurplus_oldCommitment_owner_publicKey,\
           numberOfConsecutivePeriodsForSurplus_oldCommitment_salt        ])
 

@@ -1,89 +1,110 @@
-import { service_setStrikePrice } from "./api_services.mjs";
-
-import { service_setBundlePrice } from "./api_services.mjs";
-
-import { service_setShortfallThreshold } from "./api_services.mjs";
-
-import { service_setShortfallPeriods } from "./api_services.mjs";
-
-import { service_setSurplusThreshold } from "./api_services.mjs";
-
-import { service_setSurplusPeriods } from "./api_services.mjs";
-
-import { service_setDailyInterestRate } from "./api_services.mjs";
-
-import { service_setExpiryDateOfContract } from "./api_services.mjs";
-
-import { service_setVolumeShare } from "./api_services.mjs";
-
-import { service_setSequenceNumberInterval } from "./api_services.mjs";
-
-import { service_initSequenceNumber } from "./api_services.mjs";
-
-import { service_initSurplusSequenceNumber } from "./api_services.mjs";
-
-import { service_setInitialContractParams } from "./api_services.mjs";
-
-import { service_calculateCfd } from "./api_services.mjs";
-import { service_terminateContract } from "./api_services.mjs";
-
 import {
 	service_allCommitments,
 	service_getCommitmentsByState,
+	service_reinstateNullifiers,
+	service_getSharedKeys,
+	service_getBalance,
+	service_getBalanceByState,
+	service_backupData,
+	service_backupVariable,
 } from "./api_services.mjs";
 
 import express from "express";
 
-const router = express.Router();
+export class Router {
+	constructor(serviceMgr) {
+		this.serviceMgr = serviceMgr;
+	}
+	addRoutes() {
+		const router = express.Router();
 
-// eslint-disable-next-line func-names
-router.post("/setStrikePrice", service_setStrikePrice);
+		router.post(
+			"/setStrikePrice",
+			this.serviceMgr.service_setStrikePrice.bind(this.serviceMgr)
+		);
 
-// eslint-disable-next-line func-names
-router.post("/setBundlePrice", service_setBundlePrice);
+		router.post(
+			"/setBundlePrice",
+			this.serviceMgr.service_setBundlePrice.bind(this.serviceMgr)
+		);
 
-// eslint-disable-next-line func-names
-router.post("/setShortfallThreshold", service_setShortfallThreshold);
+		router.post(
+			"/setShortfallThreshold",
+			this.serviceMgr.service_setShortfallThreshold.bind(this.serviceMgr)
+		);
 
-// eslint-disable-next-line func-names
-router.post("/setShortfallPeriods", service_setShortfallPeriods);
+		router.post(
+			"/setShortfallPeriods",
+			this.serviceMgr.service_setShortfallPeriods.bind(this.serviceMgr)
+		);
 
-// eslint-disable-next-line func-names
-router.post("/setSurplusThreshold", service_setSurplusThreshold);
+		router.post(
+			"/setSurplusThreshold",
+			this.serviceMgr.service_setSurplusThreshold.bind(this.serviceMgr)
+		);
 
-// eslint-disable-next-line func-names
-router.post("/setSurplusPeriods", service_setSurplusPeriods);
+		router.post(
+			"/setSurplusPeriods",
+			this.serviceMgr.service_setSurplusPeriods.bind(this.serviceMgr)
+		);
 
-// eslint-disable-next-line func-names
-router.post("/setDailyInterestRate", service_setDailyInterestRate);
+		router.post(
+			"/setDailyInterestRate",
+			this.serviceMgr.service_setDailyInterestRate.bind(this.serviceMgr)
+		);
 
-// eslint-disable-next-line func-names
-router.post("/setExpiryDateOfContract", service_setExpiryDateOfContract);
+		router.post(
+			"/setStartDateOfContract",
+			this.serviceMgr.service_setStartDateOfContract.bind(this.serviceMgr)
+		);
 
-// eslint-disable-next-line func-names
-router.post("/setVolumeShare", service_setVolumeShare);
+		router.post(
+			"/setExpiryDateOfContract",
+			this.serviceMgr.service_setExpiryDateOfContract.bind(this.serviceMgr)
+		);
 
-// eslint-disable-next-line func-names
-router.post("/setSequenceNumberInterval", service_setSequenceNumberInterval);
+		router.post(
+			"/setVolumeShare",
+			this.serviceMgr.service_setVolumeShare.bind(this.serviceMgr)
+		);
 
-// eslint-disable-next-line func-names
-router.post("/initSequenceNumber", service_initSequenceNumber);
+		router.post(
+			"/setSequenceNumberInterval",
+			this.serviceMgr.service_setSequenceNumberInterval.bind(this.serviceMgr)
+		);
 
-// eslint-disable-next-line func-names
-router.post("/initSurplusSequenceNumber", service_initSurplusSequenceNumber);
+		router.post(
+			"/initSequenceNumber",
+			this.serviceMgr.service_initSequenceNumber.bind(this.serviceMgr)
+		);
 
-// eslint-disable-next-line func-names
-router.post("/setInitialContractParams", service_setInitialContractParams);
+		router.post(
+			"/setInitialContractParams",
+			this.serviceMgr.service_setInitialContractParams.bind(this.serviceMgr)
+		);
 
-// eslint-disable-next-line func-names
-router.post("/calculateCfd", service_calculateCfd);
+		router.post(
+			"/calculateCfd",
+			this.serviceMgr.service_calculateCfd.bind(this.serviceMgr)
+		);
 
-router.post("/terminateContract", service_terminateContract);
+		router.post(
+			"/terminateContract",
+			this.serviceMgr.service_terminateContract.bind(this.serviceMgr)
+		);
 
-// commitment getter routes
-router.get("/getAllCommitments", service_allCommitments);
-router.get("/getCommitmentsByVariableName", service_getCommitmentsByState);
-// nullifier route
+		// commitment getter routes
+		router.get("/getAllCommitments", service_allCommitments);
+		router.get("/getCommitmentsByVariableName", service_getCommitmentsByState);
+		router.get("/getBalance", service_getBalance);
+		router.get("/getBalanceByState", service_getBalanceByState);
+		// nullifier route
+		router.post("/reinstateNullifiers", service_reinstateNullifiers);
+		router.post("/getSharedKeys", service_getSharedKeys);
+		// backup route
+		router.post("/backupDataRetriever", service_backupData);
+		router.post("/backupVariable", service_backupVariable);
 
-
-export default router;
+		return router;
+	}
+}

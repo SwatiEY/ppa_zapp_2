@@ -35,7 +35,7 @@ const { generalise } = GN;
 const db = "/app/orchestration/common/db/preimage.json";
 const keyDb = "/app/orchestration/common/db/key.json";
 
-export class SetDailyInterestRateManager {
+export class SetStartDateOfContractManager {
 	constructor(web3) {
 		this.web3 = web3;
 	}
@@ -45,18 +45,18 @@ export class SetDailyInterestRateManager {
 		this.contractAddr = await getContractAddress("SyntheticPpaShield");
 	}
 
-	async setDailyInterestRate(
-		_dailyInterestRateParam,
-		_dailyInterestRate_newOwnerPublicKey = 0
+	async setStartDateOfContract(
+		_startDateOfContractParam,
+		_startDateOfContract_newOwnerPublicKey = 0
 	) {
 		const instance = this.instance;
 		const contractAddr = this.contractAddr;
 		const web3 = this.web3;
 
 		const msgValue = 0;
-		const dailyInterestRateParam = generalise(_dailyInterestRateParam);
-		let dailyInterestRate_newOwnerPublicKey = generalise(
-			_dailyInterestRate_newOwnerPublicKey
+		const startDateOfContractParam = generalise(_startDateOfContractParam);
+		let startDateOfContract_newOwnerPublicKey = generalise(
+			_startDateOfContract_newOwnerPublicKey
 		);
 
 		// Read dbs for keys and previous commitment values:
@@ -74,138 +74,144 @@ export class SetDailyInterestRateManager {
 
 		// Initialise commitment preimage of whole state:
 
-		const dailyInterestRate_stateVarId = generalise(11).hex(32);
+		const startDateOfContract_stateVarId = generalise(13).hex(32);
 
-		let dailyInterestRate_commitmentExists = true;
-		let dailyInterestRate_witnessRequired = true;
+		let startDateOfContract_commitmentExists = true;
+		let startDateOfContract_witnessRequired = true;
 
-		const dailyInterestRate_commitment = await getCurrentWholeCommitment(
-			dailyInterestRate_stateVarId
+		const startDateOfContract_commitment = await getCurrentWholeCommitment(
+			startDateOfContract_stateVarId
 		);
 
-		let dailyInterestRate_preimage = {
+		let startDateOfContract_preimage = {
 			value: 0,
 			salt: 0,
 			commitment: 0,
 		};
-		if (!dailyInterestRate_commitment) {
-			dailyInterestRate_commitmentExists = false;
-			dailyInterestRate_witnessRequired = false;
+		if (!startDateOfContract_commitment) {
+			startDateOfContract_commitmentExists = false;
+			startDateOfContract_witnessRequired = false;
 		} else {
-			dailyInterestRate_preimage = dailyInterestRate_commitment.preimage;
+			startDateOfContract_preimage = startDateOfContract_commitment.preimage;
 		}
 
 		// read preimage for whole state
-		dailyInterestRate_newOwnerPublicKey =
-			_dailyInterestRate_newOwnerPublicKey === 0
+		startDateOfContract_newOwnerPublicKey =
+			_startDateOfContract_newOwnerPublicKey === 0
 				? generalise(
 						await instance.methods
 							.zkpPublicKeys(await instance.methods.owner().call())
 							.call()
 				  )
-				: dailyInterestRate_newOwnerPublicKey;
+				: startDateOfContract_newOwnerPublicKey;
 
-		const dailyInterestRate_currentCommitment =
-			dailyInterestRate_commitmentExists
-				? generalise(dailyInterestRate_commitment._id)
+		const startDateOfContract_currentCommitment =
+			startDateOfContract_commitmentExists
+				? generalise(startDateOfContract_commitment._id)
 				: generalise(0);
-		const dailyInterestRate_prev = generalise(dailyInterestRate_preimage.value);
-		const dailyInterestRate_prevSalt = generalise(
-			dailyInterestRate_preimage.salt
+		const startDateOfContract_prev = generalise(
+			startDateOfContract_preimage.value
+		);
+		const startDateOfContract_prevSalt = generalise(
+			startDateOfContract_preimage.salt
 		);
 
 		// non-secret line would go here but has been filtered out
 
-		let dailyInterestRate = generalise(
-			parseInt(dailyInterestRateParam.integer, 10)
+		let startDateOfContract = generalise(
+			parseInt(startDateOfContractParam.integer, 10)
 		);
 
 		// Extract set membership witness:
 
 		// generate witness for whole state
-		const dailyInterestRate_emptyPath = new Array(32).fill(0);
-		const dailyInterestRate_witness = dailyInterestRate_witnessRequired
+		const startDateOfContract_emptyPath = new Array(32).fill(0);
+		const startDateOfContract_witness = startDateOfContract_witnessRequired
 			? await getMembershipWitness(
 					"SyntheticPpaShield",
-					dailyInterestRate_currentCommitment.integer
+					startDateOfContract_currentCommitment.integer
 			  )
 			: {
 					index: 0,
-					path: dailyInterestRate_emptyPath,
+					path: startDateOfContract_emptyPath,
 					root: (await getRoot("SyntheticPpaShield")) || 0,
 			  };
-		const dailyInterestRate_index = generalise(dailyInterestRate_witness.index);
-		const dailyInterestRate_root = generalise(dailyInterestRate_witness.root);
-		const dailyInterestRate_path = generalise(
-			dailyInterestRate_witness.path
+		const startDateOfContract_index = generalise(
+			startDateOfContract_witness.index
+		);
+		const startDateOfContract_root = generalise(
+			startDateOfContract_witness.root
+		);
+		const startDateOfContract_path = generalise(
+			startDateOfContract_witness.path
 		).all;
 
 		// Calculate nullifier(s):
 
-		let dailyInterestRate_nullifier = dailyInterestRate_commitmentExists
+		let startDateOfContract_nullifier = startDateOfContract_commitmentExists
 			? poseidonHash([
-					BigInt(dailyInterestRate_stateVarId),
+					BigInt(startDateOfContract_stateVarId),
 					BigInt(secretKey.hex(32)),
-					BigInt(dailyInterestRate_prevSalt.hex(32)),
+					BigInt(startDateOfContract_prevSalt.hex(32)),
 			  ])
 			: poseidonHash([
-					BigInt(dailyInterestRate_stateVarId),
+					BigInt(startDateOfContract_stateVarId),
 					BigInt(generalise(0).hex(32)),
-					BigInt(dailyInterestRate_prevSalt.hex(32)),
+					BigInt(startDateOfContract_prevSalt.hex(32)),
 			  ]);
 
-		dailyInterestRate_nullifier = generalise(
-			dailyInterestRate_nullifier.hex(32)
+		startDateOfContract_nullifier = generalise(
+			startDateOfContract_nullifier.hex(32)
 		); // truncate
 
 		// Calculate commitment(s):
 
-		const dailyInterestRate_newSalt = generalise(utils.randomHex(31));
+		const startDateOfContract_newSalt = generalise(utils.randomHex(31));
 
-		let dailyInterestRate_newCommitment = poseidonHash([
-			BigInt(dailyInterestRate_stateVarId),
-			BigInt(dailyInterestRate.hex(32)),
-			BigInt(dailyInterestRate_newOwnerPublicKey.hex(32)),
-			BigInt(dailyInterestRate_newSalt.hex(32)),
+		let startDateOfContract_newCommitment = poseidonHash([
+			BigInt(startDateOfContract_stateVarId),
+			BigInt(startDateOfContract.hex(32)),
+			BigInt(startDateOfContract_newOwnerPublicKey.hex(32)),
+			BigInt(startDateOfContract_newSalt.hex(32)),
 		]);
 
-		dailyInterestRate_newCommitment = generalise(
-			dailyInterestRate_newCommitment.hex(32)
+		startDateOfContract_newCommitment = generalise(
+			startDateOfContract_newCommitment.hex(32)
 		); // truncate
 
 		// Call Zokrates to generate the proof:
 
 		const allInputs = [
-			dailyInterestRateParam.integer,
-			dailyInterestRate_commitmentExists
+			startDateOfContractParam.integer,
+			startDateOfContract_commitmentExists
 				? secretKey.integer
 				: generalise(0).integer,
-			dailyInterestRate_nullifier.integer,
+			startDateOfContract_nullifier.integer,
 
-			dailyInterestRate_prev.integer,
-			dailyInterestRate_prevSalt.integer,
-			dailyInterestRate_commitmentExists ? 0 : 1,
-			dailyInterestRate_root.integer,
-			dailyInterestRate_index.integer,
-			dailyInterestRate_path.integer,
-			dailyInterestRate_newOwnerPublicKey.integer,
-			dailyInterestRate_newSalt.integer,
-			dailyInterestRate_newCommitment.integer,
+			startDateOfContract_prev.integer,
+			startDateOfContract_prevSalt.integer,
+			startDateOfContract_commitmentExists ? 0 : 1,
+			startDateOfContract_root.integer,
+			startDateOfContract_index.integer,
+			startDateOfContract_path.integer,
+			startDateOfContract_newOwnerPublicKey.integer,
+			startDateOfContract_newSalt.integer,
+			startDateOfContract_newCommitment.integer,
 		].flat(Infinity);
-		const res = await generateProof("setDailyInterestRate", allInputs);
+		const res = await generateProof("setStartDateOfContract", allInputs);
 		const proof = generalise(Object.values(res.proof).flat(Infinity))
 			.map((coeff) => coeff.integer)
 			.flat(Infinity);
 
 		let BackupData = [];
 
-		// Encrypt pre-image for state variable dailyInterestRate as a backup:
+		// Encrypt pre-image for state variable startDateOfContract as a backup:
 
-		const dailyInterestRate_bcipherText = encrypt(
+		const startDateOfContract_bcipherText = encrypt(
 			[
-				BigInt(dailyInterestRate_newSalt.hex(32)),
-				BigInt(dailyInterestRate_stateVarId),
-				BigInt(dailyInterestRate.hex(32)),
+				BigInt(startDateOfContract_newSalt.hex(32)),
+				BigInt(startDateOfContract_stateVarId),
+				BigInt(startDateOfContract.hex(32)),
 			],
 			masterZkpSecretKey.hex(32),
 			[
@@ -214,24 +220,24 @@ export class SetDailyInterestRateManager {
 			]
 		);
 
-		let dailyInterestRate_cipherText_combined = {
-			varName: "dailyInterestRate",
-			cipherText: dailyInterestRate_bcipherText,
+		let startDateOfContract_cipherText_combined = {
+			varName: "startDateOfContract",
+			cipherText: startDateOfContract_bcipherText,
 			ephPublicKey: masterZkpPublicKey.hex(32),
 		};
 
-		BackupData.push(dailyInterestRate_cipherText_combined);
+		BackupData.push(startDateOfContract_cipherText_combined);
 
 		// Send transaction to the blockchain:
 
 		const txData = await instance.methods
-			.setDailyInterestRate(
+			.setStartDateOfContract(
 				{
 					customInputs: [1],
-					newNullifiers: [dailyInterestRate_nullifier.integer],
-					commitmentRoot: dailyInterestRate_root.integer,
+					newNullifiers: [startDateOfContract_nullifier.integer],
+					commitmentRoot: startDateOfContract_root.integer,
 					checkNullifiers: [],
-					newCommitments: [dailyInterestRate_newCommitment.integer],
+					newCommitments: [startDateOfContract_newCommitment.integer],
 					cipherText: [],
 					encKeys: [],
 				},
@@ -283,24 +289,24 @@ export class SetDailyInterestRateManager {
 
 		// Write new commitment preimage to db:
 
-		if (dailyInterestRate_commitmentExists)
+		if (startDateOfContract_commitmentExists)
 			await markNullified(
-				dailyInterestRate_currentCommitment,
+				startDateOfContract_currentCommitment,
 				secretKey.hex(32)
 			);
 
 		await storeCommitment({
-			hash: dailyInterestRate_newCommitment,
-			name: "dailyInterestRate",
+			hash: startDateOfContract_newCommitment,
+			name: "startDateOfContract",
 			mappingKey: null,
 			preimage: {
-				stateVarId: generalise(dailyInterestRate_stateVarId),
-				value: dailyInterestRate,
-				salt: dailyInterestRate_newSalt,
-				publicKey: dailyInterestRate_newOwnerPublicKey,
+				stateVarId: generalise(startDateOfContract_stateVarId),
+				value: startDateOfContract,
+				salt: startDateOfContract_newSalt,
+				publicKey: startDateOfContract_newOwnerPublicKey,
 			},
 			secretKey:
-				dailyInterestRate_newOwnerPublicKey.integer === publicKey.integer
+				startDateOfContract_newOwnerPublicKey.integer === publicKey.integer
 					? secretKey
 					: null,
 			isNullified: false,

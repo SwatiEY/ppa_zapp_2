@@ -190,3 +190,4 @@ export async function registerZKPKey(
 			const signed = await web3.eth.accounts.signTransaction(txParams, key);
 			const sendTxn = await web3.eth.sendSignedTransaction(signed.rawTransaction);	
 }
+

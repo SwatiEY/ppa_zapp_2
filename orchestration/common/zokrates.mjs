@@ -3,7 +3,7 @@ import axios from "axios";
 
 import logger from "./logger.mjs";
 
-const { url } = config.zokrates;
+const url = 'http://zokrates:80';
 
 /**
 POST inputs to a circuit (and receive a proof in return)

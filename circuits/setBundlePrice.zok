@@ -4,6 +4,8 @@ from "ecc/edwardsCompress" import main as edwardsCompress
 from "utils/pack/bool/pack256.zok" import main as bool_256_to_field
 from "utils/pack/bool/nonStrictUnpack256.zok" import main as field_to_bool_256
 from "hashes/poseidon/poseidon.zok" import main as poseidon
+from "./common/merkle-tree/sparse-merkle-tree/checkproof.zok" import main as checkproof
+from "./common/merkle-tree/sparse-merkle-tree/checkproof.zok" import checkUpdatedPath as checkUpdatedPath
 from "./common/merkle-tree/mimc/altbn254/verify-membership/height32.zok" import main as checkRoot
 
 def main(\
@@ -55,15 +57,30 @@ bundlePrice = bundlePriceParam
         assert(\
         field_to_bool_256(bundlePrice_oldCommitment_nullifier)[8..256] == field_to_bool_256(bundlePrice_oldCommitment_nullifier_check_field)[8..256]\
         )
+        // bundlePrice_oldCommitment_nullifier : non-existence check
         
+        assert(\
+          !bundlePrice_oldCommitment_isDummy || (bundlePrice_oldCommitment_owner_secretKey == 0)\
+        )
+ 
+        assert(\
+          !bundlePrice_oldCommitment_isDummy || (bundlePrice_oldCommitment_salt == 0)\
+        )
 
+        assert(\
+            !bundlePrice_oldCommitment_isDummy || (bundlePrice_oldCommitment_value == 0)\
+        )
 
+        // prepare secret state 'bundlePrice' for commitment
+
+          field bundlePrice_oldCommitment_value_field = bundlePrice_oldCommitment_value
+          
         // bundlePrice_oldCommitment_commitment: preimage check
 
 
         field bundlePrice_oldCommitment_commitment_field = poseidon([\
           bundlePrice_stateVarId_field,\
-          bundlePrice_oldCommitment_value,\
+          bundlePrice_oldCommitment_value_field,\
           bundlePrice_oldCommitment_owner_publicKey,\
           bundlePrice_oldCommitment_salt        ])
 

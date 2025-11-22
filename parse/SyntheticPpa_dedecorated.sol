@@ -1,0 +1,376 @@
+// SPDX-License-Identifier: CC0
+
+pragma solidity ^0.8.0;
+contract SyntheticPpa {
+address public immutable owner;
+uint256 private strikePrice;
+uint256 private bundlePrice;
+uint256 private volumeShare;
+uint256 private dailyInterestRate;
+uint256 private startDateOfContract;
+uint256 private expiryDateOfContract;
+bool public isContractTerminated;
+
+mapping(uint256 => VolumeGap) private shortfalls;
+uint256 private latestShortfallSequenceNumber;
+
+mapping(uint256 => VolumeGap) private surpluses;
+uint256 private latestSurplusSequenceNumber;
+
+uint256 private sequenceNumberInterval;
+
+struct VolumeGap {
+uint256 billNumber;
+uint256 volume;
+uint256 price;
+}
+
+mapping(uint256 => uint256) private generatorCfdNetPosition;
+mapping(uint256 => uint256) private offtakerCfdNetPosition;
+mapping(uint256 => uint256) private generatorInterest;
+mapping(uint256 => uint256) private offtakerInterest;
+mapping(uint256 => uint256) private offtakerNegativePriceCharges;
+mapping(uint256 => uint256) private generatorNegativePriceCharges;
+
+uint256 private numberOfConsecutivePeriodsForShortfall;
+uint256 private shortfallThreshold;
+uint256 private shortfallPositiveChargeSum;
+uint256 private shortfallNegativeChargeSum;
+uint256 private shortfallIndex;
+mapping(uint256 => uint256) private shortfallPositiveCharges;
+mapping(uint256 => uint256) private shortfallNegativeCharges;
+
+uint256 private numberOfConsecutivePeriodsForSurplus;
+uint256 private surplusThreshold;
+uint256 private surplusPositiveChargeSum;
+uint256 private surplusNegativeChargeSum;
+uint256 private surplusIndex;
+mapping(uint256 => uint256) private surplusPositiveCharges;
+mapping(uint256 => uint256) private surplusNegativeCharges;
+
+modifier onlyOwner() {
+require(
+msg.sender == owner
+);
+_;
+}
+
+constructor() {
+owner = msg.sender;
+}
+
+
+function setStrikePrice(uint256 strikePriceParam) public onlyOwner {
+require(
+msg.sender == owner
+);
+
+strikePrice = strikePriceParam;
+}
+
+function setBundlePrice(uint256 bundlePriceParam) public onlyOwner {
+require(
+msg.sender == owner
+);
+
+bundlePrice = bundlePriceParam;
+}
+
+function setShortfallThreshold(uint256 shortfallThresholdParam) public onlyOwner {
+require(
+msg.sender == owner
+);
+
+shortfallThreshold = shortfallThresholdParam;
+}
+
+function setShortfallPeriods(uint256 shortfallPeriods) public onlyOwner {
+require(
+msg.sender == owner
+);
+
+numberOfConsecutivePeriodsForShortfall = shortfallPeriods;
+}
+
+function setSurplusThreshold(uint256 surplusThresholdParam) public onlyOwner {
+require(
+msg.sender == owner
+);
+
+surplusThreshold = surplusThresholdParam;
+}
+
+function setSurplusPeriods(uint256 surplusPeriods) public onlyOwner {
+require(
+msg.sender == owner
+);
+
+numberOfConsecutivePeriodsForSurplus = surplusPeriods;
+}
+
+function setDailyInterestRate(uint256 dailyInterestRateParam) public onlyOwner {
+require(
+msg.sender == owner
+);
+
+dailyInterestRate = dailyInterestRateParam;
+}
+
+function setStartDateOfContract(uint256 startDateOfContractParam) public onlyOwner {
+require(
+msg.sender == owner
+);
+
+startDateOfContract = startDateOfContractParam;
+}
+
+function setExpiryDateOfContract(uint256 expiryDateOfContractParam) public onlyOwner {
+require(
+msg.sender == owner
+);
+
+expiryDateOfContract = expiryDateOfContractParam;
+}
+
+function setVolumeShare(uint256 volumeShareParam) public onlyOwner {
+require(
+msg.sender == owner
+);
+
+volumeShare = volumeShareParam;
+}
+
+function setSequenceNumberInterval(uint256 sequenceNumberIntervalParam) public onlyOwner {
+require(
+msg.sender == owner
+);
+
+sequenceNumberInterval = sequenceNumberIntervalParam;
+}
+
+function initSequenceNumber() public onlyOwner {
+require(
+msg.sender == owner
+);
+
+latestShortfallSequenceNumber = 0;
+latestSurplusSequenceNumber = 0;
+}
+
+
+function setInitialContractParams(
+
+
+uint256 strikePriceParam,
+uint256 bundlePriceParam,
+uint256 volumeShareParam,
+uint256 numberOfConsecutivePeriodsForShortfallParam,
+uint256 shortfallThresholdParam,
+uint256 numberOfConsecutivePeriodsForSurplusParam,
+uint256 surplusThresholdParam,
+uint256 dailyInterestRateParam,
+uint256 startDateOfContractParam,
+uint256 expiryDateOfContractParam,
+uint256 sequenceNumberIntervalParam
+) public onlyOwner {
+require(isContractTerminated == false);
+
+
+volumeShare = volumeShareParam;
+strikePrice = strikePriceParam;
+bundlePrice = bundlePriceParam;
+numberOfConsecutivePeriodsForShortfall = numberOfConsecutivePeriodsForShortfallParam;
+shortfallThreshold = shortfallThresholdParam;
+numberOfConsecutivePeriodsForSurplus = numberOfConsecutivePeriodsForSurplusParam;
+surplusThreshold = surplusThresholdParam;
+dailyInterestRate = dailyInterestRateParam;
+startDateOfContract = startDateOfContractParam;
+expiryDateOfContract = expiryDateOfContractParam;
+sequenceNumberInterval = sequenceNumberIntervalParam;
+latestShortfallSequenceNumber = 0;
+latestSurplusSequenceNumber = 0;
+}
+
+
+function calculateCfd(
+
+
+uint256 billNumber,
+uint256 sequenceNumber,
+uint256 totalGeneratedVolume,
+uint256 expectedVolume,
+uint256 averagePrice,
+uint256 marginalLossFactor,
+uint256 floatingAmount,
+uint256 positiveAdjustment,
+uint256 negativeAdjustment,
+uint256[5] calldata outstandingGeneratorAmount,
+uint256[5] calldata outstandingOfftakerAmount,
+uint256[5] calldata generatorDelayDays,
+uint256[5] calldata offtakerDelayDays,
+bool negativePriceOccurredParam,
+uint256 referenceDate
+) public onlyOwner
+returns (uint256, uint256, uint256, uint256, uint256, uint256, uint256, uint256, uint256, uint256) {
+
+require(referenceDate >= startDateOfContract);
+require(referenceDate <= expiryDateOfContract);
+require(!isContractTerminated);
+
+uint256 offtakerVolume = totalGeneratedVolume * volumeShare * marginalLossFactor;
+uint256 fixedAmount = 0;
+if(bundlePrice <= 0) {
+fixedAmount = offtakerVolume * strikePrice; 
+} else {
+fixedAmount = offtakerVolume * bundlePrice;
+}
+
+uint256 netPositiveAdjustment = 0;
+uint256 netNegativeAdjustment = 0;
+if(negativeAdjustment > positiveAdjustment) {
+netNegativeAdjustment = negativeAdjustment - positiveAdjustment;
+} else {
+netPositiveAdjustment = positiveAdjustment - negativeAdjustment;
+}
+
+// Positive adjustment means that the price has been retroactively increased;
+// therefore, it's a debt for the offtaker to the generator.
+// Since a higher fixed amount is also a debt for the offtaker to the generator,
+// positive adjustment and fixed amount can be added together.
+// Negative adjustment works the same with the floating amount.
+// The logic and calculations below need to sacrifice readability in order to
+// avoid nested ifs, brackets and negative numbers.
+
+if ((floatingAmount + netNegativeAdjustment) > (fixedAmount + netPositiveAdjustment)) {
+generatorCfdNetPosition[billNumber] = floatingAmount + netNegativeAdjustment - fixedAmount - netPositiveAdjustment;
+} else {
+offtakerCfdNetPosition[billNumber] = fixedAmount + netPositiveAdjustment - floatingAmount - netNegativeAdjustment;
+}
+
+uint256 shortfallSequence = 0;
+if(sequenceNumber == latestShortfallSequenceNumber + sequenceNumberInterval ||
+latestShortfallSequenceNumber == 0 ||
+sequenceNumber == 0
+) {
+shortfallSequence = 1;
+}
+
+uint256 surplusSequence = 0;
+if(sequenceNumber == latestSurplusSequenceNumber + sequenceNumberInterval ||
+latestSurplusSequenceNumber == 0 ||
+sequenceNumber == 0
+) {
+surplusSequence = 1;
+}
+
+uint256 positivePriceDifference = 0;
+uint256 negativePriceDifference = 0;
+if(averagePrice > strikePrice) {
+positivePriceDifference = averagePrice - strikePrice;
+} else {
+negativePriceDifference = strikePrice - averagePrice;
+}
+
+// Shortfall and surplus difference
+uint256 volumeDifference = 0;
+if(expectedVolume > offtakerVolume) { 
+volumeDifference = expectedVolume - offtakerVolume;
+} else {
+volumeDifference = offtakerVolume - expectedVolume;
+}
+
+if(negativePriceOccurredParam && expectedVolume > offtakerVolume) { 
+generatorNegativePriceCharges[billNumber] = volumeDifference * strikePrice;
+} 
+
+if (negativePriceOccurredParam && expectedVolume <= offtakerVolume) {
+offtakerNegativePriceCharges[billNumber] = volumeDifference * strikePrice;
+}
+
+// Shortfall calculation
+uint256 index = shortfallIndex + 0;
+if (shortfallSequence != 0 && expectedVolume > offtakerVolume && volumeDifference >= shortfallThreshold && numberOfConsecutivePeriodsForShortfall > 0) {
+shortfalls[index].billNumber = billNumber;
+shortfalls[index].price = averagePrice;
+shortfalls[index].volume = volumeDifference;
+shortfallPositiveChargeSum += shortfalls[index].volume * positivePriceDifference;
+shortfallNegativeChargeSum += shortfalls[index].volume * negativePriceDifference;
+shortfallIndex += 1;
+latestShortfallSequenceNumber = sequenceNumber;
+} 
+
+if (shortfallSequence != 0 && (expectedVolume <= offtakerVolume || volumeDifference < shortfallThreshold)) {
+shortfallPositiveChargeSum = 0;
+shortfallNegativeChargeSum = 0;
+shortfallIndex = 0;
+latestShortfallSequenceNumber = 0;
+}
+
+if (shortfallIndex >= numberOfConsecutivePeriodsForShortfall && numberOfConsecutivePeriodsForShortfall > 0 ) {
+shortfallPositiveCharges[billNumber] = shortfallPositiveChargeSum;
+shortfallNegativeCharges[billNumber] = shortfallNegativeChargeSum;
+shortfallPositiveChargeSum = 0;
+shortfallNegativeChargeSum = 0;
+shortfallIndex = 0;
+latestShortfallSequenceNumber = 0;
+}
+
+// Surplus calculation
+index = surplusIndex + 0;
+if (surplusSequence != 0 && expectedVolume < offtakerVolume && volumeDifference >= surplusThreshold && numberOfConsecutivePeriodsForSurplus > 0) {
+surpluses[index].billNumber = billNumber;
+surpluses[index].price = averagePrice;
+surpluses[index].volume = volumeDifference;
+surplusPositiveChargeSum += surpluses[index].volume * positivePriceDifference;
+surplusNegativeChargeSum += surpluses[index].volume * negativePriceDifference;
+surplusIndex += 1;
+latestSurplusSequenceNumber = sequenceNumber;
+}
+
+if (surplusSequence != 0 && (expectedVolume >= offtakerVolume || volumeDifference < surplusThreshold)) {
+surplusPositiveChargeSum = 0;
+surplusNegativeChargeSum = 0;
+surplusIndex = 0;
+latestSurplusSequenceNumber = 0;
+}
+
+if (surplusIndex >= numberOfConsecutivePeriodsForSurplus && numberOfConsecutivePeriodsForSurplus > 0) {
+surplusPositiveCharges[billNumber] = surplusPositiveChargeSum;
+surplusNegativeCharges[billNumber] = surplusNegativeChargeSum;
+surplusPositiveChargeSum = 0;
+surplusNegativeChargeSum = 0;
+surplusIndex = 0;
+latestSurplusSequenceNumber = 0;
+}
+
+for (uint256 i = 0; i < 5; i++) {
+if (outstandingGeneratorAmount[i] > 0) {
+generatorInterest[billNumber] += outstandingGeneratorAmount[i] * generatorDelayDays[i] * dailyInterestRate;
+} if (outstandingOfftakerAmount[i] > 0) {
+offtakerInterest[billNumber] += outstandingOfftakerAmount[i] * offtakerDelayDays[i] * dailyInterestRate;
+}
+}
+
+return (
+generatorCfdNetPosition[billNumber],
+offtakerCfdNetPosition[billNumber],
+generatorInterest[billNumber],
+offtakerInterest[billNumber],
+shortfallPositiveCharges[billNumber],
+shortfallNegativeCharges[billNumber],
+surplusPositiveCharges[billNumber],
+surplusNegativeCharges[billNumber],
+generatorNegativePriceCharges[billNumber],
+offtakerNegativePriceCharges[billNumber]
+);
+}
+
+
+function terminateContract() public onlyOwner {
+require(
+msg.sender == owner
+);
+
+isContractTerminated = true;
+}
+}
